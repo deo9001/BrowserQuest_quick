@@ -1,0 +1,1009 @@
+# Premium Game World Depth, Connectivity, Terrain, and Building Renovation Prompt
+
+================================================================================
+PURPOSE OF THIS PROMPT
+================================================================================
+
+This is a reusable renovation prompt for transforming an existing HTML /
+JavaScript / CSS game into a richer, more connected, more explorable, more
+interactive world.
+
+This prompt is especially intended for games that already have a playable
+standalone mode but still feel like a sequence of disconnected rectangular areas,
+flat backgrounds, or empty arenas.
+
+The goal is to improve the game world itself:
+
+- connected world layout
+- smooth transitions between areas
+- preview/buffer zones at area edges
+- terrain features
+- collision-safe map design
+- trees, grass, rocks, cliffs, rivers, ponds, hills, roads, bridges, houses,
+  castles, ruins, towns, caves, and interiors
+- enterable buildings
+- destroyable/gatherable objects
+- mining and resource collection
+- crafting/building systems
+- better area connectivity
+- spawn safety
+- pathing safety
+- map readability
+- player movement through believable spaces
+- better use of light and darkness
+- better world assets and object variety
+- bug prevention for stuck states at entrances, borders, doors, caves, and
+  transitions
+
+This prompt is not primarily about GUI polish. It is about making the world feel
+real, connected, explorable, interactive, and mechanically useful.
+
+================================================================================
+
+## Mission
+
+You are an expert game systems designer, world designer, level designer,
+JavaScript engineer, creative technologist, and gameplay programmer.
+
+Your mission is to renovate the world and interaction systems of an existing
+HTML / JavaScript / CSS game.
+
+The renovated game should feel less like a set of isolated screens and more like
+a continuous world made of connected places.
+
+The player should be able to:
+
+- travel smoothly between areas
+- see hints/previews of neighboring areas before entering them
+- avoid getting stuck at borders or entrances
+- move around real terrain features
+- enter buildings, caves, fortresses, houses, shops, ruins, and dungeons
+- interact with trees, rocks, grass, ores, crates, barrels, bridges, doors,
+  gates, signs, and other world objects
+- destroy or mine certain objects
+- collect resources
+- use resources for crafting or building
+- understand where they are through an in-game map
+- experience areas with distinct visual identity, lighting, terrain, and
+  gameplay function
+
+The goal is not to replace the original game. The goal is to evolve it into a
+deeper and more connected version of itself.
+
+================================================================================
+
+## Non-Negotiable Philosophy
+
+1. The world must be connected.
+   Do not treat each screen as an unrelated rectangle. Areas should connect
+   spatially and logically.
+
+2. Transitions must be smooth and safe.
+   The player should never wait several seconds at an edge, hard cut into an
+   unrelated space, or spawn inside a wall.
+
+3. Preview zones must match destination collision.
+   If the next area has a wall, cliff, river, gate, building, or blocked path at
+   the transition point, the preview/buffer area must show that obstruction too.
+   Never show an open path that leads to a blocked spawn.
+
+4. The player must not get stuck.
+   Every entrance, exit, door, cave mouth, bridge, fortress gate, interior
+   portal, and border transition must be spawn-safe and escape-safe.
+
+5. Terrain must matter.
+   Trees, rocks, rivers, walls, cliffs, ponds, buildings, and ruins should affect
+   navigation, combat, exploration, resources, or progression.
+
+6. Assets should be functional when possible.
+   A rock can be decoration, but some rocks should be mineable. A tree can be
+   scenery, but some trees should provide wood. A house can be background, but
+   some buildings should be enterable.
+
+7. Systems should connect.
+   Mining gives stone or ore. Trees give wood. Resources feed crafting. Crafting
+   creates tools, structures, repairs, upgrades, or unlocks.
+
+8. Darkness is a world property, not a browser theme.
+   Outdoor meadows, towns, roads, and forests can be bright and sunny. Caves,
+   evil fortresses, haunted zones, dungeons, and night areas can be dark.
+
+9. Prefer data-driven world content.
+   Regions, transitions, biomes, terrain, props, resources, interiors, and
+   collision should be defined in reusable structures where practical.
+
+10. Avoid decorative-only fake systems.
+    Do not add dead buttons, fake building menus, non-working mines, non-enterable
+    doors labeled as enterable, or placeholder resources with no use.
+
+================================================================================
+
+## Step 1 — Understand the Current World
+
+Before changing code, produce a written assessment of the current game world.
+
+--------------------------------------------------------------------------------
+1.1 Core World Identity
+--------------------------------------------------------------------------------
+
+Answer:
+
+- What kind of game world is this?
+- Is it an overworld, dungeon crawler, RPG map, arena sequence, survival world,
+  sandbox, town-and-dungeon structure, or something else?
+- How does the player currently move between areas?
+- Are areas spatially connected or just swapped?
+- Is there a world map or region graph?
+- Are there meaningful landmarks?
+- Are there enterable locations?
+- Are there obstacles?
+- Are there resources?
+- Are there buildable/craftable systems?
+- What is missing from the sense of place?
+
+--------------------------------------------------------------------------------
+1.2 Current Area Transition Model
+--------------------------------------------------------------------------------
+
+Document:
+
+- How the current area is represented.
+- How area IDs/region IDs are stored.
+- How edge transitions are triggered.
+- Whether transition is based on absolute screen edge, margin, portal, door, or
+  coordinate.
+- Whether transitions are instant, delayed, animated, or asynchronous.
+- Whether transitions can overlap.
+- Whether the player can be placed into invalid positions.
+- Whether the next area is previewed before entry.
+- Whether transition collision data is shared between adjacent regions.
+- Known bugs, including stuck states at entrances or borders.
+
+Specifically check for problems like:
+
+- waiting too long at a border
+- transition requiring exact edge contact
+- hard cuts to unrelated spaces
+- player spawning inside walls
+- walls too close to entrance spawn points
+- missing escape routes
+- one-way transitions that trap the player
+- preview area not matching the next area's real collision
+- region data that visually suggests a path but blocks the player after loading
+
+--------------------------------------------------------------------------------
+1.3 Current Map Connectivity
+--------------------------------------------------------------------------------
+
+Document:
+
+- Whether the map is a grid, graph, list, tiled map, random generation, or
+  hardcoded screens.
+- Whether each area has neighbors.
+- Whether coordinates are world-space or screen-space.
+- Whether logical regions span multiple visible blocks.
+- Whether entrances/exits have explicit spawn points.
+- Whether interiors are separate maps or part of the same world.
+- Whether there is a concept of discovered regions.
+- Whether the player can backtrack safely.
+
+--------------------------------------------------------------------------------
+1.4 Current Terrain and Collision
+--------------------------------------------------------------------------------
+
+Document:
+
+- What terrain exists now.
+- What objects exist now.
+- Whether objects have collision.
+- Whether collision is tile-based, rectangle-based, pixel-based, entity-based,
+  or absent.
+- Whether enemies respect collision.
+- Whether projectiles/sword swings respect terrain.
+- Whether terrain creates meaningful routes.
+- Whether terrain blocks transitions accidentally.
+- Whether collision can be inspected/debugged.
+
+Look for:
+
+- trees
+- rocks
+- cliffs
+- rivers
+- ponds
+- hills
+- walls
+- fences
+- houses
+- castles
+- gates
+- bridges
+- caves
+- ruins
+- doors
+- signs
+- mineable nodes
+- destructible props
+- resource objects
+- buildable structures
+
+--------------------------------------------------------------------------------
+1.5 Current Resource and Building Systems
+--------------------------------------------------------------------------------
+
+Document:
+
+- Are there resources such as wood, stone, ore, gems, herbs, food, fiber, gold,
+  crystals, or relics?
+- Can resources be gathered?
+- Are any world objects destroyable?
+- Are tools required?
+- Is there mining, chopping, harvesting, digging, or salvaging?
+- Are resources used for crafting?
+- Can the player build anything?
+- Are built objects persisted?
+- Are there placement rules?
+- Can building create blocked paths or stuck states?
+- Can the player remove or move built objects?
+
+--------------------------------------------------------------------------------
+1.6 Current Lighting and Biome Identity
+--------------------------------------------------------------------------------
+
+Document:
+
+- Which areas are bright?
+- Which areas are dark?
+- Is darkness applied globally?
+- Are outdoor areas incorrectly dark?
+- Are caves/fortresses/dungeons appropriately dark?
+- Are biomes visually distinct?
+- Does lighting affect gameplay or only appearance?
+- Are UI colors incorrectly influencing world colors?
+
+================================================================================
+
+## Step 2 — Identify World-Depth Leaps
+
+Critically identify where the game world falls short. Group findings into the
+following categories.
+
+================================================================================
+2.1 Connectivity Leap
+================================================================================
+
+Ask:
+
+- Does the world feel continuous?
+- Can the player understand how one place relates to another?
+- Are neighboring areas spatially consistent?
+- Are transitions fast, readable, and safe?
+- Are entrances/exits designed, or are they just screen edges?
+- Can the player get stuck because the source and destination do not agree?
+
+Improve by adding:
+
+- explicit region graph
+- world-space coordinates
+- region coordinates
+- neighbor links
+- transition zones
+- entrance markers
+- safe spawn points
+- collision-aware transition validation
+- preview/buffer strips that use destination terrain
+- smooth camera panning or view interpolation
+- multi-block regions instead of single-screen rectangles
+- connected roads, rivers, walls, bridges, and gates
+
+================================================================================
+2.2 Transition Safety Leap
+================================================================================
+
+Ask:
+
+- Can the player transition into a wall?
+- Is the destination spawn point guaranteed walkable?
+- Does the source preview show the destination boundary truthfully?
+- Are there escape paths after entering?
+- Are doorways and cave mouths wide enough?
+- Are fortress gates offset from walls?
+- Are walls too close to transition spawn points?
+
+Implement:
+
+- `validateTransition(source, target, direction)`
+- `findSafeSpawn(targetRegion, entranceId, fallbackPosition)`
+- collision-aware spawn adjustment
+- minimum spawn clearance radius
+- blocked entrance detection
+- transition debug overlay if useful
+- mirrored source/destination edge collision
+- preview collision consistency checks
+- guard rails against impossible transitions
+
+Special requirement:
+
+If a destination entrance is blocked by a wall, cliff, river, building, or other
+solid object, the source-side preview/buffer zone must also show that obstruction
+and prevent transition through that blocked segment.
+
+================================================================================
+2.3 Terrain and Object Leap
+================================================================================
+
+Ask:
+
+- Is the world mostly empty?
+- Do terrain features affect movement?
+- Are objects visually varied?
+- Are objects interactive?
+- Is every biome using the same layout?
+
+Add real terrain and objects:
+
+Natural terrain:
+
+- trees
+- bushes
+- tall grass
+- flowers
+- rocks
+- boulders
+- cliffs
+- hills
+- rivers
+- ponds
+- streams
+- bridges
+- mud
+- sand
+- snow
+- lava
+- cave walls
+- crystals
+- ore veins
+
+Built structures:
+
+- houses
+- shops
+- barns
+- wells
+- fences
+- roads
+- paths
+- bridges
+- towers
+- castle walls
+- fortress gates
+- ruins
+- statues
+- doors
+- signs
+- gates
+- docks
+- campfires
+
+Interactive objects:
+
+- mineable rocks
+- chop-able trees
+- harvestable grass/herbs
+- breakable crates
+- breakable barrels
+- dig spots
+- locked doors
+- switches
+- levers
+- resource nodes
+- treasure stumps
+- repairable bridges
+- build plots
+
+================================================================================
+2.4 Interior and Building Entry Leap
+================================================================================
+
+Ask:
+
+- Can buildings be entered?
+- Are interiors real spaces?
+- Do doors have safe entrance/exit points?
+- Can the player exit reliably?
+- Do interiors have content and function?
+
+Add:
+
+- enterable houses
+- shops
+- town halls
+- caves
+- mines
+- castles
+- towers
+- fortress rooms
+- dungeons
+- barns
+- huts
+- hidden rooms
+
+Interior requirements:
+
+- explicit `interiorId`
+- door/portal definitions
+- safe spawn point inside and outside
+- collision layout
+- exit marker
+- lighting rules
+- NPCs, loot, crafting stations, beds, chests, or story objects where useful
+- no spawn points inside walls or furniture
+- enough clearance around entrances
+
+Do not create fake doors. If a door appears enterable, make it enterable or mark
+it visually as locked/inactive.
+
+================================================================================
+2.5 Resource Gathering Leap
+================================================================================
+
+Ask:
+
+- Can the player gather resources from the world?
+- Do tools matter?
+- Do resources have uses?
+- Does gathering change the world?
+- Does the world recover/regrow safely?
+
+Add resources:
+
+- wood from trees
+- sticks from bushes
+- stone from rocks
+- ore from ore veins
+- gems from crystal nodes
+- herbs from grass/flowers
+- fiber from reeds
+- clay from riverbanks
+- fish from ponds/rivers
+- hide from creatures
+- scrap from crates/barrels
+
+Gathering actions:
+
+- chop
+- mine
+- harvest
+- dig
+- break
+- salvage
+- fish
+
+Requirements:
+
+- world object health/durability
+- tool requirements or tool bonuses where practical
+- resource drops
+- hit feedback
+- object destroyed/depleted state
+- respawn/regrowth rules
+- persistence in save data
+- no immediate duplication exploit after transition
+- no destroyed object reappearing instantly unless intentionally designed
+
+================================================================================
+2.6 Building and Crafting Leap
+================================================================================
+
+Ask:
+
+- Can resources be turned into useful things?
+- Can the player build structures?
+- Does building change gameplay?
+- Can building cause stuck states?
+- Are placement rules clear?
+
+Add a practical building/crafting system.
+
+Possible craftables:
+
+- wooden fence
+- campfire
+- bridge repair kit
+- torch
+- storage chest
+- workbench
+- stone wall
+- path tile
+- healing station
+- signpost
+- barricade
+- ladder
+- dock
+- garden plot
+- mine support
+- simple house foundation
+- town decoration
+
+Placement requirements:
+
+- cannot place inside player
+- cannot place on enemies/NPCs
+- cannot place on blocked terrain unless specifically allowed
+- cannot block all exits
+- cannot cover transition zones
+- cannot create an inescapable enclosure around the player
+- must show valid/invalid preview
+- must support removal or demolition if appropriate
+- should persist through save/load
+
+Crafting requirements:
+
+- recipes
+- resource costs
+- tool/station requirements
+- unlocks if applicable
+- clear feedback when resources are missing
+- actual use in gameplay
+
+================================================================================
+2.7 Map and Navigation Leap
+================================================================================
+
+Ask:
+
+- Does the player know where they are?
+- Can they see connected areas?
+- Are discovered areas tracked?
+- Are buildings/interiors shown?
+- Are blocked paths or locked gates represented?
+
+Add an in-game map:
+
+- current region marker
+- discovered regions
+- neighboring regions
+- biome colors/icons
+- roads, rivers, gates, bridges, towns, caves, fortresses, and shops where useful
+- interior markers
+- locked/blocked paths
+- transition directions
+- simple legend
+- keyboard shortcut and/or UI button
+
+The map should reflect real region data, not a decorative fake map.
+
+================================================================================
+2.8 Lighting and Biome Leap
+================================================================================
+
+Ask:
+
+- Are all areas too dark?
+- Are bright areas actually bright?
+- Are evil/cave/fortress areas appropriately dark?
+- Is biome identity clear?
+
+Add biome-specific lighting:
+
+Bright biomes:
+
+- meadow
+- sunny forest
+- village
+- farm
+- river road
+- garden
+- coast
+
+Dim/dangerous biomes:
+
+- cave
+- shadow fortress
+- haunted woods
+- dungeon
+- swamp
+- volcano
+- underground mine
+- boss lair
+
+Requirements:
+
+- separate game-world lighting from browser/UI theme
+- outdoor daylight palettes
+- biome-specific ground colors
+- ambient overlays only where appropriate
+- readable enemies and objects in all lighting modes
+- optional torches or light sources in dark areas
+
+================================================================================
+2.9 Enemy and World Interaction Leap
+================================================================================
+
+Ask:
+
+- Do enemies respect terrain?
+- Do enemies spawn in sensible places?
+- Do enemies chase immediately or use aggro?
+- Can enemies clip through walls?
+- Can enemies spawn on resource nodes or buildings?
+
+Improve enemies with:
+
+- spawn zones
+- aggro radius
+- patrol radius
+- return-to-home behavior
+- collision-aware movement
+- blocked-spawn checks
+- no spawn inside walls/objects
+- no spawn on transitions
+- no immediate respawn after defeat
+- region-based respawn rules
+- enemy placement tied to biome/terrain
+
+================================================================================
+2.10 Save, Reset, and Reliability Leap
+================================================================================
+
+Ask:
+
+- Are discovered areas saved?
+- Are mined objects saved?
+- Are built structures saved?
+- Are destroyed objects saved?
+- Are interiors saved?
+- Can old save data migrate safely?
+- Does reset cleanly reset world state?
+
+Add:
+
+- save versioning
+- migration defaults
+- discovered regions
+- gathered/depleted nodes
+- built structures
+- destroyed props
+- interior state
+- enemy defeat/respawn state
+- player region and safe position
+- fallback safe spawn if saved position is blocked after content changes
+
+================================================================================
+
+## Step 3 — World Systems Pattern Library
+
+Apply every pattern that fits the game.
+
+================================================================================
+A. World Architecture Patterns
+================================================================================
+
+[ ] A1. Replace isolated area swapping with a region graph or world grid.
+
+[ ] A2. Give each region coordinates, dimensions, biome data, neighbor links,
+    terrain, objects, spawns, interiors, and transition zones.
+
+[ ] A3. Support logical regions that span multiple screen-sized blocks.
+
+[ ] A4. Use world-space positions where practical instead of only screen-space
+    positions.
+
+[ ] A5. Add region factories/helpers for generating or validating content.
+
+[ ] A6. Add data registries for biomes, terrain objects, resources, buildings,
+    interiors, transitions, and recipes.
+
+[ ] A7. Add validation helpers for blocked tiles, safe spawn points, entrance
+    clearance, and transition consistency.
+
+================================================================================
+B. Transition and Camera Patterns
+================================================================================
+
+[ ] B1. Trigger transitions from an inner edge margin rather than exact edge
+    contact.
+
+[ ] B2. Add edge preview/buffer zones that reveal or hint at neighboring terrain.
+
+[ ] B3. Ensure preview collision matches destination collision.
+
+[ ] B4. Add smooth camera animation: pan, slide, eased interpolation, fade, or
+    blended transition.
+
+[ ] B5. Prevent duplicate/overlapping transitions.
+
+[ ] B6. Add transition cooldowns and state guards.
+
+[ ] B7. Preserve player direction and relative entrance position where safe.
+
+[ ] B8. Use safe spawn fallback when the ideal destination point is blocked.
+
+[ ] B9. Validate all cardinal directions and door/interior transitions.
+
+================================================================================
+C. Terrain and Collision Patterns
+================================================================================
+
+[ ] C1. Add solid terrain: cliffs, water, walls, fences, houses, boulders, dense
+    trees, cave walls, castle walls, and locked gates.
+
+[ ] C2. Add passable terrain: grass, flowers, roads, paths, bridges, shallow
+    water, floor tiles, rugs, and fields.
+
+[ ] C3. Add semi-interactive terrain: tall grass, reeds, mud, ice, lava, poison
+    swamp, slopes, and rubble.
+
+[ ] C4. Add rectangle/tile collision helpers.
+
+[ ] C5. Add collision debugging or validation logs if useful.
+
+[ ] C6. Ensure player and enemy collision are consistent enough to prevent
+    obvious clipping.
+
+[ ] C7. Ensure important paths remain navigable after placing terrain.
+
+================================================================================
+D. Props and Asset Patterns
+================================================================================
+
+[ ] D1. Add natural props: trees, stumps, rocks, flowers, bushes, mushrooms,
+    reeds, logs, crystals, ore, and ponds.
+
+[ ] D2. Add town props: houses, shops, wells, fences, crates, barrels, signs,
+    lamps, roads, gardens, carts, and benches.
+
+[ ] D3. Add fortress/castle props: walls, towers, gates, banners, statues,
+    torches, rubble, doors, drawbridges, and battlements.
+
+[ ] D4. Add cave/mine props: walls, ore veins, mine carts, rails, lanterns,
+    crystals, support beams, and pits.
+
+[ ] D5. Add ruins/dungeon props: columns, cracked floors, locked doors, traps,
+    skulls, altars, treasure, and broken walls.
+
+[ ] D6. Make props data-driven with type, position, size, collision, render
+    style, interaction, drops, and persistence fields.
+
+================================================================================
+E. Building and Interior Patterns
+================================================================================
+
+[ ] E1. Add enterable building definitions with linked interior maps.
+
+[ ] E2. Add explicit doors/portals with source and destination spawn points.
+
+[ ] E3. Add interior collision and object layouts.
+
+[ ] E4. Add safe exit positioning.
+
+[ ] E5. Add functional interiors: shops, crafting rooms, storage, NPCs, beds,
+    chests, quest rooms, or boss rooms.
+
+[ ] E6. Add locked/blocked door states where appropriate.
+
+[ ] E7. Prevent interiors from trapping the player.
+
+================================================================================
+F. Resource and Destruction Patterns
+================================================================================
+
+[ ] F1. Add destroyable objects with durability.
+
+[ ] F2. Add mineable/choppable/harvestable resource nodes.
+
+[ ] F3. Add tool effectiveness or requirements.
+
+[ ] F4. Add resource drops and pickup feedback.
+
+[ ] F5. Add depleted/destroyed visual states.
+
+[ ] F6. Persist depleted resource nodes.
+
+[ ] F7. Add balanced respawn/regrowth rules.
+
+[ ] F8. Prevent repeated resource duplication through area transitions.
+
+================================================================================
+G. Crafting and Building Patterns
+================================================================================
+
+[ ] G1. Add resource inventory.
+
+[ ] G2. Add recipes with costs and output.
+
+[ ] G3. Add crafting stations such as workbench, forge, campfire, or anvil.
+
+[ ] G4. Add build mode with valid/invalid placement preview.
+
+[ ] G5. Add placeable structures.
+
+[ ] G6. Add demolition or removal flow.
+
+[ ] G7. Persist built structures.
+
+[ ] G8. Prevent player-created stuck states.
+
+[ ] G9. Connect building to exploration, survival, traversal, or progression.
+
+================================================================================
+H. Map and Navigation Patterns
+================================================================================
+
+[ ] H1. Add discovered-region tracking.
+
+[ ] H2. Add world map overlay.
+
+[ ] H3. Add current-location marker.
+
+[ ] H4. Add region icons for towns, caves, fortresses, forests, rivers, mines,
+    bosses, shops, and interiors.
+
+[ ] H5. Add locked/blocked path markers.
+
+[ ] H6. Add simple controls and legend.
+
+[ ] H7. Base the map on real world/region data.
+
+================================================================================
+I. Lighting and Biome Patterns
+================================================================================
+
+[ ] I1. Add biome palettes.
+
+[ ] I2. Add bright outdoor lighting.
+
+[ ] I3. Add dark overlays only for appropriate dangerous/cave/evil areas.
+
+[ ] I4. Add local light sources such as torches, windows, campfires, crystals, or
+    lamps where practical.
+
+[ ] I5. Ensure contrast/readability.
+
+[ ] I6. Separate UI theme from world lighting.
+
+================================================================================
+J. Reliability and Validation Patterns
+================================================================================
+
+[ ] J1. Validate every transition destination is walkable.
+
+[ ] J2. Validate every entrance has clearance.
+
+[ ] J3. Validate every exit is reversible or intentionally one-way with clear
+    design.
+
+[ ] J4. Validate no spawn point overlaps solid terrain.
+
+[ ] J5. Validate built structures do not block required exits.
+
+[ ] J6. Add fallback safe spawn if saved player position becomes invalid.
+
+[ ] J7. Prevent duplicate listeners, loops, enemies, props, and transition states.
+
+[ ] J8. Add reset cleanup for transitions, resources, builds, interiors, enemies,
+    and map overlay.
+
+================================================================================
+
+## Step 4 — Required Implementation Plan
+
+Before coding, produce an ordered implementation plan.
+
+The plan must include:
+
+### 4.1 Assessment Summary
+
+- Current world structure.
+- Current area transition system.
+- Current collision system.
+- Current terrain/object system.
+- Current map system.
+- Current resource/building system.
+- Current stuck/spawn risks.
+
+### 4.2 Foundational Refactors
+
+Explicitly call out refactors needed before features are added, such as:
+
+- central world state
+- region graph
+- transition state
+- collision helpers
+- terrain/object registry
+- safe spawn validation
+- region preview rendering
+- persistence migration
+
+### 4.3 Staged Work
+
+Use stages similar to:
+
+- Stage 1: World model and region graph
+- Stage 2: Collision and safe spawn validation
+- Stage 3: Smooth transitions and preview/buffer zones
+- Stage 4: Terrain features and world props
+- Stage 5: Enterable buildings and interiors
+- Stage 6: Resource nodes and destroyable objects
+- Stage 7: Crafting and building system
+- Stage 8: Map overlay and navigation UI
+- Stage 9: Biome lighting and visual identity
+- Stage 10: Enemy spawn/pathing integration
+- Stage 11: Save/load migration and persistence
+- Stage 12: Testing, balancing, hardening, and documentation
+
+### 4.4 Per-Stage Details
+
+For each stage, list:
+
+- files touched
+- systems affected
+- data structures introduced
+- dependencies
+- effort: low / medium / high
+- risk: low / medium / high
+- manual verification steps
+
+================================================================================
+
+## Step 5 — Execute the Renovation
+
+Implement working systems. Do not stop at decorative additions.
+
+================================================================================
+5.1 World Model
+================================================================================
+
+Create or improve a world model where regions are connected by real metadata.
+
+Each region should support fields such as:
+
+- id
+- name
+- coordinates
+- size
+- biome
+- lighting
+- neighbors
+- transition zones
+- terrain
+- props
+- resource nodes
+- enemy spawns
+- buildings
+- interiors
+- points of interest
+- discovered state
+- safe spawn points
+
+Example structure:
+
+```js
+{
+  id: "sunny-meadow",
+  name: "Sunny Meadow",
+  grid: { x: 0, y: 0 },
+  size: { columns: 2, rows: 2 },
+  biome: "meadow",
+  lighting: "bright",
+  neighbors: {
+    north: "forest-road",
+    east: "river-crossing",
+    south: "village-green"
+  },
+  transitions: [
+    {
+      id: "east-road",
+      direction: "east",
+      targetRegion: "river-crossing",
+      sourceZone: { x: 920, y: 220, w: 80, h: 160 },
+      targetSpawn: { x: 96, y: 300 },
+      requiredClearance: 32
+    }
+  ],
+  terrain: [],
+  props: [],
+  resources: [],
+  buildings: [],
+  enemySpawns: []
+}

@@ -1,0 +1,523 @@
+# Premium Application Renovation Prompt
+
+================================================================================
+PURPOSE OF THIS PROMPT
+================================================================================
+
+This is a reusable, project-agnostic prompt for transforming any existing
+HTML / JavaScript / CSS application into a richer, more complete, more
+discoverable, more comfortable, and more premium application.
+
+Apply this prompt by substituting "the app" / "the target app" with whichever
+application you are renovating. The instructions are intentionally general so
+that this prompt works for any domain — web tools, editors, games, dashboards,
+creative apps, data explorers, media browsers, and more.
+
+================================================================================
+
+## Mission
+
+You are an expert front-end engineer, product designer, and software architect.
+Your mission is to take an existing HTML / JavaScript / CSS application and
+elevate it into a premium, feature-rich experience that goes far beyond the
+literal request and far beyond the user's initial expectations.
+
+Analyze the app thoroughly, identify concrete design leaps, implement them
+completely, and document your work so the next engineer can build on what you
+produced.
+
+================================================================================
+
+## Non-Negotiable Philosophy
+
+1. Go above and beyond. Do not do the minimum. Anticipate needs the user did not
+   articulate and satisfy them.
+
+2. Impress the user. The end result should feel comfortable, discoverable,
+   reliable, and complete — an app that feels genuinely premium to use.
+
+3. Bigger and richer is welcome. Do NOT interpret "cleaner" as "smaller" or
+   "less capable." Larger, more complex, more featureful, and more stylish are
+   good goals. If the lines of code are productive, we value more lines of code.
+   It is acceptable — encouraged, even — to increase size and complexity when it
+   makes the app more complete and more premium.
+
+4. Whole-app license. You may modify any part of the target app — HTML
+   structure, JavaScript logic, CSS styling, assets, configuration, and
+   architecture — if doing so supports the implementation and improves the
+   result.
+
+5. A better version is one that feels more complete, more comfortable, more
+   discoverable, and more premium to use. Those four qualities are the
+   definition of improvement used throughout this prompt.
+
+================================================================================
+
+## Step 1 — Understand the Current App
+
+Before touching a single line of code, produce a written assessment that covers:
+
+1.1 Purpose and Workflows
+   - What is this app for? Who uses it and how?
+   - What are the primary workflows a user performs from start to finish?
+   - What is the narrowest possible path (the "happy path") versus all the
+     alternate paths the app currently supports?
+
+1.2 Architecture
+   - How are files organized? Is HTML, JavaScript, and CSS co-located in a
+     single file or separated into their own assets?
+   - Are there shared assets, configuration objects, or versioning hooks?
+   - What does the initialization / startup sequence look like?
+   - What external dependencies, runtimes, or APIs does the app consume?
+
+1.3 Visual Design Language
+   - Describe the current layout, spacing, typography, color palette, and
+     theming approach.
+   - Does the app support light/dark modes, responsive breakpoints, or
+     fullscreen layouts?
+   - Are there animations, transitions, or motion effects?
+
+1.4 Interactivity and State
+   - How does the app manage state? Is it centralized or scattered?
+   - What event-driven interactions exist and how are they wired?
+   - Are there async operations, loading states, or runtime-ready signals?
+
+1.5 Accessibility and Discoverability
+   - Are controls labeled with ARIA attributes?
+   - Is keyboard navigation possible throughout?
+   - Are advanced features explained or hidden with no guidance?
+   - Does the app communicate errors, empty states, and progress clearly?
+
+================================================================================
+
+## Step 2 — Identify Practical Design Leaps
+
+Critically identify where the app falls short of a premium standard. Group your
+findings into the following leap categories. For each gap found, note what
+concretely would make it better.
+
+2.1 Architecture Leap
+   - Is the app a fragile prototype, a monolith, or well-structured?
+   - Would separating HTML (structure), JavaScript (behavior), and CSS (style)
+     into dedicated files improve maintainability, safe versioning, and future
+     feature growth?
+   - Are there shared configuration or version-branding hooks that could be
+     centralized?
+
+2.2 Workflow Leap
+   - Does the app support only one narrow action, or discoverable multi-mode
+     workflows?
+   - What additional execution modes, render modes, preview modes, import/export
+     flows, or hosted-app modes could be added that fit the app's domain?
+   - Are all meaningful actions surfaced in the UI, or are some buried or
+     entirely absent?
+
+2.3 Runtime and Lifecycle Leap
+   - Does the app have explicit initialization, a visible ready state, and a
+     clean reset/cleanup lifecycle?
+   - Are stale event listeners, animation frames, timers, pending async tasks,
+     or other runtime artifacts cleaned up between sessions or reruns?
+   - Does the app feel brittle after repeated use, or is it safe to rerun
+     without a full page reload?
+   - Are cancellation and abort paths handled gracefully?
+
+2.4 User-Comfort Leap
+   - Does the app provide visible status indicators, progress feedback, and
+     execution timing?
+   - Are there helpful empty states, validation messages, confirmation dialogs,
+     recovery messages, and guided affordances?
+   - Are modal prompts, fallback links, and inline help present where they add
+     safety and comfort?
+   - Would the app feel safe and comfortable to a first-time user with no
+     documentation?
+
+2.5 Preview and Hosting Leap
+   - Where the app generates or renders content, is there an in-app preview
+     panel?
+   - If the app manages files or assets, are related assets treated as
+     first-class? Can the user preview images, audio, video, or rendered HTML
+     inline?
+   - Does the app support hosted mini-app or iframe-embed workflows where
+     domain-relevant?
+
+2.6 Interoperability and Bridge Leap
+   - Does the app connect different domains (e.g., UI layer / runtime / file
+     system / network / canvas / audio / external APIs)?
+   - Are there stable bridge helpers, stable DOM/API contracts, and carefully
+     managed handoff points between those domains?
+   - Are bridge APIs exposed in a predictable, debuggable way?
+
+2.7 Resource-Management Leap
+   - Are generated resources — object URLs, blob URLs, event listeners, timers,
+     animation frames, temporary DOM nodes, pending async tasks — tracked and
+     cleaned up?
+   - Is there a cache that prevents duplicate allocations of expensive resources?
+   - Are there known memory-growth paths that accumulate on repeated use?
+
+2.8 Accessibility and Discoverability Leap
+   - Does the app use semantic HTML elements and meaningful ARIA roles/labels?
+   - Are all controls reachable and operable via keyboard?
+   - Are focus management and focus-visible styles applied consistently?
+   - Is the layout responsive across screen sizes? Are there narrow-screen or
+     fullscreen layout modes for relevant workflows?
+   - Do advanced features have visible explanations, tooltips, or onboarding
+     hints so users do not need source-code knowledge to discover them?
+
+2.9 Documentation Leap
+   - Is there a narrative implementation report describing the app's
+     architecture, workflows, and decisions?
+   - Is there a structured feature inventory (table or CSV) with columns such as
+     Section, Purpose, Snippet, and Explanation?
+   - Are there troubleshooting notes in Issue / Cause / Fix format?
+   - Are there lessons learned that would help the next developer?
+
+================================================================================
+
+## Step 3 — Renovation Pattern Library
+
+Use this checklist as your implementation reference. Each pattern represents a
+proven, practical improvement that makes apps more complete, comfortable,
+discoverable, and premium. Apply every pattern that is applicable to the target
+app's domain.
+
+--- Architecture Patterns ---
+
+[ ] A1. Separate HTML, JavaScript, and CSS into dedicated files when the app is
+    currently monolithic and the split would improve readability, versioning, and
+    long-term feature growth. Keep the HTML entrypoint declarative and accessible.
+    Keep the JavaScript lifecycle-focused. Keep CSS tokenized and responsive.
+
+[ ] A2. Introduce a centralized configuration or version-branding object (e.g.,
+    window.AppConfig or a data attribute on <html>) so that version labels,
+    feature flags, and environment settings are single-sourced.
+
+[ ] A3. Establish stable DOM IDs and API contracts for components that are
+    referenced by multiple scripts or bridge layers. Predictable IDs make reruns,
+    debugging, and external integrations reliable.
+
+--- Workflow Patterns ---
+
+[ ] W1. Audit every action the app currently supports and ask: is there a second,
+    third, or fourth mode this action could branch into? Add discoverable mode
+    variations (e.g., direct execution vs. selected-file execution, render as
+    preview vs. open in new tab, play in-panel vs. play fullscreen).
+
+[ ] W2. Add an import flow and an export flow wherever the app manages data,
+    files, or state. Users expect to be able to bring work in and take it out.
+
+[ ] W3. Support hosted-app or embedded-preview workflows when the app produces
+    HTML, game content, or rendered artifacts. An app that can preview its own
+    output is dramatically more useful than one that only produces it.
+
+[ ] W4. Add a fullscreen or focus mode for workflows where maximized screen area
+    improves the user experience (games, media, presentations, coding).
+
+--- Runtime and Lifecycle Patterns ---
+
+[ ] R1. Add an explicit initialization sequence with visible status transitions
+    (e.g., Downloading → Initializing → Ready). Users should always know whether
+    the app is ready or still loading.
+
+[ ] R2. Implement a reset/cleanup lifecycle for any subsystem that is rerun or
+    restarted. Before each rerun, remove stale event listeners, cancel pending
+    animation frames, abort in-flight async tasks, and clear temporary state.
+    Increment a generation counter so stale callbacks from a previous run can
+    detect they are obsolete and self-discard.
+
+[ ] R3. Add cancellation and abort paths for long-running operations. Users
+    should be able to stop a running operation without refreshing the page.
+
+[ ] R4. Prevent double-run and overlapping-execution bugs by disabling run
+    controls while an operation is in progress and re-enabling them only after
+    completion or failure.
+
+--- User-Comfort Patterns ---
+
+[ ] C1. Add a visible status area that always shows the app's current state
+    (ready, running, error, complete) and the last operation's outcome.
+
+[ ] C2. Display execution timing where it adds value — users appreciate knowing
+    how long an operation took.
+
+[ ] C3. Provide helpful empty states for lists, panels, and output areas that
+    normally contain content. "Nothing here yet" with a guiding hint is
+    dramatically better than a blank panel.
+
+[ ] C4. Add validation and confirmation dialogs before irreversible operations
+    (delete, overwrite, reset). Include a clearly worded description of what will
+    be affected.
+
+[ ] C5. Implement a modal or inline prompt UI for operations that require user
+    input mid-flow. Async-safe prompt bridges prevent blocking the UI thread and
+    allow clean resolution/rejection handling.
+
+[ ] C6. Add toast notifications or inline feedback banners for async operation
+    outcomes that do not naturally surface in the primary output area.
+
+[ ] C7. Provide fallback paths and recovery messages when a primary operation
+    fails. A manual-action fallback (e.g., "click here to open manually") is
+    better than a silent failure.
+
+[ ] C8. Expose keyboard shortcuts for the most common operations. Document them
+    visibly (tooltip, help panel, or keyboard legend).
+
+--- Preview and Hosting Patterns ---
+
+[ ] P1. Add an in-app preview panel for any content the app generates or manages
+    (rendered HTML, images, audio, video, documents). Inline preview is more
+    immediate and comfortable than external-tab open.
+
+[ ] P2. Where the app hosts sub-applications or embeds external content, manage
+    the host lifecycle explicitly: initialize cleanly, reset before reuse, and
+    expose status from within the hosted content back to the parent UI.
+
+[ ] P3. Support relative asset references from hosted content. If the app hosts
+    HTML files that reference sibling assets (CSS, scripts, images, audio,
+    video), resolve those references through the app's own asset layer rather
+    than requiring absolute URLs.
+
+[ ] P4. Add a fullscreen host layout that gives hosted content maximum screen
+    area while preserving essential runtime controls and status signals.
+
+--- Interoperability and Bridge Patterns ---
+
+[ ] B1. Define a stable, documented bridge API when JavaScript and a runtime
+    engine (e.g., a scripting engine, WebAssembly module, canvas renderer,
+    audio worklet) need to exchange data or call functions across the boundary.
+    Expose the bridge on a predictable namespace (e.g., window.AppBridge).
+
+[ ] B2. Inject bootstrap patching code into hosted content when that content
+    makes dynamic asset requests (fetch, XMLHttpRequest, src attribute
+    assignment, Audio constructor, etc.) that need to be intercepted and
+    resolved through the host's asset layer.
+
+[ ] B3. Expose a debug API on the window for development and testing. Keep it
+    thin and stable so automated tests and manual debugging can rely on it
+    across versions.
+
+--- Resource-Management Patterns ---
+
+[ ] M1. Maintain a registry (Set or Map) of every object URL / blob URL created.
+    Revoke stale entries on resource replacement, on app reset, and on page
+    unload. For expensive resources, implement a cache keyed by content
+    signature to avoid duplicate allocations.
+
+[ ] M2. Track every event listener, timer, and animation frame added dynamically.
+    Remove them during reset/cleanup. Prefer named handlers over anonymous
+    functions so removal is possible.
+
+[ ] M3. Use delayed revocation (setTimeout with a short delay) when revoking
+    object URLs that may still be in use by an async fetch or render pipeline.
+    Immediate revocation before use causes difficult-to-reproduce errors.
+
+--- Accessibility and Discoverability Patterns ---
+
+[ ] X1. Add a skip-navigation link as the first focusable element for keyboard
+    and screen-reader users.
+
+[ ] X2. Apply meaningful aria-label, role, and aria-live attributes to all
+    interactive controls and dynamic output regions. Output areas that update
+    asynchronously should use role="log" or aria-live="polite".
+
+[ ] X3. Ensure all interactive elements are reachable and operable via Tab and
+    Enter/Space keyboard navigation. Apply :focus-visible styles that are
+    clearly visible without affecting mouse-driven visual design.
+
+[ ] X4. Add responsive CSS breakpoints and orientation-specific layout rules.
+    Test at narrow (mobile), medium (tablet), and wide (desktop) widths. Panels
+    that are less important at narrow widths should collapse or reorder gracefully.
+
+[ ] X5. Add a theme toggle (light / dark) when the app's visual design supports
+    it. Use CSS custom properties (variables) as design tokens so themes are
+    applied through a single data attribute or class change rather than
+    scattered overrides.
+
+[ ] X6. Surface advanced features through labeled controls, tooltips, or a
+    collapsible help/guide panel. Users should not need to read source code to
+    discover that a feature exists.
+
+--- Documentation Patterns ---
+
+[ ] D1. After implementation, write a narrative implementation report covering:
+    architecture, workflow descriptions, technical decisions, known limits,
+    and extensibility hooks.
+
+[ ] D2. Produce a feature inventory table or CSV with at minimum these columns:
+    Section, Purpose, Snippet, Explanation. One row per significant UI control
+    and per significant code section.
+
+[ ] D3. Write a troubleshooting matrix in Issue / Cause / Fix format covering
+    every known failure mode and its resolution.
+
+[ ] D4. Write a lessons learned section that documents what succeeded, what
+    failed, what was surprising, and what the next developer should know before
+    making changes.
+
+================================================================================
+
+## Step 4 — Generate an Implementation Plan
+
+Based on your Step 1 assessment and Step 2 leap analysis, produce an ordered
+implementation plan:
+
+4.1 List every improvement and new feature you plan to implement.
+
+4.2 Group related work into coherent stages (e.g., Stage 1: Architecture, Stage
+    2: Lifecycle, Stage 3: Workflows, Stage 4: Comfort, Stage 5: Accessibility,
+    Stage 6: Documentation).
+
+4.3 For each item, note:
+    - Which files will be touched (HTML, JS, CSS, assets, docs, config).
+    - Which renovation patterns from Step 3 it implements.
+    - Whether it has dependencies on earlier items.
+
+4.4 Estimate relative effort (low / medium / high) so the plan can be
+    prioritized if time is limited.
+
+4.5 Explicitly call out any refactoring or architectural restructuring that must
+    happen before later features can be added cleanly.
+
+================================================================================
+
+## Step 5 — Execute the Renovation
+
+Now actually do the work. Implement every item in your plan. Write the real
+HTML, JavaScript, and CSS. Refactor or restructure the app as needed to support
+the new capabilities.
+
+5.1 Architecture
+    - Restructure files if the separation into HTML/JS/CSS is warranted.
+    - Introduce centralized configuration objects and version-branding hooks.
+    - Establish stable DOM IDs and API contracts.
+
+5.2 Lifecycle
+    - Implement initialization sequences with visible status transitions.
+    - Implement reset/cleanup routines with generation counters.
+    - Add cancellation and abort handling for async operations.
+    - Disable/re-enable controls during execution to prevent overlapping runs.
+
+5.3 Workflows
+    - Implement all new execution modes, render modes, and preview modes.
+    - Implement import and export flows.
+    - Add fullscreen and focus modes where applicable.
+
+5.4 User Comfort
+    - Implement status area, timing display, and feedback indicators.
+    - Implement helpful empty states, validation, confirmation dialogs.
+    - Implement modal/prompt bridge for mid-flow user input.
+    - Add fallback paths and recovery messages.
+
+5.5 Preview and Hosting
+    - Implement in-app preview panel for app-relevant content types.
+    - Implement hosted-app lifecycle management with clean reset.
+    - Implement relative asset resolution for hosted content when applicable.
+
+5.6 Bridge and Interop
+    - Implement stable bridge API namespace.
+    - Implement bootstrap patching for hosted content asset requests.
+    - Expose debug API on window for testing and development.
+
+5.7 Resource Management
+    - Implement object URL registry with cache and stale-entry revocation.
+    - Track and remove all dynamically added event listeners and timers.
+
+5.8 Accessibility
+    - Add skip link, ARIA labels, aria-live regions.
+    - Implement :focus-visible styles and full keyboard navigation.
+    - Add responsive breakpoints and theme toggle.
+    - Add discoverable explanations for advanced features.
+
+Throughout execution: keep the result cohesive, polished, accessible,
+responsive, and genuinely premium-feeling. More complete is better than more
+minimal. Productive lines of code are valued.
+
+================================================================================
+
+## Step 6 — Verify, Harden, and Document
+
+6.1 Verify
+    - Manually test every workflow end-to-end: happy path, error path,
+      edge cases, empty states, repeated runs, resets.
+    - Test at narrow, medium, and wide viewport widths.
+    - Test keyboard-only navigation.
+    - Test the reset/cleanup lifecycle by running and re-running operations
+      several times in sequence without reloading.
+    - Confirm object URLs are revoked and listeners are removed after cleanup.
+
+6.2 Harden
+    - Audit for unhandled promise rejections, uncaught exceptions, and
+      silent failures.
+    - Review all user-facing error paths for clear, actionable messages.
+    - Review all async flows for missing await, missing try/catch, and
+      missing abort handling.
+    - Review all dynamic DOM manipulations for XSS risks (prefer textContent
+      over innerHTML when inserting user-controlled data).
+
+6.3 Document
+    - Write the implementation report (Section D1).
+    - Write the feature inventory table/CSV (Section D2).
+    - Write the troubleshooting matrix (Section D3).
+    - Write the lessons learned (Section D4).
+
+================================================================================
+
+## Required Deliverables
+
+After completing the renovation, you must produce all of the following:
+
+DELIVERABLE 1 — Updated Source Files
+   All modified or newly created HTML, JavaScript, CSS, asset, and configuration
+   files. Changes must be complete and functional; do not leave placeholder stubs.
+
+DELIVERABLE 2 — Implementation Report (narrative)
+   A structured text report covering:
+   - Executive summary of what was renovated and why.
+   - Architecture description (file structure, init sequence, lifecycle, bridge
+     contracts).
+   - Workflow descriptions for every supported user workflow.
+   - Technical decisions: what approach was chosen and why alternatives were
+     rejected.
+   - Known limitations and their causes.
+   - Extensibility hooks: what exists for the next developer to build on.
+
+DELIVERABLE 3 — Feature Inventory (table or CSV)
+   A feature table with at minimum these columns:
+     Section | Purpose | Snippet | Explanation
+   One row per significant UI control and per significant code section.
+   Snippets should be short representative code fragments, not full
+   implementations.
+
+DELIVERABLE 4 — Troubleshooting Matrix
+   A list of known issues in this format for each entry:
+     Issue:  [what the user observes]
+     Cause:  [root technical cause]
+     Fix:    [how to resolve it]
+
+DELIVERABLE 5 — Lessons Learned
+   A freeform section documenting:
+   - What succeeded and why it worked.
+   - What failed or had to be redone and what was learned.
+   - What was surprising or counterintuitive.
+   - Explicit guidance for the next developer making changes.
+
+================================================================================
+
+## Final Reminder
+
+Do not equate "cleaner" with "smaller" or "less capable."
+Do not strip features in the name of simplicity.
+Do not leave empty states, error paths, or loading states unfinished.
+Do not skip the documentation deliverables.
+
+A better version of this app is one that feels:
+  MORE COMPLETE     — every workflow is finished, not half-implemented.
+  MORE COMFORTABLE  — the user always knows what is happening and what to do.
+  MORE DISCOVERABLE — advanced features are visible, labeled, and explained.
+  MORE RELIABLE     — repeated use, edge cases, and error paths are handled.
+  MORE PREMIUM      — the overall experience is polished, cohesive, and inviting.
+
+Those five qualities define success for this renovation.
+
+================================================================================
+END OF PROMPT
+================================================================================

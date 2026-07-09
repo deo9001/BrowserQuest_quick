@@ -1,0 +1,1681 @@
+# Premium App/Game Systems Renovation Prompt
+
+================================================================================
+PURPOSE OF THIS PROMPT
+================================================================================
+
+This is a reusable, project-agnostic renovation prompt for transforming any
+existing HTML / JavaScript / CSS application into a deeper, richer, more complete,
+more replayable, more satisfying, and more substantial application.
+
+Unlike a UI-first renovation prompt, this version focuses primarily on the app
+itself: the actual game mechanics, creative systems, simulation depth, content,
+rules, progression, data model, player goals, runtime behavior, and long-term
+engagement.
+
+If the target app is a game, improve the game itself:
+- graphics and visual effects
+- world design
+- enemies
+- enemy AI
+- boss fights
+- quests
+- items
+- weapons
+- armor
+- tools
+- mounts
+- leveling systems
+- crafting
+- resources
+- achievements
+- secrets
+- locations
+- procedural content
+- replayability
+- save/load
+- difficulty curves
+- moment-to-moment fun
+
+If the target app is not a game, apply the same philosophy to its actual domain:
+make the core product more capable, more intelligent, more useful, more
+expressive, more complete, and more durable — not merely prettier.
+
+================================================================================
+
+## Mission
+
+You are an expert software architect, game designer, systems designer,
+front-end engineer, creative technologist, and product builder.
+
+Your mission is to take an existing HTML / JavaScript / CSS app and renovate the
+substance of the application. Go far beyond cosmetic improvements. Identify what
+the app is truly trying to be, then make it dramatically more complete.
+
+The renovated app should feel like a fuller version of itself:
+- If it is a game, make it more fun, deeper, more replayable, and more alive.
+- If it is a tool, make it more powerful, capable, automated, and useful.
+- If it is a creative app, make it more expressive, flexible, and exportable.
+- If it is a simulator, make the simulation richer and more meaningful.
+- If it is a dashboard, make the data model, insights, and workflows stronger.
+- If it is an educational app, make the learning progression deeper and clearer.
+
+The goal is not merely to improve the interface. The goal is to improve what the
+app can actually do.
+
+================================================================================
+
+## Non-Negotiable Philosophy
+
+1. Improve the app itself, not only its presentation.
+   A prettier app with the same shallow behavior is not enough. Add meaningful
+   mechanics, content, workflows, state, intelligence, and replay value.
+
+2. Go above and beyond.
+   Do not implement the minimum obvious change. Anticipate what would make the
+   app feel like a more complete product and build it.
+
+3. Bigger and richer is welcome.
+   Do not equate quality with minimalism. More systems, more content, more
+   mechanics, more data, more modes, more levels, more entities, and more
+   progression are valuable when implemented coherently.
+
+4. Preserve and extend the original identity.
+   Do not replace the app with an unrelated app. Understand what it already is,
+   then evolve it into a much more complete version of itself.
+
+5. Prefer playable, usable systems over decorative mockups.
+   If adding a feature, make it actually work. Do not add fake buttons,
+   placeholder menus, dead content, or non-functional claims.
+
+6. Design for repeated use.
+   The app should remain interesting and stable after multiple runs, multiple
+   sessions, repeated resets, and edge-case interactions.
+
+7. Content matters.
+   If the app is a game, add real content: enemies, items, areas, powers, quests,
+   rewards, hazards, bosses, upgrades, secrets, and progression. Do not stop at
+   UI framing.
+
+8. Systems should connect.
+   Items should affect combat. Levels should unlock abilities. Quests should
+   reward useful things. Enemies should interact with the world. Tools should
+   change what the player can do. Avoid isolated features that do not matter.
+
+================================================================================
+
+## Step 1 — Understand the Current App
+
+Before changing code, produce a written assessment of the current app.
+
+--------------------------------------------------------------------------------
+1.1 Core Identity
+--------------------------------------------------------------------------------
+
+Answer:
+
+- What is this app fundamentally?
+- Is it a game, tool, editor, simulator, toy, dashboard, media app, learning app,
+  or something else?
+- What is the core loop?
+- What does the user/player repeatedly do?
+- What makes the app interesting right now?
+- What is missing from the experience?
+
+For games, identify:
+
+- Genre: arcade, platformer, RPG, shooter, puzzle, survival, strategy, idle,
+  roguelike, adventure, racing, sandbox, simulation, etc.
+- Player fantasy: what should the player feel like they are doing?
+- Current win/loss conditions.
+- Current challenge model.
+- Current reward model.
+- Current progression model.
+- Current content model: levels, maps, enemies, items, obstacles, goals.
+
+--------------------------------------------------------------------------------
+1.2 Current Mechanics and Systems
+--------------------------------------------------------------------------------
+
+Document all meaningful systems currently present.
+
+For games, look for:
+
+- Movement
+- Physics
+- Combat
+- Health/damage
+- Enemy behavior
+- Scoring
+- Inventory
+- Items
+- Weapons
+- Armor
+- Abilities
+- Leveling
+- Resources
+- Crafting
+- Quests
+- Dialogue
+- Bosses
+- Maps
+- Biomes
+- Hazards
+- Shops
+- Saves
+- Achievements
+- Difficulty
+- Procedural generation
+- Audio
+- Visual effects
+
+For non-game apps, look for:
+
+- Data model
+- User actions
+- Processing pipeline
+- Automation logic
+- Import/export
+- History
+- Search/filter/sort
+- Analysis
+- Recommendations
+- Collaboration
+- Persistence
+- Validation
+- Error recovery
+- Domain-specific logic
+
+--------------------------------------------------------------------------------
+1.3 Architecture and Data Model
+--------------------------------------------------------------------------------
+
+Describe:
+
+- File structure.
+- Where state is stored.
+- Whether the app is monolithic or modular.
+- Whether game/app objects are represented as data, classes, plain objects, DOM
+  elements, canvas state, or scattered variables.
+- How the app initializes.
+- How the app updates over time.
+- Whether there is a game loop, render loop, event loop, or async workflow.
+- Whether content is hardcoded or data-driven.
+- Whether new content can be added easily.
+
+For games, identify:
+
+- Main loop.
+- Render pipeline.
+- Update/tick function.
+- Collision system.
+- Entity model.
+- Input system.
+- Camera system.
+- Level/map representation.
+- Spawning system.
+- AI update flow.
+- Save/load state.
+- Asset loading.
+
+--------------------------------------------------------------------------------
+1.4 Content Depth
+--------------------------------------------------------------------------------
+
+Assess how much actual content exists.
+
+For games, count or describe:
+
+- Number of levels/maps/areas.
+- Number of enemy types.
+- Number of weapons.
+- Number of armor pieces.
+- Number of items or powerups.
+- Number of quests/objectives.
+- Number of bosses.
+- Number of biomes/locations.
+- Number of abilities.
+- Number of upgrade paths.
+- Number of hazards.
+- Number of secrets.
+- Number of endings or replay variations.
+
+For other apps, count or describe:
+
+- Number of modes.
+- Number of supported input types.
+- Number of output formats.
+- Number of transformations.
+- Number of templates/presets.
+- Number of domain entities.
+- Number of automation features.
+- Number of meaningful workflows.
+
+--------------------------------------------------------------------------------
+1.5 User/Player Experience
+--------------------------------------------------------------------------------
+
+Assess the experience from start to finish:
+
+- What does a first-time user do?
+- What does an experienced user do?
+- What happens after 30 seconds?
+- What happens after 5 minutes?
+- What happens after repeated use?
+- Is there a reason to keep playing/using the app?
+- Are there meaningful choices?
+- Are there surprises?
+- Are there goals?
+- Are there rewards?
+- Are there consequences?
+- Are there failure states?
+- Are there recovery paths?
+
+================================================================================
+
+## Step 2 — Identify Practical App-Depth Leaps
+
+Critically identify where the app falls short as a complete experience. Group
+your findings into the following categories.
+
+================================================================================
+2.1 Core Loop Leap
+================================================================================
+
+Ask:
+
+- Is the main loop fun/useful/satisfying?
+- Is there a clear reason to continue?
+- Is the loop too short, repetitive, or shallow?
+- Does the app need more goals, rewards, risks, choices, or mastery?
+
+For games, improve:
+
+- Movement feel.
+- Combat feel.
+- Enemy variety.
+- Level goals.
+- Reward pacing.
+- Difficulty curve.
+- Moment-to-moment decisions.
+- Player agency.
+
+Examples:
+
+- A basic clicker can gain upgrades, milestones, automation, prestige, and
+  random events.
+- A simple dodging game can gain enemy patterns, powerups, bosses, biomes, and
+  missions.
+- A basic platformer can gain collectibles, enemies, hazards, checkpoints,
+  abilities, and themed stages.
+- A simple RPG can gain quests, equipment, leveling, enemy AI, shops, and
+  dungeons.
+
+================================================================================
+2.2 Content Leap
+================================================================================
+
+Ask:
+
+- Does the app have enough real content?
+- Are there multiple things to discover?
+- Are there enough entities, levels, items, challenges, or scenarios?
+- Can the app support more content through data-driven definitions?
+
+For games, consider adding:
+
+- Multiple biomes:
+  - forest
+  - castle
+  - swamp
+  - volcano
+  - ice caves
+  - desert ruins
+  - crystal caverns
+  - haunted graveyard
+  - sky islands
+  - underwater temple
+
+- Enemy families:
+  - melee enemies
+  - ranged enemies
+  - flying enemies
+  - shielded enemies
+  - summoners
+  - chargers
+  - stealth enemies
+  - exploding enemies
+  - elite variants
+  - minibosses
+
+- Items:
+  - healing potions
+  - mana potions
+  - bombs
+  - keys
+  - maps
+  - crafting resources
+  - rare gems
+  - quest artifacts
+  - temporary buffs
+  - permanent upgrades
+
+- Weapons:
+  - sword
+  - axe
+  - spear
+  - bow
+  - crossbow
+  - staff
+  - wand
+  - dagger
+  - hammer
+  - boomerang
+  - elemental weapons
+  - legendary weapons
+
+- Armor:
+  - cloth
+  - leather
+  - chainmail
+  - plate
+  - mage robes
+  - ranger gear
+  - fire-resistant armor
+  - poison-resistant armor
+  - legendary armor sets
+
+- Tools:
+  - pickaxe
+  - shovel
+  - grappling hook
+  - torch
+  - fishing rod
+  - lockpick
+  - glider
+  - compass
+  - crafting hammer
+
+- Mounts:
+  - horse
+  - wolf
+  - lizard
+  - giant bird
+  - boat
+  - mine cart
+  - dragon
+  - magical broom
+
+- Quests:
+  - fetch quests
+  - rescue quests
+  - boss kill quests
+  - escort quests
+  - exploration quests
+  - crafting quests
+  - collection quests
+  - mystery quests
+  - faction quests
+  - daily/repeatable quests
+
+- Boss fights:
+  - multi-phase attacks
+  - telegraphed moves
+  - weak points
+  - arena hazards
+  - summons
+  - enraged final phase
+  - unique rewards
+
+================================================================================
+2.3 Progression Leap
+================================================================================
+
+Ask:
+
+- Does the user/player grow stronger, smarter, faster, or more capable?
+- Are rewards meaningful?
+- Are upgrades connected to gameplay?
+- Is there a sense of journey?
+
+For games, consider adding:
+
+- XP and levels.
+- Skill points.
+- Stat upgrades.
+- Unlockable abilities.
+- Equipment rarity.
+- Weapon upgrades.
+- Armor upgrades.
+- Crafting recipes.
+- Mount unlocks.
+- Zone unlocks.
+- Quest chains.
+- Boss-gated progression.
+- Achievement rewards.
+- Talent trees.
+- Class/archetype choices.
+- Permanent upgrades.
+- Temporary run-based upgrades.
+
+Progression should affect actual play, not just numbers.
+
+Good examples:
+
+- A sword upgrade changes attack range or adds a slash arc.
+- Fire armor reduces volcano damage.
+- A mount increases speed and allows crossing larger gaps.
+- A grappling hook unlocks vertical areas.
+- A boss reward opens a new biome.
+- Leveling up grants a choice between health, stamina, damage, or special
+  ability improvements.
+
+================================================================================
+2.4 World and Exploration Leap
+================================================================================
+
+Ask:
+
+- Is there a world, or only a screen?
+- Are there places to go?
+- Are locations meaningfully different?
+- Does exploration reward curiosity?
+
+For games, consider adding:
+
+- Multiple zones or maps.
+- Distinct visual themes.
+- Biome-specific enemies.
+- Biome-specific hazards.
+- Hidden rooms.
+- Secret items.
+- Locked doors.
+- Keys and gates.
+- Environmental storytelling.
+- NPCs.
+- Landmarks.
+- Fast travel.
+- Minimap.
+- World map.
+- Checkpoints.
+- Safe zones.
+- Shops.
+- Dungeons.
+- Boss arenas.
+
+Example location concepts:
+
+- Forest:
+  - vines, wolves, archers, hidden paths, healing herbs.
+
+- Castle:
+  - guards, locked doors, treasure rooms, traps, throne boss.
+
+- Swamp:
+  - poison water, frogs, mosquitoes, slow movement, antidote herbs.
+
+- Volcano:
+  - lava, fire enemies, heat damage, fire-resistant armor, magma boss.
+
+- Caves:
+  - darkness, bats, crystals, mining, hidden tunnels, echo monsters.
+
+- Ice zone:
+  - slippery floors, frozen enemies, snowstorms, ice bridges.
+
+================================================================================
+2.5 Enemy AI and Behavior Leap
+================================================================================
+
+Ask:
+
+- Do enemies merely move randomly?
+- Do they react to the player?
+- Do they have readable patterns?
+- Do they create different tactical problems?
+
+For games, add enemy behaviors such as:
+
+- Patrol.
+- Chase.
+- Flee when low health.
+- Guard an area.
+- Shoot projectiles.
+- Circle the player.
+- Charge attack.
+- Telegraphed heavy attack.
+- Summon minions.
+- Heal allies.
+- Shield allies.
+- Hide and ambush.
+- Maintain distance.
+- Use terrain.
+- Retreat to reinforcements.
+- Switch phases.
+- Become enraged.
+- Drop loot.
+- Adapt based on player distance or health.
+
+Enemy AI should be understandable and counterable. Avoid unfair instant damage.
+
+================================================================================
+2.6 Combat, Challenge, and Boss Leap
+================================================================================
+
+Ask:
+
+- Is combat satisfying?
+- Are there meaningful attack choices?
+- Are bosses memorable?
+- Does challenge increase fairly?
+
+For games, consider adding:
+
+- Multiple weapons with different ranges, speeds, and damage.
+- Armor with tradeoffs.
+- Special attacks.
+- Cooldowns.
+- Stamina or mana.
+- Dodge or dash.
+- Blocking or parrying.
+- Critical hits.
+- Elemental damage.
+- Status effects:
+  - burn
+  - poison
+  - freeze
+  - stun
+  - slow
+  - bleed
+  - shield
+  - regeneration
+
+- Boss mechanics:
+  - phase 1: basic attacks
+  - phase 2: arena hazards
+  - phase 3: summons or enraged attacks
+  - weak point exposure
+  - timed dodges
+  - unique reward drop
+
+Challenge should come from patterns, choices, timing, and preparation — not from
+random unavoidable punishment.
+
+================================================================================
+2.7 Economy, Inventory, and Crafting Leap
+================================================================================
+
+Ask:
+
+- Are collected things useful?
+- Can players make choices about equipment and resources?
+- Is there an economy or crafting loop?
+
+For games, consider adding:
+
+- Inventory.
+- Item stacking.
+- Equipment slots.
+- Weapon slot.
+- Armor slot.
+- Tool slot.
+- Mount slot.
+- Consumables.
+- Gold/coins.
+- Shops.
+- Sell/buy flow.
+- Crafting recipes.
+- Resource gathering.
+- Rarity tiers.
+- Loot tables.
+- Treasure chests.
+- Key items.
+- Quest items.
+- Item comparison.
+- Item effects.
+
+Example equipment slots:
+
+- Weapon
+- Off-hand
+- Helmet
+- Chest armor
+- Boots
+- Ring
+- Amulet
+- Tool
+- Mount
+
+Example rarity tiers:
+
+- Common
+- Uncommon
+- Rare
+- Epic
+- Legendary
+- Mythic
+
+================================================================================
+2.8 Quest, Objective, and Narrative Leap
+================================================================================
+
+Ask:
+
+- Does the player know what to do?
+- Are there short-term and long-term goals?
+- Are objectives varied?
+- Does the world feel purposeful?
+
+For games, consider adding:
+
+- Main quest.
+- Side quests.
+- Quest log.
+- Objective tracker.
+- NPC dialogue.
+- Rewards.
+- Quest prerequisites.
+- Branching quest outcomes.
+- Region-specific quests.
+- Boss quests.
+- Collection quests.
+- Discovery quests.
+- Tutorial quests.
+- Endgame quests.
+
+Quest structure:
+
+- Title
+- Description
+- Objective
+- Progress
+- Completion condition
+- Reward
+- Follow-up unlocks
+
+Example:
+
+Quest: Cleanse the Swamp Shrine  
+Objective: Defeat 6 Bog Slimes and recover the shrine lantern.  
+Reward: Poison-resistant boots and access to the Sunken Path.
+
+================================================================================
+2.9 Replayability and Long-Term Engagement Leap
+================================================================================
+
+Ask:
+
+- Why would someone use/play this more than once?
+- Is there variety between sessions?
+- Are there unlocks, achievements, randomization, or mastery goals?
+
+For games, consider adding:
+
+- Achievements.
+- Daily challenges.
+- Procedural maps.
+- Random loot.
+- Difficulty modes.
+- New Game Plus.
+- Unlockable characters.
+- Unlockable classes.
+- Speedrun timer.
+- Best-time tracking.
+- High scores.
+- Collections.
+- Secrets.
+- Multiple endings.
+- Challenge modifiers.
+- Permadeath mode.
+- Endless mode.
+- Arena mode.
+- Boss rush mode.
+
+================================================================================
+2.10 Persistence and Save-System Leap
+================================================================================
+
+Ask:
+
+- Does progress survive reload?
+- Can users resume?
+- Can users reset intentionally?
+- Is save data versioned?
+
+For games, consider adding:
+
+- Save/load using localStorage or IndexedDB.
+- Save slots.
+- Autosave.
+- Manual save.
+- Reset confirmation.
+- Save version migration.
+- Export save.
+- Import save.
+- Checkpoints.
+- Respawn state.
+- Best scores.
+- Unlocked content.
+- Completed quests.
+- Inventory persistence.
+- Player level persistence.
+
+For non-game apps, consider:
+
+- Project files.
+- Recent documents.
+- Draft recovery.
+- Undo/redo history.
+- Export/import.
+- Versioned state.
+- Backup and restore.
+
+================================================================================
+2.11 Simulation and Systemic Interaction Leap
+================================================================================
+
+Ask:
+
+- Do systems interact with each other?
+- Can surprising outcomes emerge?
+- Are rules consistent?
+
+For games, examples:
+
+- Fire burns grass but is stopped by water.
+- Ice freezes water and creates temporary bridges.
+- Poison clouds damage both player and enemies.
+- Heavy armor reduces speed but increases defense.
+- Mounts cannot enter caves unless they are cave-compatible.
+- Fire weapons are strong in swamps but weak in volcano zones.
+- Enemies can trigger traps.
+- Boss attacks can destroy parts of the arena.
+- Tools unlock shortcuts.
+- Weather changes enemy behavior.
+
+For tools/simulators:
+
+- Inputs should affect multiple outputs.
+- Rules should be inspectable.
+- Models should update consistently.
+- Derived metrics should be recalculated safely.
+- The app should expose meaningful cause/effect.
+
+================================================================================
+2.12 Technical Foundation Leap
+================================================================================
+
+Ask:
+
+- Is the current code capable of supporting deeper systems?
+- Is content hardcoded everywhere?
+- Would data-driven definitions make expansion easier?
+- Are entities, items, enemies, quests, and levels represented cleanly?
+
+Prefer:
+
+- Central game/app state.
+- Data-driven content registries.
+- Reusable entity factories.
+- Clear update/render separation.
+- Stable input handling.
+- Deterministic state transitions where practical.
+- Save-compatible data models.
+- Modular systems:
+  - player system
+  - enemy system
+  - inventory system
+  - quest system
+  - combat system
+  - map system
+  - audio system
+  - save system
+
+================================================================================
+
+## Step 3 — App/Game Systems Renovation Pattern Library
+
+Apply every pattern that fits the target app.
+
+================================================================================
+A. Architecture and Data Patterns
+================================================================================
+
+[ ] A1. Convert scattered hardcoded values into centralized data registries for
+    items, enemies, weapons, armor, quests, maps, levels, abilities, recipes, or
+    app-domain entities.
+
+[ ] A2. Introduce a central state object that represents the real app/game state:
+    player, world, inventory, progress, active enemies, quests, timers, settings,
+    save data, and runtime flags.
+
+[ ] A3. Separate update logic from render logic where applicable. The app should
+    be able to update state, then render that state consistently.
+
+[ ] A4. Add stable factories/helpers for creating repeated entities such as
+    enemies, projectiles, items, cards, documents, tasks, nodes, resources, or
+    other domain objects.
+
+[ ] A5. Add versioned save data and migration hooks when persistent progress is
+    introduced.
+
+[ ] A6. Define constants for tuning: damage, speed, spawn rates, XP curves,
+    prices, cooldowns, rarity weights, level thresholds, and difficulty scaling.
+
+================================================================================
+B. Core Gameplay / Core Workflow Patterns
+================================================================================
+
+[ ] B1. Strengthen the core loop so the user/player has a clear cycle of action,
+    feedback, reward, and next goal.
+
+[ ] B2. Add meaningful choices. Different tools, routes, upgrades, items,
+    tactics, or modes should produce different outcomes.
+
+[ ] B3. Add short-term, medium-term, and long-term goals.
+
+[ ] B4. Add rewards that change what the user/player can do.
+
+[ ] B5. Add consequences for failure that are fair, recoverable, and clear.
+
+[ ] B6. Add a tutorial or guided first objective that teaches the core loop
+    through action rather than only text.
+
+================================================================================
+C. Game Content Patterns
+================================================================================
+
+[ ] C1. Add multiple enemy types with distinct behaviors, stats, and rewards.
+
+[ ] C2. Add multiple weapons with different ranges, speeds, effects, and upgrade
+    paths.
+
+[ ] C3. Add multiple armor types with different defenses, resistances, and
+    tradeoffs.
+
+[ ] C4. Add consumable items such as potions, bombs, traps, scrolls, food, or
+    temporary buffs.
+
+[ ] C5. Add tools that unlock new interactions, such as pickaxes, shovels,
+    keys, grappling hooks, gliders, torches, scanners, or crafting tools.
+
+[ ] C6. Add mounts or vehicles when movement, travel, or exploration would
+    benefit from speed, terrain access, or special traversal.
+
+[ ] C7. Add distinct locations/biomes with different visuals, enemies, hazards,
+    resources, and rewards.
+
+[ ] C8. Add treasure, secrets, collectibles, or optional discoveries.
+
+[ ] C9. Add elite enemies, minibosses, or rare encounters.
+
+[ ] C10. Add at least one boss fight with multiple phases and a unique reward
+     when appropriate for the game.
+
+================================================================================
+D. Progression Patterns
+================================================================================
+
+[ ] D1. Add XP, levels, rank, mastery, or skill progression.
+
+[ ] D2. Add upgrade choices that support different play styles.
+
+[ ] D3. Add unlockable areas, modes, items, enemies, or abilities.
+
+[ ] D4. Add equipment progression through rarity, crafting, enhancement, or
+    quest rewards.
+
+[ ] D5. Add difficulty scaling so later content becomes more challenging without
+    becoming unfair.
+
+[ ] D6. Add achievements, milestones, or collection progress.
+
+================================================================================
+E. World, Level, and Exploration Patterns
+================================================================================
+
+[ ] E1. Add multiple levels, rooms, waves, zones, maps, or stages.
+
+[ ] E2. Add environmental hazards that interact with the player and enemies.
+
+[ ] E3. Add landmarks, safe zones, shops, quest hubs, or checkpoints.
+
+[ ] E4. Add hidden paths, locked areas, keys, gates, shortcuts, or secrets.
+
+[ ] E5. Add biome-specific content so each area feels mechanically different,
+    not only visually different.
+
+[ ] E6. Add map progression or travel flow.
+
+================================================================================
+F. Enemy AI and Encounter Patterns
+================================================================================
+
+[ ] F1. Add AI states such as idle, patrol, alert, chase, attack, flee, stunned,
+    returning, guarding, or enraged.
+
+[ ] F2. Add distance-based behavior, such as melee chase, ranged kiting, or
+    retreating when too close.
+
+[ ] F3. Add telegraphed attacks so players can learn and respond.
+
+[ ] F4. Add group behavior, such as summoning, healing, shielding, or flanking.
+
+[ ] F5. Add encounter composition: mix enemies to create tactical variety.
+
+[ ] F6. Add boss phases, cooldowns, attack patterns, and arena mechanics.
+
+================================================================================
+G. Inventory, Economy, and Crafting Patterns
+================================================================================
+
+[ ] G1. Add inventory management with item quantities and item effects.
+
+[ ] G2. Add equipment slots and item comparison.
+
+[ ] G3. Add loot drops and loot tables.
+
+[ ] G4. Add shops, prices, buy/sell flow, or reward vendors.
+
+[ ] G5. Add crafting recipes and resource requirements.
+
+[ ] G6. Add item rarity and special modifiers.
+
+================================================================================
+H. Quest and Objective Patterns
+================================================================================
+
+[ ] H1. Add a quest/objective system with active, completed, and available
+    objectives.
+
+[ ] H2. Add progress tracking for kill, collect, explore, craft, deliver, rescue,
+    survive, or defeat-boss objectives.
+
+[ ] H3. Add rewards that connect to progression.
+
+[ ] H4. Add NPCs, messages, or story fragments where appropriate.
+
+[ ] H5. Add chained quests that unlock later content.
+
+================================================================================
+I. Persistence and Replayability Patterns
+================================================================================
+
+[ ] I1. Add autosave/manual save.
+
+[ ] I2. Add import/export save.
+
+[ ] I3. Add reset/new run with confirmation.
+
+[ ] I4. Add high scores, best times, completed collections, or unlocked content.
+
+[ ] I5. Add randomization or procedural variation where useful.
+
+[ ] I6. Add multiple modes such as story, endless, challenge, arena, sandbox,
+    boss rush, or creative mode.
+
+================================================================================
+J. Feedback, Feel, and Polish Patterns
+================================================================================
+
+[ ] J1. Add satisfying feedback for important actions: hit flashes, particles,
+    screen shake, sound effects, floating text, animation, trails, or impact
+    effects.
+
+[ ] J2. Add clear feedback for damage, healing, leveling, quest progress, item
+    pickup, unlocking, saving, and failure.
+
+[ ] J3. Add animation or state changes that make entities feel alive.
+
+[ ] J4. Add audio cues and music if the app can support them cleanly.
+
+[ ] J5. Add camera movement, following, zoom, parallax, or scene transitions
+    where appropriate.
+
+[ ] J6. Add juice without reducing readability or accessibility.
+
+================================================================================
+K. Tool/App Domain Patterns
+================================================================================
+
+For non-game apps, apply equivalent depth improvements:
+
+[ ] K1. Add richer domain entities and relationships.
+
+[ ] K2. Add advanced workflows beyond the happy path.
+
+[ ] K3. Add automation, batch operations, templates, presets, or smart defaults.
+
+[ ] K4. Add history, undo/redo, versioning, or comparison.
+
+[ ] K5. Add import/export for domain data.
+
+[ ] K6. Add analysis, recommendations, validation, or diagnostics.
+
+[ ] K7. Add simulation, preview, or what-if modes.
+
+[ ] K8. Add persistence, project saving, and restore.
+
+[ ] K9. Add power-user features that materially improve capability.
+
+================================================================================
+L. Reliability and Lifecycle Patterns
+================================================================================
+
+[ ] L1. Ensure repeated runs do not duplicate timers, listeners, entities, loops,
+    object URLs, audio nodes, or stale async tasks.
+
+[ ] L2. Add reset/cleanup routines for the core app/game state.
+
+[ ] L3. Add pause/resume where appropriate.
+
+[ ] L4. Add clear game-over, victory, completion, restart, and continue flows.
+
+[ ] L5. Add guards against overlapping operations or broken state transitions.
+
+[ ] L6. Handle errors with recovery paths.
+
+================================================================================
+M. Documentation Patterns
+================================================================================
+
+[ ] M1. Document the app/game systems that were added.
+
+[ ] M2. Document all content registries: enemies, items, weapons, armor, quests,
+    areas, bosses, upgrades, or equivalent domain data.
+
+[ ] M3. Document the state model and save model.
+
+[ ] M4. Document extension points so the next developer can add more content.
+
+[ ] M5. Document balancing/tuning notes.
+
+================================================================================
+
+## Step 4 — Generate an Implementation Plan
+
+Based on the assessment and leap analysis, produce an ordered implementation
+plan before coding.
+
+The plan must include:
+
+4.1 Every major system, mechanic, content set, or workflow to be added.
+
+4.2 Work grouped into coherent stages, such as:
+
+- Stage 1: Architecture and state model
+- Stage 2: Core loop improvements
+- Stage 3: Content registries
+- Stage 4: Progression systems
+- Stage 5: Enemies and AI
+- Stage 6: Items, equipment, inventory, and economy
+- Stage 7: World, maps, levels, and biomes
+- Stage 8: Quests, objectives, and rewards
+- Stage 9: Bosses and advanced encounters
+- Stage 10: Persistence, replayability, and saves
+- Stage 11: Feedback, effects, audio, and game feel
+- Stage 12: Verification and documentation
+
+4.3 For each item, note:
+
+- Files touched.
+- Systems affected.
+- Data structures introduced.
+- Patterns implemented.
+- Dependencies on earlier work.
+- Relative effort: low / medium / high.
+- Risk level: low / medium / high.
+
+4.4 Explicitly call out foundational refactors required before adding features.
+
+4.5 Prioritize working features over decorative placeholders.
+
+================================================================================
+
+## Step 5 — Execute the Renovation
+
+Now implement the plan.
+
+Do real work. Add working systems. Add real content. Refactor as needed.
+
+================================================================================
+5.1 Architecture and State
+================================================================================
+
+- Introduce or improve central app/game state.
+- Create data registries for content.
+- Separate update, render, input, save, and content logic where practical.
+- Add stable constants and tuning values.
+- Make it easy to add more content later.
+
+================================================================================
+5.2 Core Loop
+================================================================================
+
+- Improve what the user/player repeatedly does.
+- Add goals, feedback, rewards, and next steps.
+- Make the app meaningfully progress over time.
+- Ensure the main loop remains understandable.
+
+================================================================================
+5.3 Game Systems and Mechanics
+================================================================================
+
+For games, implement applicable systems such as:
+
+- Improved movement.
+- Combat.
+- Health/damage.
+- Multiple enemy types.
+- Enemy AI states.
+- Weapons.
+- Armor.
+- Inventory.
+- Consumables.
+- Loot.
+- XP and leveling.
+- Skill upgrades.
+- Quests.
+- Boss fights.
+- Biomes.
+- Mounts.
+- Tools.
+- Shops.
+- Crafting.
+- Achievements.
+- Save/load.
+- Difficulty modes.
+
+For non-game apps, implement equivalent domain systems such as:
+
+- Data import/export.
+- Richer data models.
+- Batch operations.
+- Templates.
+- Automation.
+- Analysis.
+- Recommendations.
+- History.
+- Persistence.
+- Comparison.
+- Simulation.
+- Advanced workflows.
+
+================================================================================
+5.4 Content
+================================================================================
+
+Add enough real content that the app feels meaningfully expanded.
+
+For games, this may include:
+
+- At least several enemy types.
+- Multiple items.
+- Multiple weapons or tools.
+- Multiple upgrades.
+- Multiple locations or levels.
+- At least one advanced encounter or boss if appropriate.
+- Quests/objectives if appropriate.
+- Rewards tied to progression.
+
+Content should be data-driven when feasible.
+
+================================================================================
+5.5 Progression
+================================================================================
+
+- Add a sense of growth.
+- Add unlocks.
+- Add rewards.
+- Add increasing challenge.
+- Add meaningful player choices.
+- Ensure upgrades affect real gameplay.
+
+================================================================================
+5.6 World and Encounters
+================================================================================
+
+- Add distinct areas, maps, rooms, waves, stages, or scenarios.
+- Add environmental variation.
+- Add encounter variety.
+- Add secrets or optional goals.
+- Add boss/miniboss encounters when appropriate.
+
+================================================================================
+5.7 Persistence and Replayability
+================================================================================
+
+- Add save/load when useful.
+- Add reset/new-run flow.
+- Add high scores, achievements, unlocks, or collections.
+- Add randomization or alternate modes if useful.
+- Ensure repeated sessions remain stable.
+
+================================================================================
+5.8 Feedback and Feel
+================================================================================
+
+- Add impact feedback.
+- Add animation, effects, particles, sounds, or screen response where appropriate.
+- Add clear feedback for progression, rewards, damage, success, and failure.
+- Make actions feel satisfying.
+
+================================================================================
+5.9 Reliability
+================================================================================
+
+- Clean up timers, listeners, object URLs, animation frames, and stale tasks.
+- Prevent overlapping loops or duplicate entities.
+- Handle errors gracefully.
+- Validate save data.
+- Ensure reset/restart works without page reload.
+
+================================================================================
+5.10 Accessibility and Usability
+================================================================================
+
+Although this prompt is not GUI-first, do not ignore usability.
+
+- Keep controls understandable.
+- Keep keyboard access functional.
+- Maintain readable contrast.
+- Provide clear instructions for new systems.
+- Ensure important state changes are communicated.
+- Avoid making the app confusing while adding depth.
+
+================================================================================
+
+## Step 6 — Verify, Balance, Harden, and Document
+
+================================================================================
+6.1 Verify
+================================================================================
+
+Manually test:
+
+- First-time experience.
+- Core loop.
+- Every new mechanic.
+- Every new enemy type.
+- Every new item/equipment/tool.
+- Every quest/objective.
+- Every boss phase.
+- Every biome/level.
+- Save/load.
+- Reset/restart.
+- Failure states.
+- Victory/completion states.
+- Repeated play without reload.
+- Keyboard controls.
+- Narrow and wide screens if applicable.
+
+================================================================================
+6.2 Balance
+================================================================================
+
+For games, review:
+
+- Player speed.
+- Enemy speed.
+- Damage values.
+- Health values.
+- XP curve.
+- Drop rates.
+- Prices.
+- Upgrade costs.
+- Boss difficulty.
+- Spawn rates.
+- Cooldowns.
+- Resource scarcity.
+- Reward pacing.
+
+Adjust values so the experience feels fair, rewarding, and progressively more
+interesting.
+
+================================================================================
+6.3 Harden
+================================================================================
+
+Audit for:
+
+- Unhandled promise rejections.
+- Uncaught exceptions.
+- Broken save data.
+- Duplicate event listeners.
+- Duplicate game loops.
+- Memory leaks.
+- Stale entities.
+- Broken collision.
+- Impossible quests.
+- Unreachable areas.
+- Items with no effect.
+- Enemies with no counterplay.
+- Bosses with unfair attacks.
+- Dead buttons or placeholder features.
+
+================================================================================
+6.4 Document
+================================================================================
+
+Write documentation that helps the next developer extend the app.
+
+Include:
+
+- What systems were added.
+- How state is structured.
+- How content registries work.
+- How to add a new enemy.
+- How to add a new item.
+- How to add a new weapon.
+- How to add a new armor piece.
+- How to add a new quest.
+- How to add a new biome/level.
+- How to tune balance.
+- Known limitations.
+- Future expansion ideas.
+
+================================================================================
+
+## Required Deliverables
+
+After completing the renovation, produce all of the following.
+
+================================================================================
+DELIVERABLE 1 — Updated Source Files
+================================================================================
+
+All modified or newly created HTML, JavaScript, CSS, asset, data, and
+configuration files.
+
+Changes must be complete and functional.
+
+Do not leave placeholder systems, fake buttons, unused registries, dead menus, or
+non-working claims.
+
+================================================================================
+DELIVERABLE 2 — Systems Implementation Report
+================================================================================
+
+Write a structured narrative report covering:
+
+- Executive summary.
+- What the app/game was before.
+- What it became after renovation.
+- Core loop description.
+- Major systems added.
+- Architecture and state model.
+- Content registries.
+- Progression model.
+- Enemy/AI model if applicable.
+- Item/equipment model if applicable.
+- Quest/objective model if applicable.
+- World/level/biome model if applicable.
+- Save/load model if applicable.
+- Technical decisions and rejected alternatives.
+- Known limitations.
+- Extension hooks for future development.
+
+================================================================================
+DELIVERABLE 3 — Content and Feature Inventory
+================================================================================
+
+Produce a table or CSV with at least these columns:
+
+Section | Purpose | Snippet | Explanation
+
+Include one row per significant:
+
+- System.
+- Mechanic.
+- Enemy.
+- Item.
+- Weapon.
+- Armor.
+- Tool.
+- Mount.
+- Quest.
+- Boss.
+- Area/biome.
+- Upgrade.
+- Save feature.
+- Replayability feature.
+- Domain-specific workflow.
+
+Snippets should be short representative fragments, not full implementations.
+
+================================================================================
+DELIVERABLE 4 — Balancing Notes
+================================================================================
+
+For games, include tuning notes for:
+
+- Player stats.
+- Enemy stats.
+- Damage.
+- Health.
+- Speed.
+- XP.
+- Rewards.
+- Drop rates.
+- Difficulty curve.
+- Boss phases.
+- Progression pacing.
+
+For non-game apps, include equivalent tuning notes for:
+
+- Limits.
+- Defaults.
+- Thresholds.
+- Validation rules.
+- Processing behavior.
+- Automation assumptions.
+- Performance constraints.
+
+================================================================================
+DELIVERABLE 5 — Troubleshooting Matrix
+================================================================================
+
+Use this format:
+
+Issue:  [what the user/player observes]
+Cause:  [root technical or design cause]
+Fix:    [how to resolve it]
+
+Cover known failure modes such as:
+
+- Save data not loading.
+- Progress not persisting.
+- Enemy behavior stuck.
+- Quest impossible to complete.
+- Item has no effect.
+- Boss does not transition phases.
+- Player gets stuck.
+- Duplicate loops after restart.
+- Performance drops.
+- Import/export failure.
+- Broken content definition.
+
+================================================================================
+DELIVERABLE 6 — Extension Guide
+================================================================================
+
+Write clear instructions for the next developer.
+
+For games, include examples such as:
+
+- How to add a new enemy.
+- How to add a new weapon.
+- How to add new armor.
+- How to add a new item.
+- How to add a new quest.
+- How to add a new biome.
+- How to add a new boss.
+- How to add a new mount.
+- How to add a new upgrade.
+- How to adjust balancing.
+
+For non-game apps, include equivalent instructions for adding new domain objects,
+workflows, processors, templates, automations, or export formats.
+
+================================================================================
+DELIVERABLE 7 — Lessons Learned
+================================================================================
+
+Document:
+
+- What succeeded and why.
+- What had to be redesigned.
+- What was surprising.
+- What tradeoffs were made.
+- What should be improved next.
+- What the next developer should be careful about.
+
+================================================================================
+
+## Game-Specific Renovation Examples
+
+Use these examples as inspiration when the target app is a game.
+
+================================================================================
+Example 1 — Simple Canvas Dodging Game
+================================================================================
+
+Before:
+- Player moves around.
+- Avoids one type of enemy.
+- Score increases over time.
+
+After:
+- Multiple enemy types:
+  - chaser
+  - shooter
+  - splitter
+  - charger
+  - boss
+- Powerups:
+  - shield
+  - slow time
+  - dash
+  - magnet
+  - heal
+- XP and level upgrades.
+- Biomes every 60 seconds.
+- Boss every 5 levels.
+- High score persistence.
+- Achievements.
+- Particle effects and hit feedback.
+- Pause/resume.
+- Difficulty modes.
+
+================================================================================
+Example 2 — Basic RPG Prototype
+================================================================================
+
+Before:
+- Player clicks attack.
+- One enemy.
+- Basic HP.
+
+After:
+- Enemy roster with AI patterns.
+- Weapons and armor.
+- Inventory.
+- Potions.
+- XP and leveling.
+- Quests.
+- Shops.
+- Forest, castle, swamp, volcano, and cave areas.
+- Boss fights with phases.
+- Loot tables.
+- Save/load.
+- Mount for faster travel.
+- Skills and stat upgrades.
+
+================================================================================
+Example 3 — Platformer
+================================================================================
+
+Before:
+- Player jumps across blocks.
+
+After:
+- Multiple stages.
+- Coins and collectibles.
+- Enemies with patrol/chase behavior.
+- Checkpoints.
+- Powerups.
+- Unlockable double jump.
+- Keys and locked doors.
+- Moving platforms.
+- Hazards.
+- Boss stage.
+- Time trials.
+- Save progress.
+
+================================================================================
+Example 4 — Sandbox Builder
+================================================================================
+
+Before:
+- Place blocks.
+
+After:
+- Multiple block types.
+- Tools.
+- Resource collection.
+- Crafting.
+- Day/night cycle.
+- Creatures.
+- Biomes.
+- Saving/loading worlds.
+- Blueprints.
+- Weather.
+- Goals/challenges.
+- Export/import worlds.
+
+================================================================================
+Example 5 — Non-Game Data Tool
+================================================================================
+
+Before:
+- User enters data.
+- App shows one result.
+
+After:
+- Import/export.
+- Saved projects.
+- Multiple analysis modes.
+- Batch processing.
+- Templates.
+- Validation.
+- Comparison view.
+- Recommendations.
+- History.
+- Undo/redo.
+- Diagnostics.
+- Report generation.
+- Advanced settings.
+
+================================================================================
+
+## Final Reminder
+
+Do not merely make the app prettier.
+
+A successful renovation makes the app itself:
+
+MORE SUBSTANTIAL   — it has more real systems, content, and capability.
+MORE PLAYABLE      — if it is a game, it is more fun moment to moment.
+MORE REPLAYABLE    — there are reasons to come back.
+MORE PROGRESSIVE   — users/players grow, unlock, discover, or improve.
+MORE CONNECTED     — systems interact instead of sitting isolated.
+MORE RELIABLE      — repeated use, saving, resetting, and edge cases work.
+MORE COMPLETE      — features are functional, not decorative.
+MORE MEMORABLE     — the app has moments, surprises, rewards, and identity.
+
+If the original renovation prompt helped improve the GUI, this prompt should
+help improve the actual experience, mechanics, systems, and content.
+
+================================================================================
+END OF PROMPT
+================================================================================

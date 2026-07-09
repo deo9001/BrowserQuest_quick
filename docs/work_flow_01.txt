@@ -1,0 +1,19 @@
+work_flow_01.txt:
+
+Code REV 1:
+Initial user prompt
+Produce: code_report.txt
+Produce: code.html
+Produce: code_features.csv
+Update: code_report.txt
+
+Code REV 2:
+Intake and process new features and updates from user prompt
+Update: code_report.txt
+Update: code.html
+Update: code_features.csv
+Update: code_report.txt
+
+code_example.html,  code_report.txt, code.html,  code_features.csv
+
+I want the code to be built, the code to be documented (analyzed) in a report, and the actual written code to be documented in a table (with code snippets) called code_features.csv. The table code_features.csv has headers [Section, Purpose, Snippet, Explanation].

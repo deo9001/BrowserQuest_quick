@@ -1,0 +1,950 @@
+# Premium Story, NPC, Interior, Quest, and Relic Economy Renovation Prompt
+
+================================================================================
+PURPOSE OF THIS PROMPT
+================================================================================
+
+This is a reusable renovation prompt for transforming an existing HTML /
+JavaScript / CSS game into a richer narrative adventure with meaningful places,
+NPCs, quests, enterable buildings, interiors, vendors, and an economy.
+
+This prompt is intended for games that already have playable mechanics and a
+world structure, but still need stronger reasons for the player to explore,
+fight, collect, spend resources, enter locations, and progress through areas.
+
+The goal is to improve the game’s meaning and structure:
+
+- story premise
+- lore
+- NPCs
+- dialogue
+- quest chains
+- meaningful regions
+- enterable houses, shops, castles, caves, mines, ruins, and fortresses
+- interior maps
+- vendors and shops
+- relic-based economy
+- purchasable upgrades
+- story-gated areas
+- faction or town identity
+- narrative progression
+- safer entrances and exits
+- map connectivity that supports story flow
+- location purpose
+- rewards that connect story, combat, exploration, and economy
+
+This prompt is not primarily about cosmetic polish. It is about giving the game
+world purpose, memory, characters, progression, and systems that make exploration
+feel meaningful.
+
+================================================================================
+
+## Mission
+
+You are an expert narrative designer, RPG systems designer, quest designer,
+world designer, gameplay programmer, JavaScript engineer, and creative
+technologist.
+
+Your mission is to renovate an existing HTML / JavaScript / CSS game so that it
+feels more like a complete adventure.
+
+The game should no longer feel like disconnected combat areas. It should feel
+like a world with people, places, problems, economies, buildings, interiors,
+threats, history, and goals.
+
+The player should be able to:
+
+- understand the main story premise
+- meet NPCs
+- receive quests
+- discover lore
+- enter buildings and interiors
+- visit shops and vendors
+- spend relics on useful items or upgrades
+- unlock or discover new areas through story progression
+- understand why each major area exists
+- travel through a map that supports the narrative
+- enter and exit houses, caves, castles, and fortresses safely
+- see story consequences through dialogue, unlocked areas, vendor stock,
+  quest progress, or world state
+
+The goal is not to replace the original game. The goal is to evolve it into a
+deeper narrative RPG-like version of itself.
+
+================================================================================
+
+## Non-Negotiable Philosophy
+
+1. Story must shape the game structure.
+   Do not add lore as detached flavor text only. The story should help explain
+   why regions, enemies, bosses, buildings, vendors, relics, and quests exist.
+
+2. NPCs must be functional.
+   NPCs should be visible, interactable, and connected to dialogue, quests,
+   vendors, lore, tutorials, or progression.
+
+3. Buildings must not be fake.
+   If a building looks enterable, either make it enterable or clearly mark it as
+   locked, ruined, blocked, or decorative.
+
+4. Interiors must be real places.
+   Enterable houses, caves, shops, castles, and fortresses need interior layouts,
+   safe spawn points, exits, collision, and gameplay purpose.
+
+5. Economy must affect gameplay.
+   Relics, gold, coins, or other currencies should be spendable on useful items,
+   upgrades, access, crafting, services, or progression.
+
+6. Quests must connect systems.
+   Quests should direct the player to explore, fight, gather, talk, buy, unlock,
+   enter buildings, recover relics, or resolve world problems.
+
+7. Rewards must matter.
+   A quest reward should change what the player can do, where the player can go,
+   what the player can buy, or how strong/prepared the player is.
+
+8. Map connectivity must support story.
+   The world map and region graph should communicate story-relevant locations:
+   towns, caves, castles, ruins, shops, roads, gates, and dangerous zones.
+
+9. Entrances and exits must be safe.
+   The player must never spawn into a wall, door frame, blocked tile, enemy,
+   object, or trap when entering or exiting an interior.
+
+10. Prefer data-driven content.
+    NPCs, dialogues, quests, vendors, items, interiors, portals, story flags,
+    and lore should be defined in reusable data structures where practical.
+
+================================================================================
+
+## Step 1 — Understand the Current Narrative Game State
+
+Before changing code, produce a written assessment of the current game.
+
+--------------------------------------------------------------------------------
+1.1 Current Story Identity
+--------------------------------------------------------------------------------
+
+Answer:
+
+- What is the current game fundamentally about?
+- Is there already a story premise?
+- Does the player know who they are?
+- Does the player know what the main threat is?
+- Does the player know why relics matter?
+- Do areas have narrative meaning?
+- Are there factions, towns, kingdoms, monsters, corrupted places, or ancient
+  ruins?
+- What story is implied by the current enemies, regions, items, and bosses?
+- What is missing from the player’s motivation?
+
+For a fantasy BrowserQuest-like game, consider questions such as:
+
+- Why is the player traveling?
+- What are relics?
+- Who wants the relics?
+- What corrupted the world?
+- What is the Shadow Fortress?
+- Why are monsters spreading?
+- Who lives in the villages?
+- What places are safe?
+- What places are dangerous?
+- What must the player ultimately accomplish?
+
+--------------------------------------------------------------------------------
+1.2 Current NPC and Dialogue Systems
+--------------------------------------------------------------------------------
+
+Document:
+
+- Are there NPCs?
+- Are NPCs rendered in the world?
+- Can the player interact with them?
+- Is there dialogue?
+- Is dialogue static or progress-aware?
+- Are NPCs tied to quests?
+- Are NPCs tied to shops/vendors?
+- Are NPCs tied to lore?
+- Are NPCs tied to tutorials?
+- Are NPCs saved/persisted?
+- Are NPCs duplicated after transitions or restarts?
+
+Look for:
+
+- quest givers
+- merchants
+- blacksmiths
+- healers
+- scholars
+- guards
+- villagers
+- travelers
+- cave miners
+- castle sentries
+- fortress prisoners
+- story companions
+- tutorial guides
+
+--------------------------------------------------------------------------------
+1.3 Current Quest and Objective Systems
+--------------------------------------------------------------------------------
+
+Document:
+
+- Are there quests or objectives?
+- Are objectives visible to the player?
+- Are quests data-driven?
+- Can quest progress be tracked?
+- Are quests completed?
+- Are rewards granted?
+- Are quests saved?
+- Are quests tied to NPCs, areas, enemies, items, or bosses?
+- Do quests unlock areas, interiors, vendor items, dialogue, or story flags?
+
+Assess whether quests currently include:
+
+- speak-to-NPC objectives
+- kill objectives
+- collect objectives
+- explore objectives
+- enter-location objectives
+- buy-item objectives
+- recover-relic objectives
+- boss objectives
+- unlock-gate objectives
+- return-to-NPC objectives
+
+--------------------------------------------------------------------------------
+1.4 Current Buildings and Interiors
+--------------------------------------------------------------------------------
+
+Document:
+
+- Are there buildings in the world?
+- Are houses visible?
+- Are castles visible?
+- Are caves visible?
+- Are shops visible?
+- Are buildings enterable?
+- Are interiors separate maps or part of the same map?
+- Are entrances and exits safe?
+- Are portals/doors data-driven?
+- Is there collision inside interiors?
+- Are there NPCs, vendors, chests, lore, or quests inside interiors?
+
+Specifically check for stuck-state risks:
+
+- spawn point inside a wall
+- wall too close to door
+- door frame blocks player
+- exit tile overlaps obstacle
+- player cannot step away from entrance
+- one-way interior trap
+- invisible collision at interior border
+- interior exit returns player into blocked exterior terrain
+
+--------------------------------------------------------------------------------
+1.5 Current Economy
+--------------------------------------------------------------------------------
+
+Document:
+
+- What currencies exist?
+- Are relics already tracked?
+- Are coins/gold/resources already tracked?
+- Can the player spend currency?
+- Are there vendors?
+- Are there shops?
+- Are prices balanced?
+- Can purchases fail cleanly when currency is insufficient?
+- Do purchases persist?
+- Do purchases affect gameplay?
+- Is vendor stock static or progress-aware?
+- Are important upgrades purchasable?
+
+Possible currencies:
+
+- relics
+- gold
+- coins
+- crystals
+- monster parts
+- ore
+- gems
+- herbs
+- faction tokens
+
+Possible purchases:
+
+- healing potions
+- weapon upgrades
+- armor upgrades
+- keys
+- maps
+- torches
+- lanterns
+- crafting materials
+- bridge repair kits
+- access permits
+- teleport/fast travel
+- companion help
+- building recipes
+
+--------------------------------------------------------------------------------
+1.6 Current Region Meaning and Progression
+--------------------------------------------------------------------------------
+
+Document:
+
+- What regions currently exist?
+- Which are safe hubs?
+- Which are dangerous zones?
+- Which are story-critical?
+- Which contain bosses?
+- Which contain vendors?
+- Which contain interiors?
+- Which contain relics?
+- Which are locked or gated?
+- Which are optional?
+- Does the world map explain progression?
+- Does the story guide the player through these places?
+
+================================================================================
+
+## Step 2 — Identify Narrative and Systems Leaps
+
+Critically identify where the game falls short as a story-driven adventure.
+
+================================================================================
+2.1 Story Premise Leap
+================================================================================
+
+Ask:
+
+- Is there a clear central conflict?
+- Does the player know the goal?
+- Do relics have a purpose?
+- Are enemies connected to the story?
+- Is there a reason to visit each major region?
+
+Add or improve:
+
+- main story premise
+- opening objective
+- world threat
+- relic mythology
+- region-specific lore
+- villain or corrupting force
+- ancient ruins or lost kingdom history
+- village/town problem
+- Shadow Fortress purpose
+- cave/castle/forest narrative identity
+- ending or current long-term goal
+
+Example story premise:
+
+The kingdom’s protective relics were shattered by a shadow spreading from the
+Shadow Fortress. Each region holds a relic fragment or clue. The player must
+help villagers, recover relics, strengthen equipment, enter dangerous interiors,
+and confront the source of the corruption.
+
+================================================================================
+2.2 NPC Leap
+================================================================================
+
+Ask:
+
+- Does the world feel inhabited?
+- Are there people to talk to?
+- Do NPCs provide guidance, story, economy, or quests?
+- Do NPCs react to progress?
+
+Add NPC roles such as:
+
+- Village Elder: introduces the main quest.
+- Relic Scholar: explains relics and lore.
+- Blacksmith: sells weapons and armor.
+- Merchant: sells potions, torches, maps, and supplies.
+- Ranger: guides travel and teaches exploration.
+- Gate Guard: blocks or warns about dangerous areas.
+- Miner: introduces caves, ore, and resource gathering.
+- Castle Steward: explains castle/court story.
+- Prisoner or Lost Knight: gives fortress objectives.
+- Healer: restores health for relics or resources.
+- Builder: teaches building/crafting systems.
+- Cartographer: upgrades the map or reveals nearby regions.
+
+NPCs should have:
+
+- id
+- name
+- role
+- region/interior
+- position
+- sprite/render style
+- dialogue
+- progress-aware dialogue variants
+- optional quest links
+- optional vendor/shop links
+- optional story flags
+- collision behavior
+- interaction radius
+
+================================================================================
+2.3 Dialogue and Lore Leap
+================================================================================
+
+Ask:
+
+- Is dialogue useful?
+- Is dialogue too generic?
+- Does it react to player state?
+- Does lore explain the world?
+- Are story beats discoverable?
+
+Add:
+
+- dialogue boxes
+- interaction prompts
+- progress-aware dialogue
+- lore notes
+- signs/books/tablets
+- discovered lore log
+- NPC reactions after quest completion
+- vendor greetings
+- warnings before dangerous regions
+- hints for blocked paths
+- story text on entering key locations
+
+Dialogue should be concise but meaningful. Avoid long walls of text during
+combat or movement.
+
+================================================================================
+2.4 Quest Chain Leap
+================================================================================
+
+Ask:
+
+- Does the player have a clear next goal?
+- Are quests connected into a story arc?
+- Do quests involve talking, exploring, fighting, entering interiors, buying
+  supplies, and recovering relics?
+- Do quests reward useful things?
+
+Add a functional quest chain such as:
+
+1. Speak to the Village Elder.
+2. Visit the Relic Scholar to learn about the broken relics.
+3. Gather supplies from the Merchant or Blacksmith.
+4. Enter the forest to recover a relic clue.
+5. Enter the cave/mine to recover ore or a relic shard.
+6. Return to town and unlock vendor upgrades.
+7. Enter the castle or fortress approach.
+8. Prepare with relic purchases.
+9. Enter the Shadow Fortress safely.
+10. Defeat or confront the shadow source.
+
+Quest data should support:
+
+- id
+- title
+- description
+- giver NPC
+- objective type
+- target region/interior/NPC/enemy/item/vendor
+- progress
+- completion condition
+- rewards
+- follow-up quest
+- story flags
+- unlocks
+- persistence
+
+================================================================================
+2.5 Enterable Location Leap
+================================================================================
+
+Ask:
+
+- Are houses, shops, caves, and castles just scenery?
+- Can the player enter meaningful places?
+- Do interiors have purpose?
+- Are entrances safe?
+
+Add enterable places:
+
+- elder hall
+- village house
+- blacksmith shop
+- merchant shop
+- relic scholar hut
+- cave/mine
+- castle hall
+- fortress gatehouse
+- Shadow Fortress interior
+- ruined shrine
+- hidden chamber
+
+Each enterable location should have:
+
+- exterior object/building
+- visible door/entrance
+- interaction prompt
+- interior region/map
+- safe entry spawn
+- safe exit spawn
+- collision layout
+- lighting
+- NPCs, vendor, chest, lore, quest objective, or crafting station
+- map marker if appropriate
+
+================================================================================
+2.6 Vendor and Relic Economy Leap
+================================================================================
+
+Ask:
+
+- Are relics only a score/stat?
+- Can relics be spent?
+- Do purchases matter?
+- Are vendors useful?
+- Is there a reason to collect more relics?
+
+Add a relic economy.
+
+Vendor types:
+
+- Blacksmith: weapons, armor, repairs.
+- Merchant: potions, torches, maps, keys.
+- Scholar: relic upgrades, lore unlocks, magical tools.
+- Healer: healing, protection, cleansing.
+- Builder: recipes, workbench upgrades, building permits.
+- Cartographer: reveals regions or upgrades the map.
+
+Purchasable items/upgrades:
+
+- healing potion
+- greater healing potion
+- iron sword
+- steel sword
+- reinforced armor
+- shield charm
+- torch
+- lantern
+- cave map
+- fortress key
+- bridge repair kit
+- relic compass
+- extra inventory pouch
+- crafting recipe
+- building blueprint
+- fast-travel token
+
+Purchases should:
+
+- check cost
+- deduct relics
+- grant item/equipment/unlock
+- show feedback
+- fail cleanly if unaffordable
+- persist through save/load
+- affect gameplay
+
+================================================================================
+2.7 Story-Gated Progression Leap
+================================================================================
+
+Ask:
+
+- Are all areas immediately open?
+- Does story unlock new places?
+- Are keys, quests, or NPC approvals meaningful?
+- Are blocked areas communicated clearly?
+
+Add progression gates such as:
+
+- fortress locked until the elder gives a warning quest
+- cave unlocked after speaking to miner
+- castle door requires relic key
+- shop stock improves after completing a quest
+- scholar reveals map after collecting first relic
+- bridge repair unlocks new region
+- Shadow Fortress requires torch/lantern/key/relic count
+
+Important:
+
+Locked content must be clearly communicated. Do not silently block the player.
+
+================================================================================
+2.8 Map and Narrative Navigation Leap
+================================================================================
+
+Ask:
+
+- Does the map show story locations?
+- Does the player know where NPCs/vendors/quests are?
+- Does the map reflect actual region data?
+
+Improve map with:
+
+- town marker
+- elder hall marker
+- shop marker
+- blacksmith marker
+- cave marker
+- castle marker
+- Shadow Fortress marker
+- current quest marker
+- discovered/undiscovered states
+- locked/blocked path markers
+- interior markers
+- region connections
+- legend
+
+The map must reflect actual world/region/interior data, not fake decorative
+claims.
+
+================================================================================
+2.9 Safe Interior and Portal Leap
+================================================================================
+
+Ask:
+
+- Can the player enter and exit safely?
+- Are portals collision-aware?
+- Are preview/buffer zones truthful?
+- Can a wall near an entrance trap the player?
+
+Implement:
+
+- safe portal definitions
+- safe spawn validation
+- entrance clearance radius
+- exit clearance radius
+- fallback safe spawn search
+- collision-aware entry/exit
+- blocked portal feedback
+- no spawn inside walls
+- no walls too close to spawn
+- no transition through preview segment that is blocked on destination side
+
+Special bug class to prevent:
+
+If the player enters a fortress, cave, shop, house, or castle and the destination
+spawn is too close to a wall, the system must move the spawn, move the wall,
+block the transition, or find a safe fallback. The player must never become stuck.
+
+================================================================================
+2.10 Save, Reset, and Persistence Leap
+================================================================================
+
+Ask:
+
+- Does story progress persist?
+- Do completed quests persist?
+- Do purchases persist?
+- Do interiors persist?
+- Do NPC flags persist?
+- Do old saves migrate safely?
+
+Persist:
+
+- story chapter
+- story flags
+- completed quests
+- active quests
+- quest progress
+- NPC dialogue flags if needed
+- discovered lore
+- discovered regions/interiors
+- current region/interior
+- safe player position
+- relics spent
+- vendor purchases
+- inventory
+- equipment upgrades
+- unlocked vendor stock
+- unlocked doors/gates
+- opened chests
+- safe spawn fallback if saved location becomes invalid
+
+================================================================================
+
+## Step 3 — Story and Economy Pattern Library
+
+Apply every pattern that fits the game.
+
+================================================================================
+A. Narrative Architecture Patterns
+================================================================================
+
+[ ] A1. Add central story state.
+
+[ ] A2. Add story flags for discoveries, quest milestones, NPC interactions,
+    unlocked regions, and major events.
+
+[ ] A3. Add data registries for chapters, lore, dialogue, quests, NPCs, vendors,
+    interiors, and story gates.
+
+[ ] A4. Tie story beats to real gameplay triggers.
+
+[ ] A5. Persist story state and migrate old saves.
+
+================================================================================
+B. NPC Patterns
+================================================================================
+
+[ ] B1. Add visible NPCs in world regions and interiors.
+
+[ ] B2. Add NPC interaction prompt and interaction key/button.
+
+[ ] B3. Add progress-aware dialogue.
+
+[ ] B4. Add NPC roles: quest giver, vendor, lore keeper, guard, guide, healer,
+    blacksmith, cartographer, builder, prisoner, or companion.
+
+[ ] B5. Add collision/position rules so NPCs do not block critical paths.
+
+[ ] B6. Prevent duplicate NPCs after region transitions or restarts.
+
+================================================================================
+C. Dialogue and Lore Patterns
+================================================================================
+
+[ ] C1. Add dialogue UI or improve existing dialogue display.
+
+[ ] C2. Add branching/progress-aware dialogue variants.
+
+[ ] C3. Add lore notes, books, signs, tablets, or discovery text.
+
+[ ] C4. Add story text for important region/interior entry.
+
+[ ] C5. Add concise hints for blocked areas and next objectives.
+
+[ ] C6. Add discovered lore tracking if practical.
+
+================================================================================
+D. Quest Patterns
+================================================================================
+
+[ ] D1. Add quest definitions.
+
+[ ] D2. Add active/completed quest state.
+
+[ ] D3. Add objective types: talk, collect, kill, explore, enter, buy, deliver,
+    unlock, recover relic, defeat boss.
+
+[ ] D4. Add quest rewards tied to gameplay.
+
+[ ] D5. Add chained quests.
+
+[ ] D6. Add quest tracker or objective display.
+
+[ ] D7. Persist quest progress.
+
+================================================================================
+E. Interior and Building Patterns
+================================================================================
+
+[ ] E1. Add enterable building definitions.
+
+[ ] E2. Add interior maps/regions.
+
+[ ] E3. Add explicit door/portal data.
+
+[ ] E4. Add safe entry and exit spawn points.
+
+[ ] E5. Add interior collision and objects.
+
+[ ] E6. Add interior NPCs, vendors, chests, lore, quest goals, or crafting
+    stations.
+
+[ ] E7. Add locked/blocked states where appropriate.
+
+[ ] E8. Prevent stuck states in all interiors.
+
+================================================================================
+F. Vendor and Economy Patterns
+================================================================================
+
+[ ] F1. Add relic currency spending.
+
+[ ] F2. Add vendor definitions.
+
+[ ] F3. Add vendor stock definitions.
+
+[ ] F4. Add purchase validation.
+
+[ ] F5. Add purchase effects.
+
+[ ] F6. Add insufficient relic feedback.
+
+[ ] F7. Add progress-aware vendor stock.
+
+[ ] F8. Persist purchases, inventory, and equipment changes.
+
+================================================================================
+G. Story-Gated World Patterns
+================================================================================
+
+[ ] G1. Add locked or gated areas.
+
+[ ] G2. Add keys, permits, relic requirements, story flags, or quest prerequisites.
+
+[ ] G3. Add clear feedback for blocked paths.
+
+[ ] G4. Add map markers for locked/available locations.
+
+[ ] G5. Unlock regions/interiors through quest or vendor progression.
+
+================================================================================
+H. Map and Navigation Patterns
+================================================================================
+
+[ ] H1. Add story-relevant map markers.
+
+[ ] H2. Show NPC/vendor/interior locations where useful.
+
+[ ] H3. Show current quest destination.
+
+[ ] H4. Show locked/undiscovered/discovered areas.
+
+[ ] H5. Generate map data from actual world/interior definitions.
+
+================================================================================
+I. Safe Portal and Transition Patterns
+================================================================================
+
+[ ] I1. Validate every portal destination.
+
+[ ] I2. Validate every exterior-to-interior spawn.
+
+[ ] I3. Validate every interior-to-exterior spawn.
+
+[ ] I4. Add clearance radius around spawn points.
+
+[ ] I5. Add safe fallback spawn search.
+
+[ ] I6. Add blocked portal feedback.
+
+[ ] I7. Ensure preview/buffer collision matches destination collision.
+
+[ ] I8. Prevent hard cuts into disconnected unsafe spaces.
+
+================================================================================
+J. Save and Reliability Patterns
+================================================================================
+
+[ ] J1. Version save data.
+
+[ ] J2. Migrate old saves.
+
+[ ] J3. Persist story, quests, NPC flags, purchases, interiors, and unlocked
+    areas.
+
+[ ] J4. Validate loaded player position.
+
+[ ] J5. Reset story and economy state safely on new game.
+
+[ ] J6. Prevent duplicate NPCs, vendors, portals, quests, and dialogue listeners.
+
+================================================================================
+
+## Step 4 — Required Implementation Plan
+
+Before coding, produce an ordered implementation plan.
+
+The plan must include:
+
+### 4.1 Assessment Summary
+
+- Current story state.
+- Current NPC/dialogue system.
+- Current quest/objective system.
+- Current economy/currency system.
+- Current building/interior system.
+- Current region/portal system.
+- Current save/load model.
+- Current stuck risks at portals/interiors.
+
+### 4.2 Foundational Refactors
+
+Explicitly call out refactors needed before features are added, such as:
+
+- central story state
+- NPC registry
+- dialogue registry
+- quest registry
+- vendor registry
+- interior registry
+- portal metadata
+- safe spawn validation
+- relic spending helpers
+- save migration
+
+### 4.3 Staged Work
+
+Use stages similar to:
+
+- Stage 1: Story premise and narrative state
+- Stage 2: NPC and dialogue system
+- Stage 3: Quest chain and objective tracking
+- Stage 4: Enterable buildings and interiors
+- Stage 5: Vendor and relic economy
+- Stage 6: Story-gated progression
+- Stage 7: Map markers and narrative navigation
+- Stage 8: Safe portal/entrance validation
+- Stage 9: Save/load migration and persistence
+- Stage 10: Testing, balancing, hardening, and documentation
+
+### 4.4 Per-Stage Details
+
+For each stage, list:
+
+- files touched
+- systems affected
+- data structures introduced
+- dependencies
+- effort: low / medium / high
+- risk: low / medium / high
+- manual verification steps
+
+================================================================================
+
+## Step 5 — Execute the Renovation
+
+Implement working systems. Do not stop at decorative additions.
+
+================================================================================
+5.1 Story Model
+================================================================================
+
+Create or improve a story model.
+
+It should support:
+
+- current chapter
+- story flags
+- discovered lore
+- unlocked areas
+- major events
+- quest progression
+- NPC interaction state
+- vendor unlocks
+
+Example structure:
+
+```js
+{
+  chapter: "awakening",
+  flags: {
+    spokeToElder: false,
+    learnedAboutRelics: false,
+    enteredCave: false,
+    recoveredForestRelic: false,
+    unlockedFortressGate: false
+  },
+  discoveredLore: [],
+  completedQuests: [],
+  activeQuestIds: []
+}

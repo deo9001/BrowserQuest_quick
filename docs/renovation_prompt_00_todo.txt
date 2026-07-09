@@ -1,0 +1,119 @@
+
+
+DONE
+Now that we have failed to make this game into a single click game, we will now try to inject the standalone version into the repository so that someone who does not have Admin on the PC can still download a zip of the repository and play the best version posible without installs
+
+we have internet access so don't worry about that.
+
+as we look through the app files I apperciate you fixing other maybe unrealted issues with the repository so that issues (and needed updates) that come up now can get fixed dispite the scope of the prompt.
+
+Continue to allow the real app to work, fix any issues that the real app has, when I get a new PC I will try to run the full app that is in this repositroy, keep the developer workflow for launching the real full app on a machine that allows Node.js.
+
+try to create a auto-starting local server.
+
+The Developer setup mode instructions state the bellow, however it does not give actuall step by step instructions on how to use VScode to get this thing running. Do not provide several diffrent paths in the developer setup mode instructions, just pick one best path with best conditions assumptions like a PC with full admin and all features posible, and then provide a Developer setup mode instructions that have better step by step instructions.
+Install dependencies with npm
+Start the Node.js game server
+Open the BrowserQuest client in a browser
+Intended for development or for a future packaged release that bundles a runtime
+
+
+
+
+
+
+DONE
+The standalone version is barley working and looking rough. 
+
+It is better for the standalone to have the structure of HTML file plus local CSS/JS/assets, having it contained to one html file restricts it's capacity.
+
+we have to get it working better. first most of the things are not rendering, also the player character is duplicated see attached screen shot. the enemy characters don't even really render the sprite looks invisible with a few static dots moving. The game needs major updates, the foundation id here and it can be made into a better game. the layout of the GUI need some improvement, the "About / Help / Dependencies" section cannot be placed on the right hand side like it is now, that has to get moved to below the "Standalone Adventure Arena" window, the "Standalone Adventure Arena" window needs to be larger and after moving the about section the "Standalone Adventure Arena" window should be able to span from left to right the whole width.
+
+the game is too quick, simply collecting relics is not a game, we need to keep incorporation more features form the real full game and get this standalone version becoming better. never consider the standalone version a small app, this app will get as big and large as it needs to get to give the user a good gaming experience. after many updates we hope that this standalone can some day come close to being as engaging as the original if not more so. 
+
+we need to have multiple maps (aka a map that will continue to the next section when the player reaches the edge). lets continue to improve this game and the game's gui
+
+the user character does not even have a sword or armor to help fight the enimeies, make these discoverable items jus tlike the real game does.
+
+
+
+
+
+DONE
+Lets continue making the standalone game better. there are some bugs to fix, when the player gets to the edge of the map it takes way too long to register and the player stays there waiting for over 5 seconds to for the game to change to the next area. there should also be some kind of buffer area at the edge of the current map section were you see a preview of the next area. also an area is not just the current rectangle, one area should span several blocks and the transition between areas should be a little more smooth. we need faster transitions between areas, if we get close to the edge at a certain distance inside the edge margin the next area should transition. the transitions between area should have some kind of animation our view should have some kind of smooth animation, 
+
+the enemies should not always immediate start chasing the character. the enemies should spawn and if the player character gets too close to the enemies then they should start chasing the player, enemies should not just keep respawning after getting killed. enemies should respawn after the character has moved away a few blocks (area transitions)
+
+the game lacks terrain, there should be borders and cliffs and rivers and ponds and hills and so on. there should be trees and the player should have boundaries where they cannot cross and would have to move over to the left right up down to move around walls and get around objects and terrain features.
+
+the game is a bit too dark, not every area need to be dark, it look like the dark theme is constantly on in the game, don't conflate the dark browser gui theme with the contents of the game being light nor dark themed the game is the game and the gui is external, it's ok for the bad evil areas to be dark and the caves can be dark but we also need well lit outside sunny forests and meadows and towns
+
+there are not trees and not houses and not castles. we need objects and terrain features
+
+we need a map that will show us the different areas that we can travel to.
+
+we need animations for the swinging of the sword that hits the enemies.
+
+AI Agent active session execution. Yes start a Copilot coding agent task/PR in the repository: deo9001/BrowserQuest_quick. Start and kick off the implementation task to upgrade BrowserQuest_quick. Create the task so that I can review it in BrowserQuest_quick/tasks
+
+
+
+
+DONE
+Lets continue making the standalone game better. lets create narratives and npc's. lets start to create a story that will then dictate the structure of the game, the levels and areas will have more meaning. lets have building like houses, castles, caves that we can enter. lets have have s sytem of economy where we can buy things with our relecs from vendors. 
+
+there were also some bugs when I tested the last build, I got stuck when I entered the shadow fortress because the is a wall that is to close to the border of the entrance. if the player cannot enter a location do the a wall then the previwe area needs to also have a wall so that the player dose not spawn into a wall in the next area and get stuck. this is why the current map and world handleing is not great and needs a new approch. we need to have a system where its more like a change of the view and not just a hard cut to an new unconnected space, the connectivity of the map should be improved
+
+AI Agent active session execution. Yes start a Copilot coding agent task/PR in the repository: deo9001/BrowserQuest_quick. Start and kick off the implementation task to upgrade BrowserQuest_quick. Create the task so that I can review it in BrowserQuest_quick/tasks
+
+
+
+
+
+
+DONE
+Lets continue making the standalone game better. the power system is not well balanced, the enemies take on too much damage too quickly, low level enemies can die quickly but more powerful enemies should take more hits or have more HP. I don't want to say that an enemy needs a certain number of hits to die instead it has to be more sophisticated, the amount of damage the player does needs to be at a certain amount so that the health of the enemy is large enough that it take more hits to get the enemy killed. this is a game power health attack balance system. basically the enemies should take more the kill they currently die too quickly, the player hast too much health or does not take enough damage so the game is too easy, this needs to get balanced. the player should not level up so easily and each successive level should take more effort to reach. objects that are more rare should also be harder to mine and ether have more hits or more health. the player should feel the weight of the game if the area is low level and easy the weight will be light and easy but if the level is hard and difficult the weight should feel hard. the player should get to some areas and feel like they need to turn back and get more powerful before returning. now that we have a good foundation lets expand the game and make more areas to explore to and the later areas will be harder and harder until a climax of the end boss.
+
+there where more bugs in the new version, you started me in the shadow fortress and the building I was in had no doors so I was stuck and could not get out, if you create and enclosed structure make sure the user has a door or a way out.  
+
+the character npc dialogs could be handled better, just showing up at the bottom of the screen in the
+
+some areas in the game should have a randomizer, the areas critical to the story can stay static but non critical areas can constantly change in between new games to keep the game more fresh. include some kind of changing symbol on the map to indicate the seed of the randomization of the affected area so that the player can understand that the area is different because it is intended and it is not some kind of bug.
+
+AI Agent active session execution. Yes start a Copilot coding agent task/PR in the repository: deo9001/BrowserQuest_quick. Start and kick off the implementation task to upgrade BrowserQuest_quick. Create the task so that I can review it in BrowserQuest_quick/tasks
+
+
+
+
+
+
+
+
+DONE
+create a version of this app renovation prompt (renovation_prompt_01.txt) that will focus more no the app itself and less about the gui. so for example if the app that is getting renovated is a game we want to improve the game's features like the graphics, items, enemy AI actions, quests, boss fights, leveling up system, tools, multiple weapons, multiple armor, mounts to ride faster, cool locations like forest castle swamp volcano caves. basically add language and actionable instructions that will help the ai create a better game. just like this original version of this prompt helped the AI improve the GUI the next version should improve the actual game.
+
+
+DONE
+create a version of this app renovation prompt (renovation_prompt_02_app_depth) that will focus on the themes that we covered in this chat session like adding more game assets, terrain fetures, continuing ot make the game better but with better dynamic trasitions between areas, the ability to enter building, having trees and bildings and grass and rocks and objects. distructable objects that we can mine for resources. resources that we can use in a building system. and all the other additons that we talked about in this chat. there were also some bugs when I tested the last build, I got stuck when I entered the shadow fortress because the is a wall that is to close to the border of the entrance. if the player cannot enter a location do the a wall then the previwe area needs to also have a wall so that the player dose not spawn into a wall in the next area and get stuck. this is why the current map and world handleing is not great and needs a new approch. we need to have a system where its more like a change of the view and not just a hard cut to an new unconnected space, the connectivity of the map should be improved
+just like this original version of this prompt helped the AI improve the GUI the next version should improve these other aspects of the game.
+
+
+DONE
+create a version of this app renovation prompt (renovation_prompt_03_world_depth_and_connectivity) that will focus on new themes that we covered in this chat session like adding more game lore, and story. lets start to create a story that will then dictate the structure of the game, the levels and areas will have more meaning. lets have building like houses, castles, caves that we can enter. lets have have s sytem of economy where we can buy things with our relecs from vendors. 
+just like this original version of this prompt helped the AI improve the GUI the next version should improve these other aspects of the game.
+
+
+
+DONE
+create a version of this app renovation prompt (renovation_prompt_04_story_npcs_economy.txt) that will focus on the themes that we covered in this chat session like improving the balance of the game. the power levels of the enemies and player and mining objects need to be well tuned so that the game feels hard enough and rewarding enough. the player should feel the weight of the game if the area is low level and easy the weight will be light and easy but if the level is hard and difficult the weight should feel hard. the player should get to some areas and feel like they need to turn back and get more powerful before returning. 
+just like this original version of this prompt helped the AI improve the GUI the next version should improve these other aspects of the game.
+
+
+
+
+
+next game update
+some big boss fights should trigger a mini game.
+
+
+

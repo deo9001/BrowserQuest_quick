@@ -1,0 +1,1719 @@
+# Premium Balance, Power Progression, World Weight, Resource Durability, and Area Expansion Renovation Prompt
+
+================================================================================
+PURPOSE OF THIS PROMPT
+================================================================================
+
+This is a reusable renovation prompt for transforming an existing HTML /
+JavaScript / CSS game into a better-balanced adventure where combat, mining,
+enemy strength, player progression, area danger, rewards, and world expansion
+feel intentional and satisfying.
+
+This prompt is intended for games that already have playable mechanics, regions,
+enemies, player stats, resources, and possibly story/NPC systems, but need a
+deeper power curve and stronger feeling of progression.
+
+The goal is to improve the game’s mechanical weight:
+
+- combat balance
+- enemy health and damage scaling
+- player health, attack, defense, and survivability
+- XP and level progression
+- enemy tiers and threat ratings
+- boss durability
+- rare resource durability
+- mining/object health and hardness
+- area difficulty ramps
+- reward pacing
+- difficulty communication
+- world expansion
+- late-game danger
+- climactic end-boss progression
+- safe spawn and interior reliability
+- better NPC dialogue presentation
+- optional randomized areas for replayability
+
+This prompt is not primarily about cosmetic polish. It is about making the game
+feel better to play: harder where it should be hard, easier where it should be
+easy, rewarding when the player grows stronger, and dangerous enough that the
+player sometimes needs to retreat and prepare.
+
+================================================================================
+
+## Mission
+
+You are an expert gameplay systems designer, RPG balance designer, progression
+designer, combat designer, world designer, JavaScript engineer, and creative
+technologist.
+
+Your mission is to renovate an existing HTML / JavaScript / CSS game so that it
+has a more sophisticated and satisfying balance model.
+
+The game should no longer feel like enemies die too quickly, the player is too
+safe, leveling happens too easily, or rare resources break with the same effort
+as common objects.
+
+The player should be able to:
+
+- defeat low-level enemies quickly
+- recognize when an enemy or area is more dangerous
+- encounter enemies that survive longer because their HP, defense, level, tier,
+  and area difficulty justify it
+- take meaningful damage in dangerous areas
+- feel the need to retreat from areas that are currently too hard
+- become stronger through leveling, equipment, upgrades, relics, or preparation
+- return later and feel the difference after improving
+- mine common resources easily
+- work harder to mine rare resources
+- understand that rare materials require better tools, more hits, or more power
+- progress through increasingly difficult regions
+- eventually face a climactic late-game or end-boss challenge
+- enter and exit interiors safely
+- understand NPC dialogue clearly
+- replay optional areas that change between new games
+
+The goal is not to make the game unfair. The goal is to make the game feel
+weighted, tuned, dangerous, rewarding, and intentional.
+
+================================================================================
+
+## Non-Negotiable Philosophy
+
+1. Balance must be systemic.
+   Do not balance the game by saying “this enemy takes exactly 5 hits.” Enemies
+   should survive based on health, defense, level, tier, resistance, area
+   difficulty, player attack, player upgrades, and damage formulas.
+
+2. Low-level content should remain approachable.
+   Early enemies and starter areas should feel light, readable, and beatable.
+
+3. Hard areas must feel hard.
+   Later areas should create pressure. The player should sometimes realize:
+   “I am not ready for this yet.”
+
+4. Player power must be earned.
+   The player should not level too quickly, gain too much health too early, or
+   trivialize enemies without earning upgrades.
+
+5. Enemy power must scale meaningfully.
+   More dangerous enemies should have more HP, stronger attacks, better defense,
+   special behavior, or stronger area modifiers.
+
+6. Mining and resource gathering must have weight.
+   Rare objects should be harder to mine than common objects. Durability,
+   hardness, tool power, rarity, and region difficulty should matter.
+
+7. Rewards must justify effort.
+   Harder enemies, dangerous areas, rare resources, and bosses should reward the
+   player appropriately without causing runaway progression.
+
+8. Area difficulty must be communicated.
+   The player should be warned through map labels, enemy names, NPC dialogue,
+   signs, danger colors, music, environment, or UI hints.
+
+9. Interior and spawn safety is mandatory.
+   The player must never start or transition into a wall, enclosed trap, blocked
+   door, doorless building, enemy cluster, or impossible-to-exit interior.
+
+10. Randomness must be intentional and visible.
+    Optional randomized areas should show a seed, rune, glyph, symbol, or map
+    marker so the player understands the area changed by design, not because of
+    a bug.
+
+================================================================================
+
+## Step 1 — Understand the Current Balance State
+
+Before changing code, produce a written assessment of the current game.
+
+--------------------------------------------------------------------------------
+1.1 Current Combat Identity
+--------------------------------------------------------------------------------
+
+Answer:
+
+- What is the current combat loop?
+- How does the player attack?
+- How do enemies attack?
+- How is damage calculated?
+- How much HP does the player have?
+- How much HP do enemies have?
+- Do enemies have attack values?
+- Do enemies have defense, armor, or resistance?
+- Are there enemy levels or tiers?
+- Are bosses meaningfully stronger than normal enemies?
+- Do enemies die too quickly?
+- Does the player take too little damage?
+- Is healing too available?
+- Is armor too strong?
+- Is the player overpowered from the beginning?
+- Is combat currently dangerous, trivial, random, or unclear?
+
+Look for:
+
+- player damage formulas
+- enemy damage formulas
+- HP values
+- defense values
+- weapon bonuses
+- armor bonuses
+- critical hits
+- enemy archetypes
+- boss multipliers
+- attack cooldowns
+- hit detection
+- combat UI feedback
+
+--------------------------------------------------------------------------------
+1.2 Current Player Power Curve
+--------------------------------------------------------------------------------
+
+Document:
+
+- Does the player level up?
+- What stats increase on level-up?
+- How much XP is required per level?
+- Is the XP curve linear, flat, exponential, or missing?
+- Are early levels too fast?
+- Are later levels too easy?
+- Are upgrades permanent?
+- Are equipment upgrades available?
+- Does the player become too strong too quickly?
+- Is player health too high?
+- Does defense reduce too much damage?
+- Are there meaningful power milestones?
+
+Assess whether progression includes:
+
+- level
+- XP
+- max HP
+- attack
+- defense
+- equipment
+- relic upgrades
+- potions
+- mining tools
+- map unlocks
+- region unlocks
+- quest rewards
+
+--------------------------------------------------------------------------------
+1.3 Current Enemy Power Curve
+--------------------------------------------------------------------------------
+
+Document:
+
+- What enemy types exist?
+- Which enemies are starter enemies?
+- Which are mid-game enemies?
+- Which are late-game enemies?
+- Which are elites?
+- Which are bosses?
+- Do enemies have enough HP for their intended role?
+- Do powerful enemies hit hard enough?
+- Do weak enemies remain easy?
+- Are enemy rewards balanced?
+- Are late-game enemies just reskins of early enemies?
+- Do enemies in harder regions feel harder?
+
+For each major enemy type, assess:
+
+- level or tier
+- HP
+- attack damage
+- defense/resistance
+- speed
+- attack rate
+- XP reward
+- resource/relic reward
+- intended region
+- expected player readiness
+- whether it currently dies too fast
+
+--------------------------------------------------------------------------------
+1.4 Current Area Difficulty and World Weight
+--------------------------------------------------------------------------------
+
+Document:
+
+- What regions currently exist?
+- Which areas are safe?
+- Which areas are starter/easy?
+- Which areas are medium difficulty?
+- Which areas are dangerous?
+- Which areas are late-game?
+- Which areas contain bosses?
+- Which areas should make the player turn back?
+- Are dangerous areas accessible too early?
+- Are hard areas labeled or warned about?
+- Does the map communicate difficulty?
+- Does enemy strength match area difficulty?
+- Does resource rarity match area difficulty?
+- Does reward quality match area difficulty?
+
+The game should have a readable difficulty gradient:
+
+- starter village / safe zone
+- low-level fields
+- forest or ruins
+- cave / mine
+- corrupted woods
+- castle approach
+- fortress outskirts
+- Shadow Fortress
+- final boss or climax
+
+--------------------------------------------------------------------------------
+1.5 Current Mining and Object Durability
+--------------------------------------------------------------------------------
+
+Document:
+
+- Are there mineable objects?
+- Are there harvestable resources?
+- Are there breakable objects?
+- Do they have health or durability?
+- Do rare objects take more effort?
+- Do tools affect mining speed?
+- Can objects require a minimum tool power?
+- Are mining rewards balanced?
+- Do rare resources appear too often?
+- Are rare resources too easy to collect?
+
+Look for:
+
+- ore nodes
+- crystals
+- trees
+- rocks
+- relic fragments
+- chests
+- barricades
+- doors
+- destructible walls
+- resource patches
+
+Each resource object should be evaluated by:
+
+- rarity
+- durability / HP
+- hardness
+- required tool power
+- region tier
+- reward value
+- respawn behavior
+- feedback when hit
+- feedback when tool is too weak
+
+--------------------------------------------------------------------------------
+1.6 Current Rewards and Economy Balance
+--------------------------------------------------------------------------------
+
+Document:
+
+- What does the player earn from enemies?
+- What does the player earn from mining?
+- Are relics, coins, gold, crystals, ore, or items tracked?
+- Can rewards be spent?
+- Are prices meaningful?
+- Are upgrades too cheap?
+- Are resources too easy to farm?
+- Are high-level enemies over-rewarding or under-rewarding?
+- Does the economy support progression?
+
+Possible reward types:
+
+- XP
+- relics
+- coins
+- ore
+- gems
+- monster parts
+- potions
+- keys
+- equipment
+- tool upgrades
+- map fragments
+- quest progress
+
+--------------------------------------------------------------------------------
+1.7 Current Spawn, Interior, and Safety State
+--------------------------------------------------------------------------------
+
+Document:
+
+- Where does a new game start?
+- Can the player accidentally start in a late-game area?
+- Can the player start inside Shadow Fortress?
+- Are there enclosed buildings?
+- Do all enclosed structures have doors or exits?
+- Can the player enter interiors?
+- Can the player exit interiors?
+- Are spawn points collision-safe?
+- Can the player spawn into a wall, object, enemy, trap, or blocked tile?
+- Can the player be trapped inside a building with no door?
+
+Specifically check for:
+
+- default spawn inside a fortress
+- default spawn inside an interior
+- building with no door
+- door blocked by wall collision
+- exit tile returning to blocked exterior
+- one-way trap
+- invisible collision at door
+- enemy spawn overlapping player spawn
+- save/load restoring the player into invalid positions
+
+--------------------------------------------------------------------------------
+1.8 Current NPC Dialogue Presentation
+--------------------------------------------------------------------------------
+
+Document:
+
+- Are NPCs present?
+- Can the player interact with NPCs?
+- Where does dialogue appear?
+- Is dialogue readable?
+- Does dialogue get cut off?
+- Is dialogue only shown at the bottom of the screen?
+- Is there a speaker name?
+- Is there a role/title?
+- Is there a continue/close control?
+- Is dialogue progress-aware?
+- Does dialogue interfere with combat?
+- Is the player clearly prompted to interact?
+
+The goal is to improve dialogue presentation so NPCs feel more intentional and
+less like debug text.
+
+--------------------------------------------------------------------------------
+1.9 Current Randomization and Replayability
+--------------------------------------------------------------------------------
+
+Document:
+
+- Are any areas randomized?
+- Are maps static?
+- Are enemy placements static?
+- Are resource placements static?
+- Are chest placements static?
+- Does a new game produce the same world every time?
+- Are story-critical areas stable?
+- Is there a seed?
+- Is randomization persisted in saves?
+- Does the map indicate which areas are randomized?
+
+================================================================================
+
+## Step 2 — Identify Balance and Progression Leaps
+
+Critically identify where the game falls short as a weighted adventure.
+
+================================================================================
+2.1 Combat Balance Leap
+================================================================================
+
+Ask:
+
+- Do enemies die too fast?
+- Does the player deal too much damage?
+- Does the player take too little damage?
+- Are bosses durable enough?
+- Are enemy tiers meaningful?
+- Is damage variance reasonable?
+- Does armor/defense matter without trivializing combat?
+
+Add or improve:
+
+- player damage formula
+- enemy damage formula
+- enemy HP scaling
+- enemy defense/resistance
+- area difficulty multipliers
+- enemy tier multipliers
+- boss multipliers
+- elite modifiers
+- minimum and maximum damage clamps
+- damage variance
+- critical hit tuning
+- combat pacing
+
+Example direction:
+
+Low-tier enemies should remain fast to kill. Mid-tier enemies should survive
+several exchanges. High-tier enemies should require preparation. Bosses should
+feel like events, not like normal enemies with slightly more HP.
+
+Do not tune by hardcoded hit count. Tune by system values.
+
+================================================================================
+2.2 Player Survivability Leap
+================================================================================
+
+Ask:
+
+- Is the player too safe?
+- Is player HP too high?
+- Does defense reduce too much incoming damage?
+- Is healing too common?
+- Can the player ignore enemies?
+- Does dangerous terrain matter?
+- Does entering a hard area feel risky?
+
+Add or improve:
+
+- lower early max HP if excessive
+- slower HP growth
+- more meaningful incoming damage
+- armor scaling that helps but does not trivialize
+- potion limits or cooldowns
+- safe-zone healing rules
+- danger-zone pressure
+- boss damage spikes with warning
+- retreat-friendly design
+
+The player should not die unfairly, but should feel pressure in dangerous areas.
+
+================================================================================
+2.3 XP and Level Curve Leap
+================================================================================
+
+Ask:
+
+- Does the player level up too easily?
+- Is the XP curve too flat?
+- Are early levels too generous?
+- Do later levels require enough effort?
+- Are high-level enemy XP rewards causing runaway growth?
+- Is there a level cap?
+- Are power gains per level too large?
+
+Add:
+
+- escalating XP requirements
+- smoother early levels
+- slower mid/late progression
+- balanced XP rewards
+- diminishing returns for farming weak enemies, if appropriate
+- clear level-up feedback
+- save migration for XP curve changes
+
+Example XP curve:
+
+- Level 1 to 2: quick introduction
+- Level 2 to 4: moderate effort
+- Level 5 and beyond: noticeably more effort
+- Late levels: require dangerous enemies, quests, bosses, or rare resources
+
+================================================================================
+2.4 Enemy Tier and Threat Leap
+================================================================================
+
+Ask:
+
+- Are enemy roles clear?
+- Are enemies grouped by threat?
+- Do harder regions use harder enemy pools?
+- Are elites and bosses special?
+- Are late-game enemies dangerous enough?
+
+Introduce enemy classifications:
+
+- trivial
+- common
+- tough
+- elite
+- guardian
+- boss
+- final boss
+
+Each classification should affect:
+
+- HP multiplier
+- damage multiplier
+- defense/resistance
+- XP reward
+- relic/resource reward
+- spawn frequency
+- map threat label
+- possible abilities
+
+================================================================================
+2.5 Area Weight Leap
+================================================================================
+
+Ask:
+
+- Does each region have a clear difficulty identity?
+- Are easy areas truly easy?
+- Are hard areas truly hard?
+- Can the player enter an area too early and feel the danger?
+- Is there a reason to return later?
+- Does the area’s reward match its threat?
+
+Add area metadata:
+
+- id
+- name
+- difficulty tier
+- recommended level
+- danger rating
+- enemy pools
+- resource pools
+- boss presence
+- story-critical flag
+- randomized flag
+- unlock requirements
+- map marker
+- warning text
+- reward multiplier
+
+Example area weights:
+
+- Safe Haven: safe, no hostile enemies
+- Greenfields: light, starter enemies
+- Old Forest: moderate, stronger enemies and better resources
+- Echo Mine: moderate-hard, durable ore nodes
+- Ruined Castle: hard, elites and locked rooms
+- Shadow Road: very hard, corruption effects
+- Shadow Fortress: late-game, elite enemies and boss
+- Heart of the Shadow: climax, final boss
+
+================================================================================
+2.6 Mining and Resource Durability Leap
+================================================================================
+
+Ask:
+
+- Do rare resources feel rare?
+- Do rare objects require more effort?
+- Does tool power matter?
+- Can the player mine late-game resources too early?
+- Are mining rewards worth the effort?
+
+Add or improve:
+
+- resource durability / HP
+- hardness
+- rarity tier
+- required tool tier
+- tool damage
+- mining damage formula
+- region resource modifiers
+- feedback per hit
+- “tool too weak” feedback
+- rare resource reward tables
+- save persistence for depleted nodes if appropriate
+
+Example resource tiers:
+
+- Common stone: low durability
+- Copper ore: low-medium durability
+- Iron ore: medium durability
+- Silver ore: medium-high durability
+- Relic crystal: high durability
+- Shadow crystal: very high durability, late-game tool recommended
+- Ancient seal: boss-area object, requires quest or upgraded tool
+
+================================================================================
+2.7 World Expansion and Climax Leap
+================================================================================
+
+Ask:
+
+- Are there enough areas to support progression?
+- Does difficulty build toward a climax?
+- Is there a true final challenge?
+- Are later areas locked, warned, or gated?
+- Does the player understand the route forward?
+
+Add or improve:
+
+- new intermediate areas
+- optional side areas
+- dangerous late-game areas
+- climactic boss region
+- region connections
+- progression gates
+- story or NPC warnings
+- map markers
+- rewards that prepare the player for the next tier
+
+The world should expand from safe/easy zones toward dangerous/endgame zones.
+
+================================================================================
+2.8 Safe Interior and Spawn Leap
+================================================================================
+
+Ask:
+
+- Can the player become trapped?
+- Does every enclosed building have a door?
+- Can a new game start in a late-game area?
+- Are interior exits reliable?
+- Are spawn points validated?
+
+Implement:
+
+- safe default new-game spawn
+- spawn validation on new game
+- spawn validation on load
+- portal destination validation
+- interior exit validation
+- clearance radius around spawn points
+- fallback safe spawn search
+- blocked transition feedback
+- no-door building detection or manual audit
+- emergency unstuck fallback if needed
+
+Important:
+
+Never allow the player to start inside Shadow Fortress or any enclosed building
+unless it is intentional, safe, story-appropriate, and has an obvious exit.
+
+================================================================================
+2.9 NPC Dialogue Presentation Leap
+================================================================================
+
+Ask:
+
+- Is dialogue readable?
+- Is the speaker clear?
+- Does the player know how to continue or close?
+- Is dialogue placed awkwardly?
+- Does bottom-screen text get cut off?
+- Does dialogue react to progress?
+
+Improve:
+
+- dialogue panel
+- speaker name
+- NPC role/title
+- portrait or icon if available
+- close/continue button
+- keyboard shortcut
+- near-NPC interaction prompt
+- progress-aware lines
+- concise hints
+- warning dialogue for hard areas
+
+Dialogue should guide the player toward preparation, danger awareness, and
+progression.
+
+================================================================================
+2.10 Randomized Optional Area Leap
+================================================================================
+
+Ask:
+
+- Can optional areas change between new games?
+- Are story-critical areas stable?
+- Is randomization seeded?
+- Is seed state persisted?
+- Does the player know the area is intentionally shifting?
+
+Add:
+
+- world seed
+- area seed
+- seeded random generator
+- optional randomized areas
+- stable story-critical areas
+- randomized enemy/resource/chest/decor placements
+- map glyph or rune derived from seed
+- tooltip explaining randomized area
+- save persistence for seed
+
+Example:
+
+“Shifting Wilds — Seed Rune: Spiral Moon”
+
+This tells the player the area is intentionally different this run.
+
+================================================================================
+
+## Step 3 — Balance and Progression Pattern Library
+
+Apply every pattern that fits the game.
+
+================================================================================
+A. Combat Balance Patterns
+================================================================================
+
+[ ] A1. Add or refactor player damage formula.
+
+[ ] A2. Add or refactor enemy damage formula.
+
+[ ] A3. Add enemy HP scaling by level, tier, and region.
+
+[ ] A4. Add enemy defense/resistance where useful.
+
+[ ] A5. Add area difficulty multipliers.
+
+[ ] A6. Add elite and boss multipliers.
+
+[ ] A7. Add minimum/maximum damage clamps.
+
+[ ] A8. Add damage variance that does not feel random or unfair.
+
+[ ] A9. Add combat feedback for damage and danger.
+
+================================================================================
+B. Player Progression Patterns
+================================================================================
+
+[ ] B1. Rebalance player starting HP, attack, and defense.
+
+[ ] B2. Rebalance stat growth per level.
+
+[ ] B3. Slow down leveling.
+
+[ ] B4. Add escalating XP requirements.
+
+[ ] B5. Tune XP rewards by enemy level and risk.
+
+[ ] B6. Prevent runaway leveling from weak enemies.
+
+[ ] B7. Make equipment/upgrades important but not overpowering.
+
+[ ] B8. Persist and migrate player progression safely.
+
+================================================================================
+C. Enemy Progression Patterns
+================================================================================
+
+[ ] C1. Define enemy tiers.
+
+[ ] C2. Define enemy threat ratings.
+
+[ ] C3. Define enemy archetypes.
+
+[ ] C4. Tune enemy HP by tier.
+
+[ ] C5. Tune enemy damage by tier.
+
+[ ] C6. Tune enemy rewards by tier.
+
+[ ] C7. Create elite variants.
+
+[ ] C8. Make bosses substantially more durable and dangerous.
+
+[ ] C9. Ensure low-level enemies remain easy.
+
+================================================================================
+D. Area Difficulty Patterns
+================================================================================
+
+[ ] D1. Add area difficulty metadata.
+
+[ ] D2. Add recommended level metadata.
+
+[ ] D3. Add danger rating metadata.
+
+[ ] D4. Tie enemy pools to area difficulty.
+
+[ ] D5. Tie resource pools to area difficulty.
+
+[ ] D6. Add map danger indicators.
+
+[ ] D7. Add NPC/sign warnings before dangerous areas.
+
+[ ] D8. Add retreat-friendly pathways.
+
+[ ] D9. Add late-game areas that feel dangerous.
+
+================================================================================
+E. Mining and Resource Durability Patterns
+================================================================================
+
+[ ] E1. Add health/durability to mineable objects.
+
+[ ] E2. Add hardness or resistance to resource nodes.
+
+[ ] E3. Add rarity tiers for resources.
+
+[ ] E4. Add mining/tool damage formula.
+
+[ ] E5. Add required tool power where appropriate.
+
+[ ] E6. Add feedback for weak tools.
+
+[ ] E7. Tune rare resources to require more effort.
+
+[ ] E8. Tune rewards so rare resources are worthwhile.
+
+[ ] E9. Persist depleted or partially mined resources if appropriate.
+
+================================================================================
+F. Reward and Economy Balance Patterns
+================================================================================
+
+[ ] F1. Tune enemy XP rewards.
+
+[ ] F2. Tune enemy currency/relic rewards.
+
+[ ] F3. Tune mining/resource rewards.
+
+[ ] F4. Tune vendor prices.
+
+[ ] F5. Tune upgrade costs.
+
+[ ] F6. Make hard areas reward preparation without breaking balance.
+
+[ ] F7. Add scarcity where needed.
+
+[ ] F8. Prevent infinite easy farming from trivializing progression.
+
+================================================================================
+G. World Expansion Patterns
+================================================================================
+
+[ ] G1. Add new starter-to-midgame area connections.
+
+[ ] G2. Add midgame challenge areas.
+
+[ ] G3. Add late-game dangerous regions.
+
+[ ] G4. Add optional side areas.
+
+[ ] G5. Add or improve final boss/climax area.
+
+[ ] G6. Add gates, warnings, or requirements for late areas.
+
+[ ] G7. Make region progression readable on the map.
+
+================================================================================
+H. Safe Spawn and Interior Patterns
+================================================================================
+
+[ ] H1. Ensure new game starts in a safe early area.
+
+[ ] H2. Prevent starting in Shadow Fortress or late-game interiors.
+
+[ ] H3. Ensure every enclosed building has an exit.
+
+[ ] H4. Validate all portal destinations.
+
+[ ] H5. Validate all interior exits.
+
+[ ] H6. Add safe spawn fallback search.
+
+[ ] H7. Add blocked-transition feedback.
+
+[ ] H8. Validate loaded player positions.
+
+[ ] H9. Add emergency unstuck fallback if appropriate.
+
+================================================================================
+I. Dialogue Presentation Patterns
+================================================================================
+
+[ ] I1. Improve dialogue UI beyond bottom-screen text.
+
+[ ] I2. Add speaker name and role.
+
+[ ] I3. Add clear continue/close affordance.
+
+[ ] I4. Add interaction prompt near NPCs.
+
+[ ] I5. Add warning dialogue for hard areas.
+
+[ ] I6. Add progress-aware preparation hints.
+
+[ ] I7. Prevent dialogue from trapping controls.
+
+================================================================================
+J. Randomized Optional Area Patterns
+================================================================================
+
+[ ] J1. Add world seed.
+
+[ ] J2. Add seeded random generator.
+
+[ ] J3. Mark story-critical areas as static.
+
+[ ] J4. Mark optional areas as randomized.
+
+[ ] J5. Randomize non-critical enemy/resource/chest/decor layouts.
+
+[ ] J6. Persist seed per save.
+
+[ ] J7. Generate new seed on new game.
+
+[ ] J8. Add map seed rune/glyph/symbol.
+
+[ ] J9. Explain shifting areas through UI or NPC dialogue.
+
+================================================================================
+K. Save, Migration, and Reliability Patterns
+================================================================================
+
+[ ] K1. Version save data.
+
+[ ] K2. Migrate old saves.
+
+[ ] K3. Initialize missing balance fields safely.
+
+[ ] K4. Validate saved position on load.
+
+[ ] K5. Persist world seed and area seeds.
+
+[ ] K6. Persist player level, XP, stats, upgrades, tools, and inventory.
+
+[ ] K7. Persist mining/resource state where needed.
+
+[ ] K8. Reset new games cleanly.
+
+================================================================================
+
+## Step 4 — Required Implementation Plan
+
+Before coding, produce an ordered implementation plan.
+
+The plan must include:
+
+### 4.1 Assessment Summary
+
+- Current combat/power system.
+- Current player HP, attack, defense, level, and XP curve.
+- Current enemy HP, attack, defense, tier, and reward model.
+- Current mining/resource durability model.
+- Current area difficulty model.
+- Current world progression and climax.
+- Current NPC dialogue presentation.
+- Current spawn/interior/portal safety.
+- Current randomization or replayability model.
+- Current save/load model and migration risks.
+
+### 4.2 Foundational Refactors
+
+Explicitly call out refactors needed before features are added, such as:
+
+- central balance configuration
+- player stat calculation helpers
+- enemy stat calculation helpers
+- XP curve helper
+- reward calculation helper
+- mining durability and tool-power helper
+- area difficulty registry
+- enemy tier registry
+- resource rarity registry
+- spawn validation helper
+- portal/interior safety metadata
+- seeded random helper
+- save migration
+
+### 4.3 Staged Work
+
+Use stages similar to:
+
+- Stage 1: Assessment and balance configuration
+- Stage 2: Player stat and XP curve rebalance
+- Stage 3: Enemy HP, attack, defense, and reward rebalance
+- Stage 4: Area difficulty and world weight metadata
+- Stage 5: Mining/resource durability and rarity tuning
+- Stage 6: World expansion and difficulty ramp
+- Stage 7: Boss and endgame climax tuning
+- Stage 8: Safe spawn, portal, and interior hardening
+- Stage 9: NPC dialogue UI improvement
+- Stage 10: Randomized optional areas and seed map symbols
+- Stage 11: Save/load migration and persistence
+- Stage 12: Testing, manual verification, balancing, and documentation
+
+### 4.4 Per-Stage Details
+
+For each stage, list:
+
+- files touched
+- systems affected
+- data structures introduced
+- dependencies
+- effort: low / medium / high
+- risk: low / medium / high
+- manual verification steps
+
+================================================================================
+
+## Step 5 — Execute the Renovation
+
+Implement working systems. Do not stop at decorative additions.
+
+================================================================================
+5.1 Balance Model
+================================================================================
+
+Create or improve a central balance model.
+
+It should support:
+
+- player base stats
+- player stat growth
+- XP requirements
+- enemy tiers
+- enemy stat scaling
+- boss multipliers
+- area difficulty modifiers
+- mining durability
+- resource rarity
+- reward formulas
+- difficulty labels
+
+Example structure:
+
+```js
+const BalanceConfig = {
+  player: {
+    baseHp: 80,
+    baseAttack: 8,
+    baseDefense: 2,
+    hpPerLevel: 8,
+    attackPerLevel: 1.25,
+    defensePerLevel: 0.6
+  },
+
+  xpCurve: {
+    base: 60,
+    growth: 1.42,
+    levelOffset: 1
+  },
+
+  enemyTiers: {
+    trivial: { hp: 0.7, attack: 0.6, defense: 0.5, xp: 0.5 },
+    common: { hp: 1.0, attack: 1.0, defense: 1.0, xp: 1.0 },
+    tough: { hp: 1.8, attack: 1.35, defense: 1.3, xp: 1.5 },
+    elite: { hp: 3.0, attack: 1.8, defense: 1.7, xp: 2.4 },
+    boss: { hp: 7.0, attack: 2.4, defense: 2.2, xp: 5.0 },
+    finalBoss: { hp: 12.0, attack: 3.0, defense: 2.8, xp: 10.0 }
+  },
+
+  areaDifficulty: {
+    safe: { enemyHp: 0, enemyAttack: 0, reward: 0 },
+    light: { enemyHp: 0.85, enemyAttack: 0.8, reward: 0.8 },
+    moderate: { enemyHp: 1.15, enemyAttack: 1.1, reward: 1.1 },
+    hard: { enemyHp: 1.6, enemyAttack: 1.45, reward: 1.4 },
+    severe: { enemyHp: 2.2, enemyAttack: 1.9, reward: 1.8 },
+    endgame: { enemyHp: 3.0, enemyAttack: 2.4, reward: 2.4 }
+  },
+
+  mining: {
+    common: { durability: 10, hardness: 1, reward: 1 },
+    uncommon: { durability: 25, hardness: 2, reward: 2 },
+    rare: { durability: 55, hardness: 4, reward: 4 },
+    epic: { durability: 100, hardness: 6, reward: 7 },
+    legendary: { durability: 180, hardness: 9, reward: 12 }
+  }
+};
+```
+
+Adapt the exact numbers to the game after inspecting the current code.
+
+================================================================================
+5.2 Damage Formula
+================================================================================
+
+Implement or improve a formula where damage depends on attacker power, defender
+defense, level difference, enemy tier, area danger, and optional variance.
+
+Example direction:
+
+```js
+function calculateDamage(attacker, defender, context) {
+  const attack = attacker.attack || 1;
+  const defense = defender.defense || 0;
+  const levelDelta = (attacker.level || 1) - (defender.level || 1);
+  const levelFactor = 1 + Math.max(-0.35, Math.min(0.35, levelDelta * 0.04));
+  const areaFactor = context.areaDamageFactor || 1;
+  const variance = 0.9 + Math.random() * 0.2;
+
+  const raw = attack * levelFactor * areaFactor * variance;
+  const mitigated = raw - defense * 0.55;
+
+  return Math.max(context.minimumDamage || 1, Math.round(mitigated));
+}
+```
+
+The exact implementation should fit the existing codebase.
+
+Important:
+
+- Do not let defense reduce damage to zero except in explicit immunity cases.
+- Do not let low-level enemies become impossible.
+- Do not let high-level enemies die instantly.
+- Do not let player scaling trivialize bosses too early.
+
+================================================================================
+5.3 Enemy Stat Scaling
+================================================================================
+
+Enemy stats should be generated or tuned from data.
+
+Each enemy should have:
+
+- id
+- name
+- level
+- tier
+- archetype
+- base HP
+- base attack
+- base defense
+- XP reward
+- relic/currency reward
+- region or spawn pool
+- optional resistances
+- optional boss flag
+
+Example:
+
+```js
+{
+  id: "shadow_guardian",
+  name: "Shadow Guardian",
+  level: 9,
+  tier: "elite",
+  archetype: "guardian",
+  baseHp: 90,
+  baseAttack: 18,
+  baseDefense: 8,
+  xpReward: 85,
+  relicReward: 6,
+  regions: ["shadow_road", "shadow_fortress"]
+}
+```
+
+Final stats can be calculated from base stats, tier multipliers, and area
+difficulty.
+
+================================================================================
+5.4 Player Level and XP Curve
+================================================================================
+
+Make leveling progressively harder.
+
+Requirements:
+
+- Level 1 to 2 can be quick.
+- Each later level must require noticeably more effort.
+- XP reward should not create runaway leveling.
+- Weak enemies should become less efficient for high-level players if needed.
+- Existing saves must migrate safely.
+
+Example:
+
+```js
+function xpForNextLevel(level) {
+  return Math.round(60 * Math.pow(level, 1.45) + level * 25);
+}
+```
+
+Tune after testing.
+
+================================================================================
+5.5 Mining and Resource Durability
+================================================================================
+
+Mineable objects should use durability/hardness instead of instantly breaking.
+
+Each mineable should have:
+
+- id
+- name
+- rarity
+- durability
+- currentDurability
+- hardness
+- requiredToolTier
+- reward table
+- region tier
+- respawn or depletion rules
+
+Example:
+
+```js
+{
+  id: "relic_crystal_node",
+  name: "Relic Crystal",
+  rarity: "rare",
+  durability: 75,
+  hardness: 4,
+  requiredToolTier: 2,
+  rewards: [{ item: "relicCrystal", min: 1, max: 2 }]
+}
+```
+
+Mining damage should depend on:
+
+- player tool power
+- mining skill or level
+- resource hardness
+- area modifier
+- upgrade bonuses
+
+If the player’s tool is too weak, show useful feedback:
+
+“You chip the crystal, but your pick is too weak to break it efficiently.”
+
+================================================================================
+5.6 Area Difficulty and World Weight
+================================================================================
+
+Every area should have difficulty metadata.
+
+Example:
+
+```js
+{
+  id: "echo_mine",
+  name: "Echo Mine",
+  difficulty: "hard",
+  recommendedLevel: 5,
+  dangerRating: 4,
+  storyCritical: true,
+  randomized: false,
+  enemyPools: ["cave_beast", "stone_imp", "ore_wraith"],
+  resourcePools: ["iron_ore", "silver_ore", "relic_crystal"],
+  warning: "The mine echoes with things stronger than wolves."
+}
+```
+
+Use this data to drive:
+
+- map labels
+- enemy scaling
+- resource scaling
+- rewards
+- NPC warnings
+- unlock requirements
+- spawn pools
+
+================================================================================
+5.7 World Expansion
+================================================================================
+
+Add new areas where appropriate.
+
+Suggested progression:
+
+1. Safe Haven / Starter Village
+   - safe hub
+   - NPCs
+   - shops
+   - tutorials
+   - no hostile enemies
+
+2. Greenfields
+   - light danger
+   - weak enemies
+   - common resources
+
+3. Old Forest
+   - moderate danger
+   - stronger enemies
+   - first “turn back if unprepared” feeling
+
+4. Echo Mine
+   - mining-focused area
+   - harder resources
+   - tougher enemies
+
+5. Ruined Castle
+   - elites
+   - locked doors
+   - stronger rewards
+
+6. Shifting Wilds
+   - optional randomized area
+   - changing seed rune on map
+   - side rewards
+
+7. Shadow Road
+   - severe danger
+   - warning NPCs/signs
+   - late-game preparation check
+
+8. Shadow Fortress
+   - endgame fortress
+   - safe entrances/exits
+   - elite enemies
+   - boss approach
+
+9. Heart of the Shadow
+   - final boss or climax area
+   - highest danger
+   - culmination of power curve
+
+Adapt names and connections to the existing game.
+
+================================================================================
+5.8 Safe Spawn and Interior Reliability
+================================================================================
+
+Fix all spawn and interior trap bugs.
+
+Requirements:
+
+- New game must start in a safe early area.
+- Player must not start in Shadow Fortress.
+- Player must not start inside an enclosed building with no door.
+- Every enclosed structure must have a visible usable exit or be marked
+  decorative/locked/ruined.
+- Every portal must validate the destination.
+- Every load must validate the saved player position.
+- If saved position is invalid, move the player to the nearest safe fallback.
+
+Implement safe spawn validation:
+
+```js
+function findSafeSpawn(region, preferredPosition, options = {}) {
+  if (isSafeSpawn(region, preferredPosition, options)) {
+    return preferredPosition;
+  }
+
+  const fallback = searchNearbySafeTile(region, preferredPosition, options.radius || 8);
+  if (fallback) {
+    return fallback;
+  }
+
+  return region.defaultSafeSpawn;
+}
+```
+
+A safe spawn must not overlap:
+
+- wall
+- doorframe collision
+- closed gate
+- enemy
+- trap
+- solid object
+- map boundary
+- blocked interior border
+
+================================================================================
+5.9 NPC Dialogue UI Improvement
+================================================================================
+
+Improve dialogue from simple bottom-screen text into a clearer interaction UI.
+
+Requirements:
+
+- Speaker name.
+- Speaker role/title if available.
+- Readable dialogue panel or speech bubble.
+- Continue/close affordance.
+- Interaction prompt when near NPC.
+- Progress-aware dialogue if supported.
+- Warning lines before dangerous areas.
+- No permanent control lock.
+- Dialogue closes cleanly.
+
+Example UI behavior:
+
+- Player approaches NPC.
+- Prompt appears: “Press E to talk to Mara, Gate Warden.”
+- Dialogue panel opens near center or near NPC.
+- Panel shows:
+  - Mara
+  - Gate Warden
+  - “The Shadow Road is no place for an untested blade. Come back with stronger armor.”
+- Player presses E, Space, Enter, or clicks Close.
+
+================================================================================
+5.10 Randomized Optional Areas
+================================================================================
+
+Add replayability to non-critical areas.
+
+Requirements:
+
+- Story-critical areas remain static.
+- Optional areas can randomize between new games.
+- Randomization must be seeded.
+- Seed persists in the current save.
+- New game generates a new seed.
+- Map shows a changing symbol/glyph/rune for randomized areas.
+
+Example:
+
+```js
+{
+  id: "shifting_wilds",
+  name: "Shifting Wilds",
+  storyCritical: false,
+  randomized: true,
+  seed: 842193,
+  seedGlyph: "Spiral Moon",
+  mapLabel: "Shifting Wilds — Rune: Spiral Moon"
+}
+```
+
+Randomizable content may include:
+
+- enemy placement
+- resource patches
+- chest positions
+- decorations
+- optional paths
+- side objectives
+- minor ruins
+- non-critical loot
+
+Do not randomize:
+
+- required story NPCs
+- required quest objectives
+- required exits
+- main progression portals
+- final boss access
+- mandatory keys unless guaranteed reachable
+
+================================================================================
+5.11 Save, Load, and Migration
+================================================================================
+
+Add or update save versioning.
+
+Persist:
+
+- player level
+- XP
+- recalculated stat fields if needed
+- equipment/upgrades
+- mining tool tier
+- resource depletion state if appropriate
+- current region
+- safe player position
+- unlocked areas
+- world seed
+- randomized area seeds
+- dialogue/story flags if present
+- completed quests if present
+
+On load:
+
+- migrate missing fields
+- recalculate derived stats
+- validate player region
+- validate player position
+- relocate unsafe saves to a safe hub if necessary
+
+On new game:
+
+- reset player stats cleanly
+- generate new world seed
+- generate optional area seeds
+- spawn player in safe starter area
+- initialize area difficulty state
+- initialize resource/enemy systems
+
+================================================================================
+
+## Step 6 — Required Verification
+
+After implementation, verify manually and through tests where possible.
+
+================================================================================
+6.1 Combat Verification
+================================================================================
+
+Check:
+
+[ ] Starter enemies die quickly.
+
+[ ] Mid-tier enemies survive longer than starter enemies.
+
+[ ] Elite enemies feel dangerous.
+
+[ ] Boss enemies do not die instantly.
+
+[ ] Final boss/climax enemy requires preparation.
+
+[ ] Player takes meaningful damage in hard areas.
+
+[ ] Player can still survive if appropriately prepared.
+
+[ ] Defense helps but does not make the player invincible.
+
+[ ] Damage numbers or health changes feel understandable.
+
+================================================================================
+6.2 XP and Progression Verification
+================================================================================
+
+Check:
+
+[ ] Level 1 to 2 is achievable early.
+
+[ ] Later levels require more effort.
+
+[ ] Player does not level too quickly from weak enemies.
+
+[ ] High-risk enemies reward more XP without breaking progression.
+
+[ ] Level-up stat increases are useful but not overpowering.
+
+[ ] Existing saves load without corrupting level/XP.
+
+================================================================================
+6.3 Mining Verification
+================================================================================
+
+Check:
+
+[ ] Common resources break quickly.
+
+[ ] Uncommon resources require more effort.
+
+[ ] Rare resources feel durable.
+
+[ ] Tool upgrades matter if tools exist.
+
+[ ] Weak-tool feedback works.
+
+[ ] Mining rewards feel worth the effort.
+
+[ ] Rare resources do not flood the player too early.
+
+================================================================================
+6.4 Area Weight Verification
+================================================================================
+
+Check:
+
+[ ] Safe areas feel safe.
+
+[ ] Early areas feel light.
+
+[ ] Midgame areas feel more dangerous.
+
+[ ] Late-game areas can force retreat.
+
+[ ] Map or NPCs communicate danger.
+
+[ ] Rewards improve in harder areas.
+
+[ ] Area difficulty matches enemy/resource pools.
+
+================================================================================
+6.5 World Expansion Verification
+================================================================================
+
+Check:
+
+[ ] New areas are reachable through intended routes.
+
+[ ] Later areas are harder than earlier areas.
+
+[ ] Optional areas are clearly optional.
+
+[ ] Endgame/climax area is reachable but not trivial.
+
+[ ] Region names and map labels are understandable.
+
+[ ] There are no disconnected required areas.
+
+================================================================================
+6.6 Spawn and Interior Verification
+================================================================================
+
+Check:
+
+[ ] New game starts in a safe starter area.
+
+[ ] New game does not start in Shadow Fortress.
+
+[ ] Player cannot spawn inside a wall.
+
+[ ] Player cannot spawn inside a door frame.
+
+[ ] Player cannot spawn inside an enemy or trap.
+
+[ ] Every enclosed building has a visible exit.
+
+[ ] Every enterable interior has a safe exit.
+
+[ ] Shadow Fortress has safe entrances and exits.
+
+[ ] Invalid saved positions are repaired on load.
+
+================================================================================
+6.7 NPC Dialogue Verification
+================================================================================
+
+Check:
+
+[ ] Interaction prompt appears near NPCs.
+
+[ ] Dialogue is readable.
+
+[ ] Speaker name is visible.
+
+[ ] Speaker role/title is visible if available.
+
+[ ] Dialogue can be closed.
+
+[ ] Dialogue does not permanently trap controls.
+
+[ ] NPCs can warn about hard areas.
+
+================================================================================
+6.8 Randomized Area Verification
+================================================================================
+
+Check:
+
+[ ] Optional randomized areas change between new games.
+
+[ ] The same save preserves the same randomized area layout.
+
+[ ] Story-critical areas remain stable.
+
+[ ] Required exits and objectives are never blocked.
+
+[ ] Map shows a seed/rune/glyph/symbol for randomized areas.
+
+[ ] UI explains that the area is intentionally shifting.
+
+================================================================================
+
+## Step 7 — PR / Change Summary Requirements
+
+When finished, include a clear summary.
+
+The summary must mention:
+
+- combat balance changes
+- player stat and XP curve changes
+- enemy HP/damage/tier changes
+- mining/resource durability changes
+- area difficulty/world weight changes
+- new or expanded areas
+- boss/endgame progression changes
+- spawn/interior safety fixes
+- NPC dialogue UI improvements
+- randomized optional area seed/glyph system
+- save/load migration
+- manual verification performed
+
+================================================================================
+
+## Final Goal
+
+The finished game should feel heavier, deeper, and more rewarding.
+
+Easy areas should feel easy.
+
+Hard areas should feel hard.
+
+Rare resources should feel rare.
+
+Powerful enemies should survive longer.
+
+The player should sometimes turn back, prepare, improve, and return stronger.
+
+The world should grow from a safe beginning into a dangerous climax.
+
+The game should feel like an adventure with real progression, not a flat field
+of enemies that all die too quickly.

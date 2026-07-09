@@ -1,0 +1,410 @@
+Updated Engineering & Implementation Instructions (instructions_02)
+
+General Philosophy
+You are a seasoned JavaScript developer with extensive experience in modern web technologies, including HTML5, CSS3, and various JavaScript frameworks. All code blocks (HTML, CSS, JavaScript) must be returned in Markdown format, clearly labeled with the appropriate language tag (e.g., html,css, ```js). Code must be deeply reasoned, step‑by‑step, and presented comprehensively with actionable outputs.
+These instructions integrate corrected directives and remove or replace any guidance that could lead to future bugs. They define architecture, styling, accessibility, performance, reliability, and error-handling standards for the application.
+
+Primary Technology Stack
+- HTML5 + modern, semantic markup
+- JavaScript (ES2022+). Optional: TypeScript may be introduced later; if plain JS is used, add JSDoc types to complex functions.
+- Tailwind CSS (via CDN) for layout, spacing, typography, flex/grid structural utilities ONLY.
+- Custom CSS (index.css) for theming via CSS variables, component-level class names, transitions, and overrides.
+- NO animation libraries (e.g., framer-motion) and NO external icon libraries (e.g., lucide-react). All icons are inline static SVG components.
+- No usage of Tailwind @apply (incompatible with CDN pipeline); replace with explicit custom CSS classes.
+
+Color & Theme System
+Color usage MUST exclusively rely on CSS custom properties. DO NOT use Tailwind’s color utility classes (e.g., bg-indigo-600).
+Define BOTH light and dark theme scopes. Dark theme is default if unspecified.
+
+:root {
+  /* Core Theme Tokens */
+  --primary-color: #4f46e5;
+  --primary-color-hover: #4338ca;
+  --success-color: #4ade80;
+  --success-color-hover: #22c55e;
+  --success-surface: rgba(74, 222, 128, 0.10);
+  --danger-color: #fca5a5;
+  --danger-surface: rgba(252, 165, 165, 0.15);
+  --background-color: #111827;
+  --surface-color-1: #1f2937;
+  --surface-color-2: #374151;
+  --border-color: #374151;
+  --text-color-primary: #f9fafb;
+  --text-color-secondary: #9ca3af;
+  --shadow-color: rgba(0, 0, 0, 0.20);
+  --link-color: #818cf8;
+
+  /* AI Message Bubble Theme */
+  --ai-message-bg-color: #E3E3E3;
+  --ai-message-border-color: #D1D1D1;
+  --ai-message-text-color: #333333;
+  --ai-message-copy-btn-color: #555555;
+  --ai-message-copy-btn-hover-bg: #D1D1D1;
+
+  /* State & Utility Tokens */
+  --focus-ring-color: var(--primary-color);
+  --error-text-color: #7f1d1d;
+  --z-overlay: 1000;
+  --z-modal: 1100;
+  --z-toast: 1200;
+  --transition-duration: 160ms;
+  --transition-ease: cubic-bezier(0.32, 0.08, 0.24, 1);
+  --app-vh: 100vh; /* Dynamically updated in JS for mobile chrome issues */
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --background-color: #ffffff;
+    --surface-color-1: #f3f4f6;
+    --surface-color-2: #e5e7eb;
+    --border-color: #d1d5db;
+    --text-color-primary: #111827;
+    --text-color-secondary: #4b5563;
+    --shadow-color: rgba(0,0,0,0.08);
+  }
+}
+
+Theming Rules
+- Use class hooks (e.g., .theme-dark, .theme-light) on <html> or <body> for explicit theme overrides.
+- Never hardcode hex colors in component files; all colors flow through variables.
+- Provide a JS theme toggle utility that sets data-theme attribute and persists preference (localStorage key: ui.theme).
+
+Layout Architecture
+Two-column responsive layout:
+- Left: ChatPanel (scrollable vertical conversation container).
+- Right: ControlsPanel (fixed width at or above lg breakpoint).
+- Below lg (52.5rem / 840px): ControlsPanel becomes a slide-out overlay panel.
+- At/above lg: Always visible; no overlay or toggle button required.
+
+Core Structural Elements (suggested)
+<body>
+  <div id="app-root">
+    <header class="app-header">...</header>
+    <main class="app-shell">
+      <section id="chat-panel" class="chat-panel">...</section>
+      <aside id="controls-panel" class="controls-panel">...</aside>
+    </main>
+    <button id="back-to-top-btn" class="back-to-top-btn" aria-label="Back to top" hidden>...</button>
+    <div id="modal-root"></div>
+  </div>
+</body>
+
+Viewport Height Handling
+Mobile browsers shrink usable viewport when address bars hide/show. JS must set:
+function updateAppVh() {
+  document.documentElement.style.setProperty('--app-vh', `${window.innerHeight}px`);
+}
+window.addEventListener('resize', updateAppVh);
+window.addEventListener('orientationchange', updateAppVh);
+updateAppVh();
+Use height: var(--app-vh) for full-height containers instead of 100vh.
+
+Breakpoints
+Primary responsive breakpoint (lg): 52.5rem (840px).
+If using Tailwind CDN: define a parallel custom media query:
+@media (min-width: 52.5rem) { /* desktop rules */ }
+Create a JS helper:
+const LG_BREAKPOINT_PX = 840;
+function isDesktop() { return window.innerWidth >= LG_BREAKPOINT_PX; }
+
+Typography
+Font: Inter (load via <link rel="preconnect"> + <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">).
+Sizes (Tailwind utilities):
+- text-xs (0.75rem): tertiary, captions, small labels.
+- text-sm (0.875rem): inputs, secondary text.
+- text-base (1rem): primary body text.
+- text-lg (1.125rem): major headings (modal titles).
+- text-xl (1.25rem): large generated content headings.
+Sentence case for all buttons, labels, headings.
+
+Spacing
+Use Tailwind spacing utilities (p-*, m-*, gap-*). For custom components, prefer consistent vertical rhythm: base 4px scale. Avoid mixing arbitrary rem values outside system unless necessary.
+
+Icon Strategy (Updated)
+- All icons are inline SVG elements (static). NO dynamic icon libraries; DO NOT import lucide-react or call iconData.toSvg.
+- Provide a small wrapper component:
+function SvgIcon({ title, children, className, role = 'img' }) {
+  return (
+    <svg className={className} role={role} aria-label={title}>
+      {children}
+    </svg>
+  );
+}
+- Keep SVGs accessible (add <title> and aria-hidden="true" when decorative).
+- Avoid runtime mutation of SVG shape data that could cause “toSvg” type errors.
+
+Buttons
+Base rules:
+- Radius: 0.375rem (rounded-md).
+- Font size: text-sm.
+- Focus outline: 2px solid var(--focus-ring-color) (use :focus-visible).
+- Disabled state: opacity-60, cursor-not-allowed; if loading, show spinner.
+
+Recommended Classes (in index.css):
+.btn { display:inline-flex; align-items:center; justify-content:center; gap:0.5rem; font-weight:500; line-height:1.2; border:1px solid var(--border-color); background:var(--surface-color-2); color:var(--text-color-primary); padding:0.5rem 1rem; border-radius:0.375rem; transition:background var(--transition-duration) var(--transition-ease), color var(--transition-duration) var(--transition-ease), border-color var(--transition-duration) var(--transition-ease); }
+.btn:hover { background:var(--surface-color-1); }
+.btn:focus-visible { outline:2px solid var(--focus-ring-color); outline-offset:2px; }
+.btn-primary { background:var(--primary-color); border-color:var(--primary-color); }
+.btn-primary:hover { background:var(--primary-color-hover); }
+.btn-secondary { background:var(--surface-color-1); }
+.btn-execute { width:100%; background:var(--success-color); color:#0f172a; font-weight:600; }
+.btn-execute:hover { background:var(--success-color-hover); }
+.btn-danger { background:var(--danger-color); color:#111827; }
+.header-btn { background:transparent; border:none; padding:0.375rem 0.75rem; }
+.header-btn:hover, .header-btn[aria-pressed="true"] { background:var(--surface-color-2); }
+.icon-btn { padding:0.375rem; width:2rem; height:2rem; }
+.icon-btn-danger { background:var(--danger-color); color:#111827; }
+.btn-spinner { width:1rem; height:1rem; border:2px solid var(--surface-color-1); border-top-color:var(--text-color-primary); border-radius:50%; animation:spin 0.6s linear infinite; }
+
+@keyframes spin { to { transform:rotate(360deg); } }
+
+Form Inputs
+.form-input {
+  width:100%;
+  font-size:0.875rem;
+  font-weight:400;
+  padding:0.625rem 0.75rem;
+  background:var(--surface-color-2);
+  color:var(--text-color-primary);
+  border:1px solid var(--border-color);
+  border-radius:0.5rem;
+  line-height:1.35;
+  transition:border-color var(--transition-duration) var(--transition-ease), background var(--transition-duration) var(--transition-ease);
+}
+.form-input::placeholder { color:var(--text-color-secondary); }
+.form-input:focus-visible { outline:none; border-color:var(--primary-color); box-shadow:0 0 0 2px rgba(79,70,229,0.40); }
+
+Checkboxes:
+- Use same .form-input styling with class .checkbox (size: h-4 w-4; adjust vertical alignment).
+
+Dropdowns / Combobox
+- Input uses .form-input.
+- Options panel: background var(--surface-color-2); border:1px solid var(--border-color); radius:0.5rem; max-height:240px; overflow-y:auto; scrollbars styled.
+- Option: padding:0.5rem 0.75rem; interactive states: hover background var(--surface-color-1); aria-selected apply background var(--primary-color) color var(--text-color-primary).
+
+Tags
+.template-tag {
+  display:inline-flex; align-items:center; gap:0.375rem;
+  padding:0.25rem 0.75rem;
+  background:var(--primary-color);
+  color:#fff;
+  font-size:0.75rem;
+  border-radius:9999px;
+  line-height:1;
+}
+.template-tag button { background:transparent; border:none; padding:0; cursor:pointer; color:#fff; }
+.template-tag button:hover { color:#e0e7ff; }
+
+Cards / Message Bubbles
+.user-message, .ai-message-final, .error-message, .tech-loader {
+  border:1px solid var(--border-color);
+  border-radius:0.75rem;
+  padding:0.75rem 1rem;
+  box-shadow:0 1px 2px 0 var(--shadow-color);
+}
+.user-message { background:var(--surface-color-2); }
+.ai-message-final { background:var(--ai-message-bg-color); color:var(--ai-message-text-color); }
+.error-message { background:var(--danger-surface); color:var(--danger-color); }
+.tech-loader { background:var(--surface-color-1); }
+
+Accessibility (WCAG 2.1 AA)
+- Semantic landmarks: header, main, aside, nav (if needed), footer (optional), section, article.
+- ARIA only when semantics insufficient (e.g., role="alert" for error-message).
+- Focus management: When a modal opens, trap focus (first focusable element) and restore to previously focused element on close.
+- Use aria-live="polite" for asynchronous AI responses; aria-live="assertive" only for critical errors.
+- Provide skip link: <a href="#chat-panel" class="skip-link">Skip to chat</a> (visible on focus).
+- Ensure color contrast: verify all foreground/background pairs meet 4.5:1 for normal text, 3:1 for large text.
+- Keyboard:
+  - All interactive elements reachable with Tab.
+  - Escape closes modals & overlays.
+  - Space/Enter activate buttons.
+  - Arrow keys navigate dropdown options.
+  - Provide visually consistent :focus-visible rings (no removal).
+
+Modal System (Simplified)
+- No animation library; no AnimatePresence.
+- Mount only when open; unmount after resolution.
+- Use #modal-root (portal) to avoid stacking context interference.
+- Backdrop: .modal-backdrop (position:fixed; inset:0; background:rgba(0,0,0,0.55); backdrop-filter:saturate(140%) blur(4px); display:flex; align-items:flex-start; justify-content:center; padding-top:10vh).
+- Modal: .modal-container (max-width:640px; width:calc(100% - 2rem); background:var(--surface-color-1); color:var(--text-color-primary); border:1px solid var(--border-color); border-radius:0.75rem; padding:1.25rem 1.5rem; box-shadow:0 4px 24px -4px rgba(0,0,0,0.5);)
+- Opening: apply .is-open with opacity transition; closing: remove then unmount (no JS animation race).
+- Help modal content wrapper: .manual-content; style <kbd> elements with monospace font, subtle border, background var(--surface-color-2).
+
+Sidebar Behavior
+Mobile:
+- Hidden by default; toggled via header button (hamburger inline SVG).
+- When open: add .sidebar-open to <body>.
+- Show overlay: <div class="sidebar-overlay" role="presentation" aria-hidden="true"></div>.
+Desktop (≥840px):
+- Sidebar always visible; overlay and toggle button hidden.
+- JS listens to resize events; if crossing breakpoint while open, re-normalize state (remove overlay).
+
+Scrolling & Back-to-Top Button
+- Chat panel scroll container has position:relative; overflow-y:auto.
+- Back-to-top button (.back-to-top-btn): position:fixed; bottom:1.25rem; right:1.25rem; width:2.75rem; height:2.75rem; border-radius:9999px; background:var(--primary-color); color:#fff; box-shadow:0 2px 6px rgba(0,0,0,0.35); border:none; opacity:0; pointer-events:none; transition:opacity var(--transition-duration) var(--transition-ease), transform var(--transition-duration) var(--transition-ease);
+- Visible state: add .visible => opacity:1; pointer-events:auto; transform:translateY(0);
+- Hidden state: transform:translateY(12px).
+- JS threshold: show after scrollTop >= 300.
+
+Transitions (Replacing Removed Animation Library)
+Use CSS transitions only (no framer-motion):
+- Fade + slight translate for modals, tags addition, message arrival: implement via class toggles (e.g., .enter / .entered).
+- For dynamic additions (messages), optionally apply a “reveal” utility: .fade-in { animation:fadeIn 0.25s var(--transition-ease); }
+@keyframes fadeIn { from { opacity:0; transform:translateY(4px); } to { opacity:1; transform:translateY(0); } }
+
+Loading States
+- Use .tech-loader for multi-step operations (text content describing each stage).
+- Provide incremental status updates (step x of y).
+- Avoid skeleton flicker: only show loader if operation > 120ms (use a setTimeout gating approach).
+
+Error Handling & Resilience
+Centralized error logger:
+function logError(context, error) {
+  console.error(`[${context}]`, error);
+  // Optionally push to error toast queue or remote telemetry.
+}
+
+Guard asynchronous chains:
+- Wrap fetch / FS bridging in try/catch.
+- Clean up object URLs: maintain Set<objectURL>; revoke after usage in finally.
+- Debounce rapid state mutations to avoid stale closure issues.
+
+Prompt Bridge & Plot Bridge (Hardened)
+- Introduce slight resolver delay (e.g., 30–50ms microtask deferral) after React unmount to prevent race conditions with Python backend continuation.
+- Validate payload structure before sending: ensure no undefined fields, sanitize user strings (strip zero-width chars, collapse repeated whitespace).
+- Provide an AbortController for each run; on user cancel, abort fetch + clear UI pending state.
+
+File System (FS) / Blob Operations
+- Always revoke Blob URLs after component unmount or usage completion.
+- Wrap FileReader errors; fallback to text decode when binary uncertain.
+- Provide explicit cleanup hook: useEffect(() => () => cleanup(), []).
+
+Security & Sanitization
+- Never inject unsanitized HTML into innerHTML.
+- Escape user-provided text when rendering code blocks.
+- For markdown-like content: use a trusted renderer configured to strip scripts, if implemented later.
+
+Performance Guidelines
+- Avoid unnecessary re-renders by memoizing large lists (messages) with React.memo or keyed virtualization strategy if message count scales.
+- Batch state updates (use functional setState when reliant on previous).
+- Avoid large inline functions inside mapped JSX; extract to pure helpers.
+
+Testing Strategy (Developer Guidance)
+- Unit tests for utilities: viewport handler, theme toggler, prompt bridge.
+- Interaction tests: keyboard nav in dropdown, focus trap in modals.
+- Visual regression smoke test: ensure dark/light theme variables applied.
+
+Logging & Telemetry (Optional)
+- Provide a structured event emitter:
+emitEvent('run:start', { id, timestamp });
+emitEvent('run:error', { id, message, stack });
+- Keep logs minimal in production mode (gate by process.env.NODE_ENV or equivalent).
+
+Prohibited Practices
+- NO usage of animation libraries (framer-motion, GSAP, etc.).
+- NO icon libraries or dynamic iconData.toSvg calls.
+- NO Tailwind color utilities (bg-red-500, text-indigo-600, etc.).
+- NO @apply directives in CSS (CDN constraint).
+- NO inline event handlers injecting unsanitized string-based HTML.
+- NO duplicated modal mounts (ensure single instance per type).
+
+Message Rendering
+- User vs AI messages distinguished by wrapper classes.
+- Copy button inside AI messages uses --ai-message-copy-btn-color for icon stroke or text; on hover background: var(--ai-message-copy-btn-hover-bg).
+- Provide aria-label="Copy response" on the copy button; announce success with a visually hidden live region (role="status").
+
+Keyboard Shortcuts (If Implemented)
+- Use <kbd>Esc</kbd> to close modals/sidebar.
+- <kbd>Ctrl</kbd> + <kbd>K</kbd> (or ⌘K on macOS) for command palette (future feature stub).
+Document shortcuts in Help modal with descriptive text and accessible formatting.
+
+Help Modal Content Styling
+.manual-content h2 { font-size:1.125rem; margin-top:1rem; }
+.manual-content p { font-size:0.875rem; line-height:1.5; }
+.manual-content kbd { background:var(--surface-color-2); border:1px solid var(--border-color); border-radius:0.375rem; padding:0.125rem 0.375rem; font-size:0.75rem; box-shadow:inset 0 1px 0 rgba(255,255,255,0.05); }
+.manual-content .item-desc { font-style:italic; border-left:3px solid var(--border-color); padding-left:0.75rem; margin:0.5rem 0; }
+
+Custom Scrollbars (WebKit)
+.chat-panel::-webkit-scrollbar { width:10px; }
+.chat-panel::-webkit-scrollbar-track { background:var(--surface-color-1); }
+.chat-panel::-webkit-scrollbar-thumb { background:var(--surface-color-2); border:2px solid var(--surface-color-1); border-radius:8px; }
+.chat-panel::-webkit-scrollbar-thumb:hover { background:var(--surface-color-2); filter:brightness(1.15); }
+
+State Management Notes
+- Keep ephemeral UI state local (e.g., isSidebarOpen).
+- Keep cross-cutting state (theme, user settings, run history) in a top-level context or a lightweight state container (avoid global mutable singletons).
+- Clean up listeners on unmount (resize, orientationchange, scroll).
+
+Run Flow (Async)
+High-level recommended pattern:
+async function executeRun(input) {
+  const controller = new AbortController();
+  setRunState({ status:'pending', controller });
+  try {
+    const safeInput = sanitizeInput(input);
+    const result = await fetchRunResult(safeInput, { signal:controller.signal });
+    setRunState({ status:'success', data:result });
+  } catch (err) {
+    if (controller.signal.aborted) {
+      setRunState({ status:'aborted' });
+    } else {
+      logError('executeRun', err);
+      setRunState({ status:'error', error:normalizeError(err) });
+    }
+  } finally {
+    scheduleResolverDelay(); // let React settle before backend continues
+  }
+}
+
+Resolver Delay
+function scheduleResolverDelay() {
+  // micro-delay to avoid race conditions with backend bridging
+  setTimeout(() => {
+    // continue or dispatch completion event
+  }, 40);
+}
+
+InputModal & HelpModal Behavior (Corrected)
+- InputModal renders only when open flag true; no exit animation hook; unmounts cleanly.
+- HelpModal may optionally remain mounted and toggle visibility via hidden attribute or CSS class for faster open cycles.
+- Prevent double-removal errors by verifying parent-child integrity before DOM removal (if any manual DOM ops occur).
+
+Code Quality & Consistency
+- Use descriptive function names (verbNoun).
+- Add JSDoc for non-trivial functions (parameters, returns, error cases).
+- Enforce linting: Prettier or ESLint recommended (future addition).
+- All string keys reused across app (e.g., localStorage keys) centralized in a constants file.
+
+Future Extensibility (Document Now)
+- Reserve space for command palette (#command-root).
+- Prepare theme extensions: warn that adding new semantic tokens requires updating both dark & light sets.
+- Consider virtualization for >500 messages.
+
+Deployment Considerations
+- Ensure CSP doesn’t block inline SVG (prefer no inline script).
+- Preload fonts and critical CSS.
+- Lazy-load non-critical panels only after first interaction (future optimization).
+
+Summary of Removed / Replaced Items (For Traceability)
+- Removed: framer-motion usage (replaced with CSS transitions).
+- Removed: lucide-react dependency (replaced with static inline SVG strategy).
+- Removed: Tailwind @apply directives (replaced by explicit CSS classes).
+- Removed: animate-presence modal patterns (simplified mount/unmount).
+- Removed: dynamic iconData.toSvg calls (explicit prohibition).
+- Added: Hardened async bridges with delay, blob revocation, error guards.
+
+Conformance Checklist (Developer Pre-Commit)
+[ ] No Tailwind color utilities used.
+[ ] All colors reference CSS variables.
+[ ] No framer-motion imports.
+[ ] No icon library imports.
+[ ] Modals mount/unmount cleanly with focus management.
+[ ] Error handling logs context + sanitized errors.
+[ ] Back-to-top button appears after scroll threshold.
+[ ] Theme toggle persists and updates DOM attribute.
+[ ] Viewport height variable updated on resize/orientationchange.
+[ ] Accessibility checks (contrast, focus ring, aria-live usage).
+[ ] Blob URLs revoked post-usage.
+[ ] Dropdown options keyboard navigable.
+
+End of instructions_02.
