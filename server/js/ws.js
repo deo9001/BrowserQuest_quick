@@ -5,6 +5,8 @@ var cls = require("./lib/class"),
    // miksagoConnection = require('websocket-server/lib/ws/connection'),
    // worlizeRequest = require('websocket').request,
     http = require('http'),
+    path = require('path'),
+    express = require('express'),
     Utils = require('./utils'),
     _ = require('underscore'),
     BISON = require('bison'),
@@ -105,9 +107,11 @@ WS.socketIOServer = Server.extend({
         self = this;
         self.host = host;
         self.port = port;
-        var app = require('express')();
+        var app = express();
         var http = require('http').Server(app);
         self.io = require('socket.io')(http);
+
+        app.use('/client', express.static(path.resolve(__dirname, '../../client')));
 
 
         self.io.on('connection', function(connection){
