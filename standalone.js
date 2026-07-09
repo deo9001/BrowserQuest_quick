@@ -15,9 +15,11 @@
     var CANVAS_W = 1100;
     var CANVAS_H = 620;
     var TRANSITION_THRESHOLD = 80;    // px from edge to trigger area transition
+    var TRANSITION_PREVIEW_SEGMENT_SIZE = 42;
     var FADE_OUT_DUR = 0.20;          // seconds for fade-to-black
     var FADE_IN_DUR  = 0.28;          // seconds for fade-from-black
     var RESPAWN_COOLDOWN_TICKS = 600; // ~10 s at 60fps before enemies respawn in a cleared area
+    var MIN_VENDOR_PURCHASES_FOR_ASSAULT = 2;
 
     // ====================================================================
     // WORLD AREAS
@@ -148,7 +150,8 @@
             enemyCount: 3, difficulty: 1.6,
             description: 'Fragments of a broken relic hum through this hidden cavern.',
             isInterior: true,
-            storyTag: 'relic_cavern'
+            storyTag: 'relic_cavern',
+            relicRange: [2, 4]
         },
         {
             id: 10, name: 'Shadow Sanctum',
@@ -161,9 +164,15 @@
             enemyCount: 2, difficulty: 3.2,
             description: 'The core chamber where the final shadow relic feeds corruption.',
             isInterior: true,
-            storyTag: 'shadow_sanctum'
+            storyTag: 'shadow_sanctum',
+            relicRange: [2, 4]
         }
     ];
+
+    var AREA_ID = {
+        RELIC_CAVERN: 9,
+        SHADOW_SANCTUM: 10
+    };
 
     // ====================================================================
     // TERRAIN OBSTACLES per area
@@ -310,6 +319,15 @@
         'Prepare for the assault by purchasing at least 2 vendor upgrades.',
         'Confront the Shadow Sanctum and end the corruption.'
     ];
+
+    var QUEST_IDX = {
+        MEET_ELDER: 0,
+        GATHER_GUIDANCE: 1,
+        RECOVER_RELICS: 2,
+        FORTRESS_ACCESS: 3,
+        PREPARE_ASSAULT: 4,
+        CONFRONT_SANCTUM: 5
+    };
 
     var NPC_DEFS = [
         { id: 'elder_mira', name: 'Elder Mira', role: 'village elder', areaId: 7, x: 550, y: 220, vendorId: null },
@@ -529,9 +547,9 @@
 
         var step = 16;
         for (var rad = step; rad <= max; rad += step) {
-            for (var a = 0; a < Math.PI * 2; a += Math.PI / 10) {
-                var tx = clamp(x + Math.cos(a) * rad, r + 2, CANVAS_W - r - 2);
-                var ty = clamp(y + Math.sin(a) * rad, r + 2, CANVAS_H - r - 2);
+            for (var angle = 0; angle < Math.PI * 2; angle += Math.PI / 10) {
+                var tx = clamp(x + Math.cos(angle) * rad, r + 2, CANVAS_W - r - 2);
+                var ty = clamp(y + Math.sin(angle) * rad, r + 2, CANVAS_H - r - 2);
                 if (isSpawnClear(areaIndex, tx, ty, r)) return { x: tx, y: ty, adjusted: true };
             }
         }
@@ -583,7 +601,7 @@
         };
     }
     function makeQuestState() {
-        return { id: 'shadow_relics', step: 0, completed: false, objective: QUEST_STEPS[0] };
+        return { id: 'shadow_relics', step: QUEST_IDX.MEET_ELDER, completed: false, objective: QUEST_STEPS[QUEST_IDX.MEET_ELDER] };
     }
     function makeBaseState() {
         return { areaIndex: 0, areasVisited: [0], hero: makeHero(), enemies: [], items: [],
@@ -611,7 +629,7 @@
     function migrateSaveData(data) {
         if (!data || !data.hero) return null;
         var out = JSON.parse(JSON.stringify(data));
-        if (out.version !== SAVE_VERSION) {
+        if (!out.version || out.version !== SAVE_VERSION) {
             out.storyState = out.storyState || makeStoryState();
             out.questState = out.questState || makeQuestState();
             out.vendorPurchases = out.vendorPurchases || {};
@@ -715,7 +733,9 @@
     function spawnItemsForArea() {
         if (state.areaIndex === 7 || state.areaIndex === 8) return [];
         var items = [];
-        var relicCount = (state.areaIndex === 9 || state.areaIndex === 10) ? rndInt(2, 4) : rndInt(2, 3);
+        var area = AREAS[state.areaIndex] || {};
+        var relicRange = area.relicRange || [2, 3];
+        var relicCount = rndInt(relicRange[0], relicRange[1]);
         for (var i = 0; i < relicCount; i++) {
             var ix, iy, att = 0;
             do { ix = rnd(60, CANVAS_W - 60); iy = rnd(60, CANVAS_H - 60); att++; }
@@ -797,7 +817,7 @@
     function canTraverseEdgeAt(dir, axisCoord) {
         var area = AREAS[state.areaIndex];
         var nextId = area.neighbors[dir];
-        if (nextId == null) return false;
+        if (nextId === null || nextId === undefined) return false;
         var ep = entryPosition(dir, axisCoord);
         return !!findSafeSpawn(nextId, ep.x, ep.y, state.hero.radius, 120);
     }
@@ -844,9 +864,9 @@
         state.hero.x = clamp(trans.targetX, state.hero.radius + 5, CANVAS_W - state.hero.radius - 5);
         state.hero.y = clamp(trans.targetY, state.hero.radius + 5, CANVAS_H - state.hero.radius - 5);
         populateArea();
-        if (nextId === 10) {
+        if (nextId === AREA_ID.SHADOW_SANCTUM) {
             state.storyState.flags.sanctumEntered = true;
-            setQuestStep(5, 'You entered the Shadow Sanctum. End the corruption!');
+            setQuestStep(QUEST_IDX.CONFRONT_SANCTUM, 'You entered the Shadow Sanctum. End the corruption!');
         }
         persist();
         updateHUD();
@@ -915,7 +935,7 @@
             }
             return true;
         });
-        if (state.areaIndex === 10 && state.enemies.length === 0 && !state.storyState.flags.shadowCleansed) {
+        if (state.areaIndex === AREA_ID.SHADOW_SANCTUM && state.enemies.length === 0 && !state.storyState.flags.shadowCleansed) {
             state.storyState.flags.shadowCleansed = true;
             state.questState.completed = true;
             state.questState.objective = 'Shadow relic cleansed. Return as the realm’s champion.';
@@ -951,16 +971,17 @@
             var def = ITEM_DEFS[item.type];
             if (!def) { return false; }
             if (def.type === 'relic') {
+                var area = AREAS[state.areaIndex] || {};
                 state.relics++; state.score += 30;
                 addFloat(item.x, item.y, 'Relic! +30', '#ffd76b', 14);
                 showNotif('Ancient Relic collected! (' + state.relics + ' total)');
-                if ((state.areaIndex === 1 || state.areaIndex === 3 || state.areaIndex === 9) && state.questState.step >= 1) {
+                if ((area.storyTag === 'forest' || area.storyTag === 'caves' || area.storyTag === 'relic_cavern') && state.questState.step >= QUEST_IDX.GATHER_GUIDANCE) {
                     state.storyState.flags.gatheredGuidance = true;
-                    setQuestStep(2, 'Relic traces found. Recover at least 3 relic fragments.');
+                    setQuestStep(QUEST_IDX.RECOVER_RELICS, 'Relic traces found. Recover at least 3 relic fragments.');
                 }
                 if (state.relics >= 3) {
                     state.storyState.flags.relicTargetReached = true;
-                    setQuestStep(3, 'Relic target reached. Secure fortress access.');
+                    setQuestStep(QUEST_IDX.FORTRESS_ACCESS, 'Relic target reached. Secure fortress access.');
                 }
             } else if (def.type === 'weapon') {
                 var oldBonus = state.hero.weapon ? (ITEM_DEFS[state.hero.weapon].attackBonus || 0) : 0;
@@ -1043,7 +1064,7 @@
         if (item.effect === 'flag') {
             state.storyState.flags[item.key] = true;
             showNotif(item.name + ' obtained.');
-            if (item.key === 'fortressAccess') setQuestStep(4, 'Fortress access granted. Prepare before entering the Sanctum.');
+            if (item.key === 'fortressAccess') setQuestStep(QUEST_IDX.PREPARE_ASSAULT, 'Fortress access granted. Prepare before entering the Sanctum.');
             return true;
         }
         return false;
@@ -1068,12 +1089,11 @@
         if (!item.repeatable && isPurchased(item.id)) { showNotif('Already purchased.'); return; }
         if (state.relics < item.cost) { showNotif('Not enough relics for ' + item.name + '.'); return; }
         state.relics -= item.cost;
-        state.score = Math.max(0, state.score - item.cost * 5);
         if (!item.repeatable) state.vendorPurchases[item.id] = true;
         state.purchaseCount++;
         applyVendorEffect(item);
-        if (state.purchaseCount >= 2 && state.questState.step >= 4) {
-            setQuestStep(5, 'Preparations complete. Enter the Shadow Sanctum.');
+        if (state.purchaseCount >= MIN_VENDOR_PURCHASES_FOR_ASSAULT && state.questState.step >= QUEST_IDX.PREPARE_ASSAULT) {
+            setQuestStep(QUEST_IDX.CONFRONT_SANCTUM, 'Preparations complete. Enter the Shadow Sanctum.');
         }
         persist();
     }
@@ -1084,12 +1104,12 @@
         showNotif(msg);
         if (npc.id === 'elder_mira') {
             state.storyState.flags.metElder = true;
-            setQuestStep(1, 'Seek guidance from Bran and Lyra.');
+            setQuestStep(QUEST_IDX.GATHER_GUIDANCE, 'Seek guidance from Bran and Lyra.');
         }
         if (npc.id === 'bran_ranger' || npc.id === 'lyra_scholar') {
             if (state.storyState.flags.metElder) {
                 state.storyState.flags.gatheredGuidance = true;
-                setQuestStep(2, 'Recover relic fragments from forest/caves.');
+                setQuestStep(QUEST_IDX.RECOVER_RELICS, 'Recover relic fragments from forest/caves.');
             }
         }
         if (npc.vendorId) interactVendor(npc.vendorId);
@@ -1288,6 +1308,10 @@
         if (biome === 'lair') { ctx.fillStyle = 'rgba(160,50,0,0.14)'; for (var i = 0; i < 8; i++) { ctx.beginPath(); ctx.arc((i * 241 + 100) % (CANVAS_W - 200) + 100, (i * 183 + 100) % (CANVAS_H - 150) + 100, 22 + i * 3, 0, Math.PI * 2); ctx.fill(); } }
     }
 
+    function isLanternApplicableBiome(biome) {
+        return biome === 'cave' || biome === 'keep' || biome === 'lair';
+    }
+
     function drawBackground() {
         var area = AREAS[state.areaIndex];
         ctx.fillStyle = area.bgColor;
@@ -1323,7 +1347,7 @@
 
         // Darkness overlay for low-ambientLight biomes
         if (area.ambientLight < 1.0) {
-            var boost = (state.upgrades && state.upgrades.lantern && (area.biome === 'cave' || area.biome === 'keep' || area.biome === 'lair')) ? 0.18 : 0;
+            var boost = (state.upgrades && state.upgrades.lantern && isLanternApplicableBiome(area.biome)) ? 0.18 : 0;
             var light = clamp(area.ambientLight + boost, 0, 1);
             ctx.fillStyle = 'rgba(0,0,0,' + ((1.0 - light) * 0.70) + ')';
             ctx.fillRect(0, 0, CANVAS_W, CANVAS_H);
@@ -1496,8 +1520,9 @@
             }
             ctx.globalAlpha = Math.min(0.95, alpha + 0.2);
             ctx.fillStyle = 'rgba(180,40,40,0.85)';
-            var segment = 42;
-            for (var pos = 30; pos < (dir === 'left' || dir === 'right' ? CANVAS_H - 30 : CANVAS_W - 30); pos += segment) {
+            var segment = TRANSITION_PREVIEW_SEGMENT_SIZE;
+            var maxPos = (dir === 'left' || dir === 'right') ? CANVAS_H - 30 : CANVAS_W - 30;
+            for (var pos = 30; pos < maxPos; pos += segment) {
                 if (canTraverseEdgeAt(dir, pos)) continue;
                 if (dir === 'right') ctx.fillRect(CANVAS_W - 20, pos - 10, 18, 18);
                 if (dir === 'left')  ctx.fillRect(2, pos - 10, 18, 18);
@@ -1892,7 +1917,7 @@
                 ctx.fillText('???', b.x + cellW / 2, b.y + cellH / 2);
             }
 
-            if (area.id === 10 && !state.storyState.flags.fortressAccess) {
+            if (area.id === AREA_ID.SHADOW_SANCTUM && !state.storyState.flags.fortressAccess) {
                 ctx.fillStyle = '#ff8888';
                 ctx.font = 'bold 10px Arial';
                 ctx.fillText('LOCKED', b.x + cellW / 2, b.y + cellH - 14);

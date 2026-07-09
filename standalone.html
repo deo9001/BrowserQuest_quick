@@ -99,7 +99,7 @@
             <button type="button" id="newGameBtn" aria-label="New Game (Press N)"><span aria-hidden="true">🆕 </span>New Game <kbd>N</kbd></button>
             <button type="button" id="pauseBtn" aria-label="Pause or Resume (Press P)"><span aria-hidden="true">⏸ </span>Pause <kbd>P</kbd></button>
             <button type="button" id="attackBtn" aria-label="Attack nearby enemies (Press Space)"><span aria-hidden="true">⚔ </span>Attack <kbd>Space</kbd></button>
-            <button type="button" id="interactBtn" aria-label="Interact with nearby npc or door (Press E)"><span aria-hidden="true">💬 </span>Interact <kbd>E</kbd></button>
+            <button type="button" id="interactBtn" aria-label="Interact with nearby NPC or door (Press E)"><span aria-hidden="true">💬 </span>Interact <kbd>E</kbd></button>
             <button type="button" id="mapBtn" aria-label="Toggle world map (Press M)"><span aria-hidden="true">🗺 </span>Map <kbd>M</kbd></button>
             <button type="button" id="saveBtn" aria-label="Save game now"><span aria-hidden="true">💾 </span>Save Now</button>
             <button type="button" id="exportBtn" aria-label="Export save data to text box"><span aria-hidden="true">📤 </span>Export Save</button>
@@ -209,7 +209,7 @@
                 <ul>
                     <li><strong>Area transition:</strong> Walk toward an edge arrow — transition starts automatically when within 80px of the border (no more 5-second wait). Blocked destination segments are marked before transition.</li>
                     <li><strong>Enemy respawn:</strong> Enemies do not respawn in the same session in a visited area. They return only when you re-enter after a cooldown (approx. 10 s of ticks).</li>
-                    <li><strong>Save not loading:</strong> If localStorage is blocked by browser policy, the game still runs but won't persist between sessions. A new v3 save key is used — old v2 saves will start fresh.</li>
+                    <li><strong>Save not loading:</strong> If localStorage is blocked by browser policy, the game still runs but won't persist between sessions. The game now uses a v4 save key and auto-migrates v3 data.</li>
                     <li><strong>Duplicate loops on restart:</strong> New Game / Import both cancel the old animation frame before starting a fresh loop.</li>
                     <li><strong>Equipment not applying:</strong> Only better items are auto-equipped. Check HUD — current weapon / armor are displayed.</li>
                     <li><strong>Full-app setup:</strong> See <a href="README.md">README.md</a> and <a href="standalone_info.md">standalone_info.md</a> for Node.js server instructions.</li>
