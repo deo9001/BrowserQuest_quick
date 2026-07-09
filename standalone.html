@@ -15,7 +15,7 @@
         <div class="title-row">
             <div>
                 <h1 id="pageTitle"><span aria-hidden="true">⚔ </span>BrowserQuest — Standalone Adventure</h1>
-                <p class="subtitle">Local single-player mode. No server required. Explore 7 areas across meadows, forests, towns, caves and lairs — collect relics, discover equipment, and survive!</p>
+                <p class="subtitle">Local single-player mode. No server required. Explore 14 areas — 10 combat zones plus 4 safe interiors — including meadows, forests, caves, keeps, lairs, and an ancient vault. Collect relics, mine resources, and face the Shadow Lord!</p>
             </div>
             <button type="button" id="themeToggle" aria-pressed="false">Switch to Light Theme</button>
         </div>
@@ -34,8 +34,27 @@
         </p>
 
         <!-- Main canvas — 1100×620 logical resolution, scales to full CSS width -->
-        <canvas id="gameCanvas" width="1100" height="620"
-                aria-label="Game map canvas" tabindex="0"></canvas>
+        <div class="canvas-wrap">
+            <canvas id="gameCanvas" width="1100" height="620"
+                    aria-label="Game map canvas" tabindex="0"></canvas>
+
+            <!-- NPC Dialogue Overlay — shown when talking to an NPC -->
+            <div id="dialogueOverlay" class="dialogue-overlay" aria-hidden="true">
+                <div class="dialogue-box" role="dialog" aria-modal="true" aria-labelledby="dlgNpcName">
+                    <div class="dialogue-header">
+                        <span class="dialogue-icon" id="dlgNpcIcon" aria-hidden="true">&#x1F464;</span>
+                        <div class="dialogue-npc-info">
+                            <span class="dialogue-npc-name" id="dlgNpcName"></span>
+                            <span class="dialogue-npc-role" id="dlgNpcRole"></span>
+                        </div>
+                    </div>
+                    <div class="dialogue-text" id="dlgText"></div>
+                    <div class="dialogue-actions">
+                        <button type="button" id="dlgCloseBtn">Continue <kbd>E</kbd></button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!-- HUD — all stats in a responsive grid -->
         <div class="hud" aria-live="polite" aria-label="Player stats">
@@ -154,8 +173,10 @@
                     <li><strong>Relics:</strong> Ancient Relics grant score and are tracked globally.</li>
                     <li><strong>Story &amp; quests:</strong> A narrative objective chain tracks progression from village investigation to Shadow Sanctum cleansing.</li>
                     <li><strong>Vendors:</strong> Spend relics for healing, upgrades, map support, lantern gear, and fortress access.</li>
-                    <li><strong>XP &amp; Levels:</strong> Defeat enemies for XP. 10 levels — each grants +4 ATK, +20 Max HP, +4 speed.</li>
-                    <li><strong>Sword swing:</strong> Attack triggers a visible arc animation. Damage is applied at the midpoint of the swing and only hits enemies within the arc cone.</li>
+                    <li><strong>XP &amp; Levels:</strong> Defeat enemies for XP. 10 levels with an escalating curve — each grants +3 ATK, +15 Max HP. Later levels require much more effort.</li>
+                    <li><strong>Sword swing:</strong> Attack triggers a visible arc animation. Damage hits enemies in the cone. With no enemies nearby, attacking mines resource nodes.</li>
+                    <li><strong>Resource Nodes:</strong> Glowing ore/crystal deposits in each area. Swing at them to mine — each hit reduces durability. Rarer nodes yield better loot.</li>
+                    <li><strong>Randomized Areas:</strong> Shifting Wilds areas (shown with a rune ᚠ on the map) change between new games but stay stable within a save.</li>
                 </ul>
             </details>
 
