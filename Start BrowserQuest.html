@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Start BrowserQuest</title>
+    <style>
+        :root {
+            color-scheme: light dark;
+            --bg: #15121d;
+            --card: #221b2f;
+            --text: #f4ecdc;
+            --muted: #d4c7ac;
+            --accent: #d9a441;
+            --border: #7c6440;
+            --ok: #8ed081;
+            --warn: #ffcd70;
+        }
+
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(180deg, #0d0b12, var(--bg));
+            color: var(--text);
+        }
+        main {
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 24px 16px 40px;
+        }
+        .card {
+            background: rgba(34, 27, 47, 0.94);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 18px;
+            margin-bottom: 16px;
+            box-shadow: 0 14px 40px rgba(0, 0, 0, 0.35);
+        }
+        h1, h2 { margin-top: 0; }
+        .eyebrow {
+            color: var(--accent);
+            font-weight: bold;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+        .status {
+            display: inline-flex;
+            gap: 10px;
+            align-items: center;
+            padding: 10px 14px;
+            border-radius: 999px;
+            background: rgba(255, 205, 112, 0.12);
+            border: 1px solid rgba(255, 205, 112, 0.45);
+            color: var(--warn);
+            font-weight: bold;
+        }
+        .status-ready {
+            background: rgba(142, 208, 129, 0.12);
+            border-color: rgba(142, 208, 129, 0.45);
+            color: var(--ok);
+        }
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 16px;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 16px;
+            border-radius: 10px;
+            border: 1px solid var(--accent);
+            background: #332741;
+            color: var(--text);
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .button:hover,
+        .button:focus-visible {
+            outline: none;
+            background: #433355;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+        }
+        .notice {
+            border-left: 4px solid var(--accent);
+            padding-left: 12px;
+            color: var(--muted);
+        }
+        .viewer img {
+            width: 100%;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: #0d0b12;
+            min-height: 220px;
+            object-fit: cover;
+        }
+        .viewer-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+        }
+        .viewer-controls button {
+            cursor: pointer;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: #2b2139;
+            color: var(--text);
+            padding: 8px 12px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            text-align: left;
+            padding: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.12);
+            vertical-align: top;
+        }
+        code {
+            background: rgba(255,255,255,0.08);
+            padding: 2px 5px;
+            border-radius: 4px;
+        }
+        #launcher-error {
+            display: none;
+            color: #ffb3b3;
+            margin-top: 12px;
+        }
+        @media (max-width: 600px) {
+            .actions, .viewer-controls { flex-direction: column; }
+            .button, .viewer-controls button { width: 100%; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+<main>
+    <section class="card">
+        <p class="eyebrow">BrowserQuest no-install launcher</p>
+        <h1>Start BrowserQuest</h1>
+        <p class="status status-ready" aria-live="polite">Ready: this launcher works from an extracted folder with no install.</p>
+        <p class="notice">
+            <strong>This is the honest single-click fallback/launcher, not the full multiplayer game.</strong>
+            The original BrowserQuest app in this repository needs a live Node.js + Socket.IO server and browser requests that are commonly blocked when you open files directly from <code>file://</code>.
+        </p>
+        <div class="actions">
+            <a class="button" href="single_click_info.md">Open single_click_info.md</a>
+            <a class="button" href="README.md">Open README</a>
+            <a class="button" href="client/index.html">Open original BrowserQuest client (advanced)</a>
+        </div>
+        <p id="launcher-error" role="alert"></p>
+    </section>
+
+    <section class="grid">
+        <article class="card">
+            <h2>What works here</h2>
+            <ul>
+                <li>This launcher opens with one obvious click from the repository folder.</li>
+                <li>It works offline and does not need admin rights, Git, Node.js, Python, or a terminal.</li>
+                <li>It explains the real app blockers, dependencies, and user vs. developer workflows.</li>
+                <li>It includes local BrowserQuest screenshots and links to the real client files.</li>
+            </ul>
+        </article>
+        <article class="card">
+            <h2>What does not work here</h2>
+            <ul>
+                <li>The full multiplayer game cannot run entirely from a clicked local HTML file.</li>
+                <li>No bundled Node.js runtime or auto-starting local server is included in this repository.</li>
+                <li>If you open <code>client/index.html</code> directly, browsers usually block the local worker/XHR setup that the game client expects.</li>
+            </ul>
+        </article>
+    </section>
+
+    <section class="card viewer" aria-labelledby="gallery-title">
+        <h2 id="gallery-title">BrowserQuest preview</h2>
+        <p id="gallery-status" aria-live="polite">Loading local preview image…</p>
+        <img id="gallery-image" src="screens/1.png" alt="BrowserQuest screenshot preview">
+        <div class="viewer-controls">
+            <button type="button" id="previous-shot">Previous screenshot</button>
+            <button type="button" id="next-shot">Next screenshot</button>
+        </div>
+    </section>
+
+    <section class="card">
+        <h2>About / Help</h2>
+        <details open>
+            <summary><strong>Why the full game is blocked in local no-install mode</strong></summary>
+            <ul>
+                <li>The real app is a client/server multiplayer game, not a self-contained static page.</li>
+                <li>The browser client expects a Socket.IO server on <code>127.0.0.1:8000</code> or another configured host.</li>
+                <li>The client also uses RequireJS text loading, Ajax, and a web worker for map data, which are unreliable or blocked in normal <code>file://</code> mode.</li>
+            </ul>
+        </details>
+        <details>
+            <summary><strong>Normal user path</strong></summary>
+            <p>Click this file first. Then read <code>single_click_info.md</code> for the full explanation, limitations, and troubleshooting steps.</p>
+        </details>
+        <details>
+            <summary><strong>Developer path</strong></summary>
+            <p>Developers can still use <code>npm install</code>, <code>node server/js/main.js</code>, and the existing build flow. See the README for the separated developer instructions.</p>
+        </details>
+    </section>
+
+    <section class="card">
+        <h2>Dependency disclosure</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Purpose</th>
+                    <th>Source / location</th>
+                    <th>Local or external</th>
+                    <th>Internet / blocked behavior / license</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>BrowserQuest source assets</td>
+                    <td>Game UI, screenshots, sprites, maps, CSS, and JavaScript source.</td>
+                    <td>This repository under <code>client/</code> and <code>screens/</code>.</td>
+                    <td>Local</td>
+                    <td>No internet required for this launcher. MPL 2.0 code and CC-BY-SA 3.0 content per README/LICENSE.</td>
+                </tr>
+                <tr>
+                    <td>Socket.IO browser client</td>
+                    <td>Lets the BrowserQuest browser client connect to the multiplayer server.</td>
+                    <td><code>client/js/lib/socket.io.min.js</code> copied from the installed <code>socket.io</code> package.</td>
+                    <td>Local</td>
+                    <td>No internet required once present. If missing, the full client cannot connect. License: MIT.</td>
+                </tr>
+                <tr>
+                    <td>Node.js + Socket.IO server</td>
+                    <td>Runs the real multiplayer world state, chat, combat, and player synchronization.</td>
+                    <td><code>server/</code> plus npm dependencies from <code>package.json</code>.</td>
+                    <td>External runtime not bundled here</td>
+                    <td>The full game needs this runtime. Without it, only this fallback launcher/information mode works. Licenses vary by dependency.</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+</main>
+<script>
+    (function () {
+        var screenshots = ["screens/1.png", "screens/2.png", "screens/3.png"];
+        var index = 0;
+        var image = document.getElementById("gallery-image");
+        var status = document.getElementById("gallery-status");
+        var errorBox = document.getElementById("launcher-error");
+
+        var show = function (nextIndex) {
+            index = (nextIndex + screenshots.length) % screenshots.length;
+            status.textContent = "Loading screenshot " + (index + 1) + " of " + screenshots.length + "…";
+            image.src = screenshots[index];
+        };
+
+        image.addEventListener("load", function () {
+            status.textContent = "Showing screenshot " + (index + 1) + " of " + screenshots.length + ".";
+        });
+
+        image.addEventListener("error", function () {
+            status.textContent = "A local screenshot could not be loaded.";
+            errorBox.style.display = "block";
+            errorBox.textContent = "Some local assets are missing or blocked. Re-extract the repository ZIP and try again.";
+        });
+
+        document.getElementById("previous-shot").addEventListener("click", function () {
+            show(index - 1);
+        });
+
+        document.getElementById("next-shot").addEventListener("click", function () {
+            show(index + 1);
+        });
+    }());
+</script>
+</body>
+</html>

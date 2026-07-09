@@ -5,7 +5,7 @@ var cls = require('./lib/class')
     Utils = require('./utils'),
     Checkpoint = require('./checkpoint');
 
-module.exports = Map = cls.Class.extend({    
+var GameMap = cls.Class.extend({
     init: function(filepath) {
     	var self = this;
     
@@ -18,6 +18,8 @@ module.exports = Map = cls.Class.extend({
             
                 self.initMap(json);
             });
+
+            module.exports = GameMap;
         }
         else
         {
