@@ -412,12 +412,12 @@
     };
 
     var NPC_DEFS = [
-        { id: 'elder_mira',    name: 'Elder Mira',   role: 'Village Elder',  areaId: 7, x: 550, y: 220, vendorId: null,             icon: '\u{1F9D9}' },
-        { id: 'tovin_smith',   name: 'Tovin',        role: 'Blacksmith',     areaId: 8, x: 450, y: 260, vendorId: 'smith_vendor',    icon: '\u2692' },
-        { id: 'lyra_scholar',  name: 'Lyra',         role: 'Relic Scholar',  areaId: 2, x: 500, y: 320, vendorId: null,             icon: '\u{1F4D6}' },
-        { id: 'bran_ranger',   name: 'Bran',         role: 'Ranger',         areaId: 1, x: 180, y: 280, vendorId: null,             icon: '\u{1F3F9}' },
-        { id: 'fort_guard',    name: 'Captain Varr', role: 'Guard Captain',  areaId: 5, x: 150, y: 335, vendorId: 'guard_vendor',   icon: '\u2694' },
-        { id: 'mira_merchant', name: 'Sela',         role: 'Merchant',       areaId: 2, x: 770, y: 260, vendorId: 'merchant_vendor',icon: '\u{1F6D2}' }
+        { id: 'elder_mira',    name: 'Elder Mira',   role: 'Village Elder', areaId: 7, x: 550, y: 220, vendorId: null,              icon: '\u{1F9D9}' },
+        { id: 'tovin_smith',   name: 'Tovin',        role: 'Blacksmith',    areaId: 8, x: 450, y: 260, vendorId: 'smith_vendor',     icon: '\u2692' },
+        { id: 'lyra_scholar',  name: 'Lyra',         role: 'Relic Scholar', areaId: 2, x: 500, y: 320, vendorId: null,              icon: '\u{1F4D6}' },
+        { id: 'bran_ranger',   name: 'Bran',         role: 'Ranger',        areaId: 1, x: 180, y: 280, vendorId: null,              icon: '\u{1F3F9}' },
+        { id: 'fort_guard',    name: 'Captain Varr', role: 'Guard Captain', areaId: 5, x: 150, y: 335, vendorId: 'guard_vendor',    icon: '\u2694' },
+        { id: 'mira_merchant', name: 'Sela',         role: 'Merchant',      areaId: 2, x: 770, y: 260, vendorId: 'merchant_vendor', icon: '\u{1F6D2}' }
     ];
 
     var VENDOR_STOCK = {
@@ -530,6 +530,8 @@
         relic:       { name: 'Ancient Relic', type: 'relic',  color: '#ffd76b', subColor: '#9b7200' }
     };
 
+    // XP required to reach each level (index = level). Index 10 = level 10 (max cap).
+    // 11 entries: levels 0-10, so the player levels from 0 up to a maximum of level 10.
     var XP_TABLE = [0, 80, 220, 450, 800, 1300, 2050, 3100, 4600, 6800, 9800];
 
     var HP_SCALING_FACTOR    = 0.65;   // enemy HP multiplier per difficulty tier
@@ -1472,10 +1474,11 @@
 
             // Contact damage — fixed per-hit amount scaled by area difficulty (not dt-based)
             if (enemy.aiState === 'chase' && dHero < hero.radius + def.size + 2 && enemy.attackCooldown <= 0) {
-                var diffMod  = 1.0 + (area.difficulty - 1.0) * 0.35;
-                var rawDmg   = def.attack * diffMod;
-                var reduction = getHeroDefense() / 100;
-                var dmg = Math.max(1, Math.round(rawDmg * (1 - reduction) * (DMG_VARIANCE_MIN + Math.random() * DMG_VARIANCE_RANGE)));
+                var diffMod   = 1.0 + (area.difficulty - 1.0) * 0.35; // scale up in harder zones
+                var rawDmg    = def.attack * diffMod;
+                var reduction = getHeroDefense() / 100;                // 0–0.75 (capped by DEF_CAP_PCT)
+                var variance  = DMG_VARIANCE_MIN + Math.random() * DMG_VARIANCE_RANGE;
+                var dmg       = Math.max(1, Math.round(rawDmg * (1 - reduction) * variance));
                 hero.hp     -= dmg;
                 hero.hitFlash = 0.22;
                 addFloat(hero.x, hero.y - hero.radius - 8, '-' + dmg, '#ff8888', 12);
@@ -2119,6 +2122,8 @@
 
     function drawWorldMap() {
         if (!mapOpen) return;
+        // Panel: 780×490 to fit a 5-column × 4-row grid of 14 areas (IDs 0-13)
+        // Cell size 118×70, starting offsets colOff/rowOff from panel top-left interior
         var pw = 780, ph = 490, px = (CANVAS_W - pw) / 2, py = (CANVAS_H - ph) / 2;
         var cellW = 118, cellH = 70, colOff = 28, rowOff = 46;
 
