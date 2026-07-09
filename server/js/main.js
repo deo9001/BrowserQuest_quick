@@ -1,12 +1,12 @@
 
 var fs = require('fs'),
+    Log = require('log'),
     Metrics = require('./metrics');
  
 
 function main(config) {
     var ws = require("./ws"),
         WorldServer = require("./worldserver"),
-        Log = require('log'),
         _ = require('underscore'),
         server = new ws.socketIOServer(config.host, config.port),
         metrics = config.metrics_enabled ? new Metrics(config) : null;
@@ -25,14 +25,8 @@ function main(config) {
             }
         }, 1000);
     
-    switch(config.debug_level) {
-        case "error":
-            log = new Log(Log.ERROR); break;
-        case "debug":
-            log = new Log(Log.DEBUG); break;
-        case "info":
-            log = new Log(Log.INFO); break;
-    };
+    log = Log;
+    log.level = config.debug_level || "info";
     
     log.info("Starting BrowserQuest game server...");
     

@@ -19,7 +19,6 @@ var GameMap = cls.Class.extend({
                 self.initMap(json);
             });
 
-            module.exports = GameMap;
         }
         else
         {
@@ -217,3 +216,5 @@ var pos = function(x, y) {
 var equalPositions = function(pos1, pos2) {
     return pos1.x === pos2.x && pos2.y === pos2.y;
 };
+
+module.exports = GameMap;
