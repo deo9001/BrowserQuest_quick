@@ -39,7 +39,22 @@ Enjoy this amazing open source browser based role playing multiplayer 2D game!
 
 And a big thank you to the original developers is in order! THANK YOU!
 
-HOW TO RUN?
+FOR NORMAL USERS (single-click / no install)
+============
+
+1. Download or extract the repository.
+2. Open the root folder.
+3. Double-click **`Start BrowserQuest.html`**.
+
+Important:
+
+- `Start BrowserQuest.html` is the **honest no-install launcher/fallback**.
+- The **real BrowserQuest multiplayer app** is still included in `client/` and `server/`.
+- The full game cannot reliably run from a plain clicked `file://` page because it needs a live Node.js + Socket.IO server plus browser requests/workers that local-file mode commonly blocks.
+
+See **`single_click_info.md`** for the full investigation, dependency disclosure, limitations, troubleshooting, and the difference between user mode and developer mode.
+
+FOR DEVELOPERS
 ============
 
 ```
@@ -47,11 +62,30 @@ npm install
 node server/js/main.js
 ```
 
-Then go inside the Client folder and open index.html.
+Then open `client/index.html` in a browser.
 
 You might want to host a webserver and open index.html in that (e.g. 127.0.0.1/index.html).
 
 Also read the original README files you'll find inside the Client and Server folders to learn the basics of configuring (it's preconfigured right now).
+
+Notes for developers:
+
+- The repository now includes `client/config/config_build.json` so the existing client config/build path has a committed default.
+- `client/index.html` now uses a local Socket.IO browser bundle instead of depending on a CDN.
+- `bin/build.sh` has been cleaned up so its file-removal step does not fail on its malformed `find` expression.
+
+INVESTIGATION SUMMARY
+============
+
+- App type: **HTML5/JavaScript multiplayer game with a Node.js + Socket.IO backend**
+- Real full-app single-click from this repository alone: **not realistic on a restricted no-install PC**
+- Main blockers:
+  - the real app requires a live backend server
+  - the client uses RequireJS text-loaded JSON, Ajax, and web workers
+  - those browser behaviors are unreliable or blocked from `file://`
+  - this repository does not bundle a portable Node.js runtime/server launcher
+
+The root single-click launcher intentionally documents these blockers clearly instead of pretending the full multiplayer game can run completely offline from a clicked HTML file.
 
 
 Original README

@@ -30,7 +30,7 @@ Mozilla presents an HTML5 mini-MMORPG by Little Workshop http://www.littleworksh
         <link rel="stylesheet" href="css/main.css" type="text/css">
         <link rel="stylesheet" href="css/achievements.css" type="text/css">
         <script src="js/lib/modernizr.js" type="text/javascript"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.1/socket.io.js"></script>
+        <script src="js/lib/socket.io.min.js"></script>
 
         <!--[if lt IE 9]>
                 <link rel="stylesheet" href="css/ie.css" type="text/css">
@@ -327,8 +327,17 @@ Mozilla presents an HTML5 mini-MMORPG by Little Workshop http://www.littleworksh
 		
         <script type="text/javascript">
             var ctx = document.querySelector('canvas').getContext('2d'),
-                parchment = document.getElementById("parchment");
+                parchment = document.getElementById("parchment"),
+                fileProtocolMessage = "This BrowserQuest client cannot fully run from file://. It needs a live Node.js + Socket.IO server, and local-file mode blocks some required browser requests. Open <strong>../Start BrowserQuest.html</strong> for the no-install launcher and details.";
             
+            var addStartupAlert = function(messageHtml) {
+                var alert = document.createElement("div"),
+                    target = document.getElementById("intro");
+                alert.className = 'alert';
+                alert.innerHTML = messageHtml;
+                document.body.insertBefore(alert, target);
+            };
+
             if(!Detect.supportsWebSocket()) {
                 parchment.className = "error";
             }
@@ -338,15 +347,17 @@ Mozilla presents an HTML5 mini-MMORPG by Little Workshop http://www.littleworksh
             }
             
             if(!Modernizr.localstorage) {
-                var alert = document.createElement("div");
-                    alert.className = 'alert';
-                    alertMsg = document.createTextNode("You need to enable cookies/localStorage to play BrowserQuest");
-                    alert.appendChild(alertMsg);
-
-                target = document.getElementById("intro");
-                document.body.insertBefore(alert, target);
+                addStartupAlert("You need to enable cookies/localStorage to play BrowserQuest");
             } else if(localStorage && localStorage.data) {
                 parchment.className = "loadcharacter";
+            }
+
+            if(location.protocol === "file:") {
+                parchment.className = "error";
+                addStartupAlert(fileProtocolMessage);
+            } else if(typeof io === "undefined") {
+                parchment.className = "error";
+                addStartupAlert("The local Socket.IO client library did not load, so BrowserQuest cannot connect to the server.");
             }
         </script>
         
