@@ -327,7 +327,8 @@ Mozilla presents an HTML5 mini-MMORPG by Little Workshop http://www.littleworksh
 		
         <script type="text/javascript">
             var ctx = document.querySelector('canvas').getContext('2d'),
-                parchment = document.getElementById("parchment");
+                parchment = document.getElementById("parchment"),
+                fileProtocolMessage = "This BrowserQuest client cannot fully run from file://. It needs a live Node.js + Socket.IO server, and local-file mode blocks some required browser requests. Open <strong>../Start BrowserQuest.html</strong> for the no-install launcher and details.";
             
             var addStartupAlert = function(messageHtml) {
                 var alert = document.createElement("div"),
@@ -353,7 +354,7 @@ Mozilla presents an HTML5 mini-MMORPG by Little Workshop http://www.littleworksh
 
             if(location.protocol === "file:") {
                 parchment.className = "error";
-                addStartupAlert("This BrowserQuest client cannot fully run from file://. It needs a live Node.js + Socket.IO server, and local-file mode blocks some required browser requests. Open <strong>../Start BrowserQuest.html</strong> for the no-install launcher and details.");
+                addStartupAlert(fileProtocolMessage);
             } else if(typeof io === "undefined") {
                 parchment.className = "error";
                 addStartupAlert("The local Socket.IO client library did not load, so BrowserQuest cannot connect to the server.");

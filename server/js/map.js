@@ -18,7 +18,6 @@ var GameMap = cls.Class.extend({
             
                 self.initMap(json);
             });
-
         }
         else
         {

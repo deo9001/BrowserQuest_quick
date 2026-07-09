@@ -9,7 +9,7 @@
 - **`Start BrowserQuest.html`** at the repository root.
 
 ## 3. Is this the full app or a fallback/lite app?
-- The root launcher is an **honestly labeled fallback / no-install launcher**.
+- The root launcher is a **clearly labeled fallback / no-install launcher**.
 - The **real existing BrowserQuest app** is still present under `client/` and `server/`.
 - The full multiplayer app was investigated first, but it cannot reliably run as a single-click local `file://` app from this repository alone.
 

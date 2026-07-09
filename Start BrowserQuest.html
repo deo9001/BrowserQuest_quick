@@ -253,6 +253,7 @@
         var errorBox = document.getElementById("launcher-error");
 
         var show = function (nextIndex) {
+            // Keep the gallery index wrapped for both previous and next navigation.
             index = (nextIndex + screenshots.length) % screenshots.length;
             status.textContent = "Loading screenshot " + (index + 1) + " of " + screenshots.length + "…";
             image.src = screenshots[index];

@@ -5,11 +5,11 @@ var fs = require('fs'),
  
 
 function main(config) {
-    var noop = function() {},
+    var noopLogger = function() {},
         logLevel = config.debug_level || "info",
         configuredLoggers = {
-            error: { error: Log.error.bind(Log), info: noop, debug: noop },
-            info: { error: Log.error.bind(Log), info: Log.info.bind(Log), debug: noop },
+            error: { error: Log.error.bind(Log), info: noopLogger, debug: noopLogger },
+            info: { error: Log.error.bind(Log), info: Log.info.bind(Log), debug: noopLogger },
             debug: { error: Log.error.bind(Log), info: Log.info.bind(Log), debug: Log.debug.bind(Log) }
         },
         activeLoggers = configuredLoggers[logLevel] || configuredLoggers.info,
