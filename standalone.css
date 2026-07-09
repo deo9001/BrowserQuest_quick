@@ -136,8 +136,7 @@ main {
    GAME SECTION — FULL WIDTH
    ====================================================== */
 #game-wrap {
-    /* Full width — no side column */
-    width: 100%;
+    /* Explicit block to clearly scope game-area styles */
 }
 
 #gameCanvas {

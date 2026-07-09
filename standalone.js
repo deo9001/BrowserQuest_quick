@@ -34,7 +34,7 @@
             id: 2, name: 'Cursed Keep',
             bgColor: '#1a0d0d', gridColor: 'rgba(90,20,20,0.35)',
             borderColor: 'rgba(160,40,40,0.25)',
-            enemyTypes: ['skeleton', 'ogre'],
+            enemyTypes: ['skeleton', 'skeleton2', 'ogre'],
             enemyCount: 4, difficulty: 2.0,
             description: 'A crumbling fortress haunted by the cursed dead.'
         },
@@ -68,6 +68,11 @@
             name: 'Skeleton', color: '#c0c0c0', size: 12,
             maxHp: 9, attack: 16, speed: 46, xp: 20,
             itemChance: 0.28, items: ['flask', 'clotharmor']
+        },
+        skeleton2: {
+            name: 'Armored Skeleton', color: '#a0a8b0', size: 13,
+            maxHp: 14, attack: 20, speed: 50, xp: 28,
+            itemChance: 0.35, items: ['mailarmor', 'bluesword']
         },
         ogre: {
             name: 'Ogre', color: '#5e3618', size: 18,
@@ -143,6 +148,14 @@
     };
 
     var XP_TABLE = [0, 50, 120, 220, 350, 520, 730, 990, 1310, 1700];
+
+    /* Balance constants — adjust here to tune the game without searching for magic numbers */
+    var HP_SCALING_FACTOR    = 0.35; // per-point-of-difficulty bonus HP multiplier for enemies
+    var DMG_VARIANCE_MIN     = 0.85; // lowest damage roll (85% of base)
+    var DMG_VARIANCE_RANGE   = 0.30; // randomness range added on top (up to +30%)
+    var ENEMY_DMG_PER_SEC    = 2.80; // contact-damage scalar (raw dmg × dt × this)
+    var ATTACK_COOLDOWN_SECS = 0.38; // seconds between player attacks
+    var DEF_CAP_PCT          = 80;   // maximum defense % (prevents invincibility)
 
     // ====================================================================
     // RUNTIME STATE
@@ -235,7 +248,7 @@
         if (state.hero.armor && ITEM_DEFS[state.hero.armor]) {
             def += ITEM_DEFS[state.hero.armor].defenseBonus || 0;
         }
-        return Math.min(80, def); // cap at 80% damage reduction
+        return Math.min(DEF_CAP_PCT, def); // cap at DEF_CAP_PCT% to prevent invincibility while keeping high-tier armor meaningful
     }
 
     function getAttackRange() {
@@ -355,7 +368,7 @@
         for (var i = 0; i < count; i++) {
             var typeName = area.enemyTypes[rndInt(0, area.enemyTypes.length - 1)];
             var def = ENEMY_DEFS[typeName];
-            var scaledHp = Math.round(def.maxHp * (1 + (area.difficulty - 1) * 0.35));
+            var scaledHp = Math.round(def.maxHp * (1 + (area.difficulty - 1) * HP_SCALING_FACTOR));
             var ex, ey, attempts = 0;
             do {
                 ex = rnd(50, CANVAS_W - 50);
@@ -447,7 +460,7 @@
         state.enemies = state.enemies.filter(function (enemy) {
             if (dist2(state.hero, enemy) > range) { return true; }
             var def = ENEMY_DEFS[enemy.type];
-            var dmg = Math.max(1, Math.round(atk * (0.85 + Math.random() * 0.3)));
+            var dmg = Math.max(1, Math.round(atk * (DMG_VARIANCE_MIN + Math.random() * DMG_VARIANCE_RANGE)));
             enemy.hp -= dmg;
             enemy.hitFlash = 0.3;
             addHitFlash(enemy.x, enemy.y, def.size);
@@ -476,7 +489,7 @@
         });
 
         if (hitCount > 0) {
-            state.hero.attackCooldown = 0.38;
+            state.hero.attackCooldown = ATTACK_COOLDOWN_SECS;
             setStatus('playing', 'Playing');
         }
     }
@@ -621,7 +634,7 @@
                 enemy.attackCooldown <= 0) {
                 var rawDmg = def.attack * area.difficulty;
                 var reduction = getHeroDefense() / 100;
-                var dmg = Math.max(1, rawDmg * (1 - reduction) * dt * 2.8);
+                var dmg = Math.max(1, rawDmg * (1 - reduction) * dt * ENEMY_DMG_PER_SEC);
                 hero.hp -= dmg;
                 hero.hitFlash = 0.22;
                 enemy.attackCooldown = 0.7;
@@ -644,7 +657,7 @@
         if (state.enemies.length < minCount && (state.tick % 150 === 0)) {
             var typeName = area.enemyTypes[rndInt(0, area.enemyTypes.length - 1)];
             var def2 = ENEMY_DEFS[typeName];
-            var scaledHp = Math.round(def2.maxHp * (1 + (area.difficulty - 1) * 0.35));
+            var scaledHp = Math.round(def2.maxHp * (1 + (area.difficulty - 1) * HP_SCALING_FACTOR));
             var ex, ey, att = 0;
             do {
                 ex = rnd(50, CANVAS_W - 50);
@@ -1056,7 +1069,7 @@
 
         // Attack range indicator (subtle ring, only while cooldown active)
         if (h.attackCooldown > 0.05) {
-            var progress = 1 - h.attackCooldown / 0.38;
+            var progress = 1 - h.attackCooldown / ATTACK_COOLDOWN_SECS;
             ctx.strokeStyle = 'rgba(255,255,200,' + (0.12 * (1 - progress)) + ')';
             ctx.lineWidth = 1;
             ctx.beginPath();

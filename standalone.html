@@ -14,7 +14,7 @@
     <section class="card" aria-labelledby="pageTitle">
         <div class="title-row">
             <div>
-                <h1 id="pageTitle">⚔ BrowserQuest — Standalone Adventure</h1>
+                <h1 id="pageTitle"><span aria-hidden="true">⚔ </span>BrowserQuest — Standalone Adventure</h1>
                 <p class="subtitle">Local single-player mode. No server required. Explore 4 areas, collect relics, discover equipment, and survive!</p>
             </div>
             <button type="button" id="themeToggle" aria-pressed="false">Switch to Light Theme</button>
@@ -90,13 +90,13 @@
 
         <!-- Controls -->
         <div class="controls" aria-label="Game controls">
-            <button type="button" id="newGameBtn">🆕 New Game <kbd>N</kbd></button>
-            <button type="button" id="pauseBtn">⏸ Pause <kbd>P</kbd></button>
-            <button type="button" id="attackBtn">⚔ Attack <kbd>Space</kbd></button>
-            <button type="button" id="saveBtn">💾 Save Now</button>
-            <button type="button" id="exportBtn">📤 Export Save</button>
-            <button type="button" id="importBtn">📥 Import Save</button>
-            <button type="button" id="resetBtn">🗑 Reset Save</button>
+            <button type="button" id="newGameBtn" aria-label="New Game (Press N)"><span aria-hidden="true">🆕 </span>New Game <kbd>N</kbd></button>
+            <button type="button" id="pauseBtn" aria-label="Pause or Resume (Press P)"><span aria-hidden="true">⏸ </span>Pause <kbd>P</kbd></button>
+            <button type="button" id="attackBtn" aria-label="Attack nearby enemies (Press Space)"><span aria-hidden="true">⚔ </span>Attack <kbd>Space</kbd></button>
+            <button type="button" id="saveBtn" aria-label="Save game now"><span aria-hidden="true">💾 </span>Save Now</button>
+            <button type="button" id="exportBtn" aria-label="Export save data to text box"><span aria-hidden="true">📤 </span>Export Save</button>
+            <button type="button" id="importBtn" aria-label="Import save data from text box"><span aria-hidden="true">📥 </span>Import Save</button>
+            <button type="button" id="resetBtn" aria-label="Reset all progress and start over"><span aria-hidden="true">🗑 </span>Reset Save</button>
         </div>
 
         <p id="gameHint" class="small">Explore the map! Reach the edges to travel to new areas.</p>
@@ -135,7 +135,7 @@
                 <summary>Game systems</summary>
                 <ul>
                     <li><strong>4 Areas:</strong> Forest Clearing → Dark Caves → Cursed Keep → Dragon's Lair (loops).</li>
-                    <li><strong>7 Enemy types:</strong> Rat, Goblin, Bat, Skeleton, Ogre, Evil Eye, Dragon — each with unique stats and shapes.</li>
+                    <li><strong>8 Enemy types:</strong> Rat, Goblin, Bat, Skeleton, Armored Skeleton, Ogre, Evil Eye, Dragon — each with unique stats and shapes.</li>
                     <li><strong>Weapons:</strong> Iron Sword, Blue Sword, Golden Sword — boost attack power and range.</li>
                     <li><strong>Armor:</strong> Cloth, Leather, Mail, Golden — each reduces incoming damage %.</li>
                     <li><strong>Consumables:</strong> Health Flask (+28 HP), Fire Potion (+65 HP).</li>
