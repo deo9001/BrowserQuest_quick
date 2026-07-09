@@ -50,6 +50,7 @@ Use this path on a normal/admin development PC for the full BrowserQuest app.
    ```
 6. Open the BrowserQuest client at:
    - `http://127.0.0.1:8000/client/index.html`
+   - This URL uses the default port from `server/config.json` (`8000`). If you change the server port, update the URL accordingly.
 7. Stop/restart server:
    - Stop: `Ctrl + C` in the terminal
    - Restart: run `node server/js/main.js` again

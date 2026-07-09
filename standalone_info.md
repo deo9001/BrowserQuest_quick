@@ -64,4 +64,4 @@ The full BrowserQuest app is a client/server multiplayer architecture and depend
 | Server state/chat/world sync | No | Yes |
 | Runtime dependency | Browser only | Browser + Node.js server |
 | Best use case | Restricted PC local play | Full development and multiplayer testing |
-| Entry point | `standalone.html` | `Launch Full App.cmd` (Windows) or `node server/js/main.js` then open `http://127.0.0.1:8000/client/index.html` |
+| Entry point | `standalone.html` | Windows: `Launch Full App.cmd`<br>Manual: `node server/js/main.js` then open `http://127.0.0.1:8000/client/index.html` |

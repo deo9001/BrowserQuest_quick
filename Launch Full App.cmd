@@ -32,7 +32,8 @@ if not exist "node_modules" (
 
 echo Starting BrowserQuest server...
 echo Client URL: http://127.0.0.1:8000/client/index.html
-start "" "http://127.0.0.1:8000/client/index.html"
+echo (Uses default port from server\\config.json. If you changed it, open the matching URL manually.)
+start "" cmd /c "timeout /t 2 >nul && start \"\" \"http://127.0.0.1:8000/client/index.html\""
 node server\js\main.js
 
 if errorlevel 1 (
