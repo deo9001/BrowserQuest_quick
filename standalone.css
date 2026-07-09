@@ -1,4 +1,4 @@
-/* BrowserQuest Standalone Game v2 — standalone.css
+/* BrowserQuest Standalone Game v3 — standalone.css
  * Full-width game layout, About/Help section below game canvas
  */
 
@@ -149,6 +149,121 @@ main {
     cursor: crosshair;
     touch-action: none;
 }
+
+/* ======================================================
+   CANVAS WRAPPER — needed for absolute dialogue overlay
+   ====================================================== */
+.canvas-wrap {
+    position: relative;
+    display: block;
+    line-height: 0; /* prevent inline gap below canvas */
+}
+
+/* ======================================================
+   NPC DIALOGUE OVERLAY
+   ====================================================== */
+.dialogue-overlay {
+    display: none;
+    position: absolute;
+    left: 0; right: 0; bottom: 0; top: 0;
+    align-items: flex-end;
+    justify-content: center;
+    z-index: 30;
+    background: transparent;
+    pointer-events: none;
+}
+
+.dialogue-overlay.dlg-visible {
+    display: flex;
+    pointer-events: auto;
+    /* Dim the game canvas while dialogue is open */
+    background: rgba(0, 0, 0, 0.30);
+}
+
+.dialogue-box {
+    background: rgba(8, 6, 22, 0.97);
+    border: 2px solid #8a6820;
+    border-radius: 12px 12px 8px 8px;
+    padding: 14px 18px 12px;
+    margin: 0 12px 12px;
+    max-width: 640px;
+    width: calc(100% - 24px);
+    box-shadow: 0 -6px 32px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255,200,80,0.12);
+}
+
+.dialogue-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+    border-bottom: 1px solid rgba(140, 100, 30, 0.35);
+    padding-bottom: 8px;
+}
+
+.dialogue-icon {
+    font-size: 1.7em;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.dialogue-npc-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.dialogue-npc-name {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #ffd060;
+    line-height: 1.2;
+}
+
+.dialogue-npc-role {
+    font-size: 0.78rem;
+    color: #9a8050;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.dialogue-text {
+    font-size: 0.97rem;
+    color: #f0e8d0;
+    line-height: 1.65;
+    min-height: 2.8em;
+    margin-bottom: 12px;
+}
+
+.dialogue-actions {
+    text-align: right;
+}
+
+.dialogue-actions button {
+    background: rgba(40, 28, 8, 0.95);
+    border: 1px solid #a08040;
+    color: #ffd060;
+    padding: 7px 16px;
+    font-size: 0.88rem;
+    font-weight: 700;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.12s, border-color 0.12s;
+}
+.dialogue-actions button:hover,
+.dialogue-actions button:focus-visible {
+    background: rgba(70, 48, 12, 0.98);
+    border-color: #ffd060;
+    outline: none;
+}
+
+body[data-theme="light"] .dialogue-box {
+    background: rgba(248, 240, 220, 0.97);
+    border-color: #9a7020;
+}
+body[data-theme="light"] .dialogue-npc-name   { color: #7a5000; }
+body[data-theme="light"] .dialogue-npc-role   { color: #6a5030; }
+body[data-theme="light"] .dialogue-text        { color: #1a1210; }
+body[data-theme="light"] .dialogue-actions button { background: #f0e0b0; color: #7a5000; border-color: #9a7020; }
 
 /* ======================================================
    HUD — stat grid below canvas

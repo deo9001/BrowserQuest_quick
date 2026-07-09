@@ -1,5 +1,6 @@
-/* BrowserQuest Standalone Game v3
- * Major renovation: area transitions, enemy AI, terrain, lighting, map, sword animations
+/* BrowserQuest Standalone Game v5
+ * Balance overhaul, world expansion, NPC dialogue UI, randomization seeds, resource mining,
+ * spawn safety fixes, new areas, Shadow Lord boss, steeper XP curve, fixed enemy damage formula
  * Architecture: IIFE module, no external dependencies, Canvas 2D rendering with shape rendering
  */
 (function () {
@@ -9,9 +10,9 @@
     // CONSTANTS
     // ====================================================================
 
-    var STORAGE_KEY = 'bq_standalone_v4';
-    var LEGACY_STORAGE_KEYS = ['bq_standalone_v3'];
-    var SAVE_VERSION = 4;
+    var STORAGE_KEY = 'bq_standalone_v5';
+    var LEGACY_STORAGE_KEYS = ['bq_standalone_v4', 'bq_standalone_v3'];
+    var SAVE_VERSION = 5;
     var CANVAS_W = 1100;
     var CANVAS_H = 620;
     var TRANSITION_THRESHOLD = 80;    // px from edge to trigger area transition
@@ -39,7 +40,8 @@
             enemyTypes: ['rat', 'goblin'],
             enemyCount: 3, difficulty: 1.0,
             description: 'A sun-drenched meadow with wildflowers and rustling grass.',
-            storyTag: 'village_outskirts'
+            storyTag: 'village_outskirts',
+            randomizable: true
         },
         {
             id: 1, name: 'Forest Clearing',
@@ -51,7 +53,8 @@
             enemyTypes: ['rat', 'goblin'],
             enemyCount: 4, difficulty: 1.2,
             description: 'Tall oaks and pines. Sunlight filters through the canopy.',
-            storyTag: 'forest'
+            storyTag: 'forest',
+            randomizable: true
         },
         {
             id: 2, name: 'Ancient Town',
@@ -71,11 +74,12 @@
             bgColor: '#0d0d1a', gridColor: 'rgba(40,40,100,0.35)',
             borderColor: 'rgba(80,80,180,0.25)',
             ambientLight: 0.22,
-            neighbors: { right: null, left: null, up: 0, down: 6 },
+            neighbors: { right: 11, left: null, up: 0, down: 6 },
             enemyTypes: ['bat', 'skeleton'],
             enemyCount: 4, difficulty: 1.5,
             description: 'Eerie tunnels echoing with bat wings and rattling bones.',
-            storyTag: 'caves'
+            storyTag: 'caves',
+            randomizable: true
         },
         {
             id: 4, name: 'Cursed Keep',
@@ -83,7 +87,7 @@
             bgColor: '#1a0d0d', gridColor: 'rgba(90,20,20,0.35)',
             borderColor: 'rgba(160,40,40,0.25)',
             ambientLight: 0.28,
-            neighbors: { right: 5, left: null, up: 1, down: null },
+            neighbors: { right: 5, left: null, up: 1, down: 12 },
             enemyTypes: ['skeleton', 'skeleton2', 'ogre'],
             enemyCount: 4, difficulty: 2.0,
             description: 'A crumbling fortress haunted by the cursed dead.',
@@ -107,7 +111,7 @@
             bgColor: '#1a0800', gridColor: 'rgba(110,35,0,0.45)',
             borderColor: 'rgba(200,60,0,0.30)',
             ambientLight: 0.12,
-            neighbors: { right: null, left: 5, up: 3, down: null },
+            neighbors: { right: 13, left: 5, up: 3, down: null },
             enemyTypes: ['eye', 'boss'],
             enemyCount: 3, difficulty: 3.0,
             description: 'A scorched lair. The air reeks of sulfur and ancient power.',
@@ -166,12 +170,52 @@
             isInterior: true,
             storyTag: 'shadow_sanctum',
             relicRange: [2, 4]
+        },
+        {
+            id: 11, name: 'Fungal Depths',
+            biome: 'cave',
+            bgColor: '#0a0d1a', gridColor: 'rgba(50,30,120,0.38)',
+            borderColor: 'rgba(100,60,200,0.30)',
+            ambientLight: 0.20,
+            neighbors: { right: null, left: 3, up: null, down: 12 },
+            enemyTypes: ['bat', 'skeleton', 'skeleton2'],
+            enemyCount: 5, difficulty: 1.9,
+            description: 'Luminous fungi light twisted passages. Something dangerous hunts here.',
+            storyTag: 'fungal_depths',
+            randomizable: true
+        },
+        {
+            id: 12, name: 'Undead Vault',
+            biome: 'keep',
+            bgColor: '#0d0808', gridColor: 'rgba(80,15,15,0.42)',
+            borderColor: 'rgba(150,30,30,0.32)',
+            ambientLight: 0.16,
+            neighbors: { right: null, left: 4, up: 11, down: null },
+            enemyTypes: ['skeleton2', 'ogre', 'eye'],
+            enemyCount: 5, difficulty: 2.7,
+            description: 'A sealed vault where ancient undead sentinels stand eternal vigil.',
+            storyTag: 'undead_vault'
+        },
+        {
+            id: 13, name: 'Ancient Vault',
+            biome: 'lair',
+            bgColor: '#150500', gridColor: 'rgba(120,40,0,0.48)',
+            borderColor: 'rgba(220,80,0,0.35)',
+            ambientLight: 0.10,
+            neighbors: { right: null, left: 6, up: null, down: null },
+            enemyTypes: ['eye', 'shadow_lord'],
+            enemyCount: 2, difficulty: 3.5,
+            description: 'The vault of the Shadow Lord. An ancient evil that predates the fortress itself.',
+            storyTag: 'ancient_vault'
         }
     ];
 
     var AREA_ID = {
         RELIC_CAVERN: 9,
-        SHADOW_SANCTUM: 10
+        SHADOW_SANCTUM: 10,
+        FUNGAL_DEPTHS: 11,
+        UNDEAD_VAULT: 12,
+        ANCIENT_VAULT: 13
     };
 
     // ====================================================================
@@ -249,7 +293,8 @@
             { type: 'rect',   x: 240,  y: 75,   w: 65,  h: 210 },
             { type: 'rect',   x: 795,  y: 75,   w: 65,  h: 210 },
             { type: 'rect',   x: 305,  y: 75,   w: 490, h: 28  },
-            { type: 'rect',   x: 305,  y: 270,  w: 490, h: 28  },
+            { type: 'rect',   x: 305,  y: 270,  w: 195, h: 28  },
+            { type: 'rect',   x: 600,  y: 270,  w: 195, h: 28  },
             { type: 'circle', x: 550,  y: 460,  r: 28          }
         ],
         // 6: Dragon's Lair
@@ -300,6 +345,43 @@
             { type: 'rect', x: 260, y: 70,  w: 580, h: 30  },
             { type: 'rect', x: 260, y: 290, w: 580, h: 30  },
             { type: 'circle', x: 550, y: 500, r: 34 }
+        ],
+        // 11: Fungal Depths
+        [
+            { type: 'rect',   x: 0,    y: 0,    w: 130, h: 220 },
+            { type: 'rect',   x: 970,  y: 0,    w: 130, h: 220 },
+            { type: 'rect',   x: 0,    y: 400,  w: 130, h: 220 },
+            { type: 'rect',   x: 970,  y: 400,  w: 130, h: 220 },
+            { type: 'circle', x: 360,  y: 190,  r: 22          },
+            { type: 'circle', x: 700,  y: 170,  r: 20          },
+            { type: 'circle', x: 450,  y: 460,  r: 22          },
+            { type: 'circle', x: 750,  y: 430,  r: 20          },
+            { type: 'rect',   x: 490,  y: 280,  w: 120, h: 24  }
+        ],
+        // 12: Undead Vault
+        [
+            { type: 'rect',   x: 0,    y: 0,    w: 32,  h: 620 },
+            { type: 'rect',   x: 1068, y: 0,    w: 32,  h: 620 },
+            { type: 'rect',   x: 150,  y: 100,  w: 38,  h: 230 },
+            { type: 'rect',   x: 912,  y: 100,  w: 38,  h: 230 },
+            { type: 'rect',   x: 188,  y: 100,  w: 360, h: 30  },
+            { type: 'rect',   x: 188,  y: 300,  w: 180, h: 30  },
+            { type: 'rect',   x: 732,  y: 300,  w: 180, h: 30  },
+            { type: 'circle', x: 270,  y: 450,  r: 22          },
+            { type: 'circle', x: 830,  y: 440,  r: 22          },
+            { type: 'circle', x: 550,  y: 520,  r: 26          }
+        ],
+        // 13: Ancient Vault
+        [
+            { type: 'circle', x: 110,  y: 85,   r: 38          },
+            { type: 'circle', x: 990,  y: 85,   r: 38          },
+            { type: 'circle', x: 110,  y: 535,  r: 38          },
+            { type: 'circle', x: 990,  y: 535,  r: 38          },
+            { type: 'rect',   x: 330,  y: 0,    w: 440, h: 50  },
+            { type: 'rect',   x: 160,  y: 220,  w: 240, h: 24  },
+            { type: 'rect',   x: 700,  y: 220,  w: 240, h: 24  },
+            { type: 'circle', x: 550,  y: 160,  r: 36          },
+            { type: 'rect',   x: 450,  y: 550,  w: 200, h: 24  }
         ]
     ];
 
@@ -330,12 +412,12 @@
     };
 
     var NPC_DEFS = [
-        { id: 'elder_mira', name: 'Elder Mira', role: 'village elder', areaId: 7, x: 550, y: 220, vendorId: null },
-        { id: 'tovin_smith', name: 'Tovin', role: 'blacksmith', areaId: 8, x: 450, y: 260, vendorId: 'smith_vendor' },
-        { id: 'lyra_scholar', name: 'Lyra', role: 'relic scholar', areaId: 2, x: 500, y: 320, vendorId: null },
-        { id: 'bran_ranger', name: 'Bran', role: 'ranger', areaId: 1, x: 180, y: 280, vendorId: null },
-        { id: 'fort_guard', name: 'Captain Varr', role: 'guard', areaId: 5, x: 150, y: 335, vendorId: 'guard_vendor' },
-        { id: 'mira_merchant', name: 'Sela', role: 'merchant', areaId: 2, x: 770, y: 260, vendorId: 'merchant_vendor' }
+        { id: 'elder_mira',    name: 'Elder Mira',   role: 'Village Elder',  areaId: 7, x: 550, y: 220, vendorId: null,             icon: '\u{1F9D9}' },
+        { id: 'tovin_smith',   name: 'Tovin',        role: 'Blacksmith',     areaId: 8, x: 450, y: 260, vendorId: 'smith_vendor',    icon: '\u2692' },
+        { id: 'lyra_scholar',  name: 'Lyra',         role: 'Relic Scholar',  areaId: 2, x: 500, y: 320, vendorId: null,             icon: '\u{1F4D6}' },
+        { id: 'bran_ranger',   name: 'Bran',         role: 'Ranger',         areaId: 1, x: 180, y: 280, vendorId: null,             icon: '\u{1F3F9}' },
+        { id: 'fort_guard',    name: 'Captain Varr', role: 'Guard Captain',  areaId: 5, x: 150, y: 335, vendorId: 'guard_vendor',   icon: '\u2694' },
+        { id: 'mira_merchant', name: 'Sela',         role: 'Merchant',       areaId: 2, x: 770, y: 260, vendorId: 'merchant_vendor',icon: '\u{1F6D2}' }
     ];
 
     var VENDOR_STOCK = {
@@ -368,54 +450,70 @@
     // ENEMY DEFINITIONS  (added aggroRadius, leashRadius, patrolSpeed)
     // ====================================================================
 
+    // attackCooldown: seconds between contact-damage hits on the hero
     var ENEMY_DEFS = {
         rat: {
             name: 'Rat', color: '#7a3a10', size: 9,
-            maxHp: 3, attack: 8, speed: 68, xp: 5,
+            maxHp: 28, attack: 8, speed: 68, xp: 5,
+            attackCooldown: 1.0,
             itemChance: 0.15, items: ['flask'],
             aggroRadius: 90, leashRadius: 200, patrolSpeed: 28
         },
         goblin: {
             name: 'Goblin', color: '#2e6e18', size: 11,
-            maxHp: 6, attack: 12, speed: 52, xp: 12,
+            maxHp: 52, attack: 14, speed: 52, xp: 12,
+            attackCooldown: 0.9,
             itemChance: 0.22, items: ['flask', 'sword1'],
             aggroRadius: 110, leashRadius: 230, patrolSpeed: 32
         },
         bat: {
             name: 'Bat', color: '#4a1e6a', size: 10,
-            maxHp: 5, attack: 10, speed: 88, xp: 12,
+            maxHp: 42, attack: 12, speed: 88, xp: 12,
+            attackCooldown: 0.7,
             itemChance: 0.15, items: ['flask'],
             aggroRadius: 130, leashRadius: 260, patrolSpeed: 38
         },
         skeleton: {
             name: 'Skeleton', color: '#c0c0c0', size: 12,
-            maxHp: 9, attack: 16, speed: 46, xp: 20,
+            maxHp: 120, attack: 22, speed: 46, xp: 20,
+            attackCooldown: 1.2,
             itemChance: 0.28, items: ['flask', 'clotharmor'],
             aggroRadius: 115, leashRadius: 240, patrolSpeed: 25
         },
         skeleton2: {
             name: 'Armored Skeleton', color: '#a0a8b0', size: 13,
-            maxHp: 14, attack: 20, speed: 50, xp: 28,
+            maxHp: 195, attack: 30, speed: 50, xp: 28,
+            attackCooldown: 1.0,
             itemChance: 0.35, items: ['mailarmor', 'bluesword'],
             aggroRadius: 125, leashRadius: 255, patrolSpeed: 28
         },
         ogre: {
             name: 'Ogre', color: '#5e3618', size: 18,
-            maxHp: 22, attack: 26, speed: 36, xp: 45,
+            maxHp: 340, attack: 44, speed: 36, xp: 45,
+            attackCooldown: 1.6,
             itemChance: 0.42, items: ['bluesword', 'leatherarmor', 'firepotion'],
             aggroRadius: 140, leashRadius: 270, patrolSpeed: 18
         },
         eye: {
             name: 'Evil Eye', color: '#a01818', size: 14,
-            maxHp: 16, attack: 22, speed: 72, xp: 32,
+            maxHp: 260, attack: 36, speed: 72, xp: 32,
+            attackCooldown: 0.8,
             itemChance: 0.38, items: ['firepotion', 'bluesword'],
             aggroRadius: 155, leashRadius: 295, patrolSpeed: 35
         },
         boss: {
             name: 'Dragon', color: '#780000', size: 22,
-            maxHp: 65, attack: 38, speed: 42, xp: 160,
+            maxHp: 1100, attack: 55, speed: 42, xp: 160,
+            attackCooldown: 1.0,
             itemChance: 0.85, items: ['goldensword', 'goldenarmor', 'firepotion'],
             aggroRadius: 200, leashRadius: 400, patrolSpeed: 20
+        },
+        shadow_lord: {
+            name: 'Shadow Lord', color: '#200028', size: 26,
+            maxHp: 2200, attack: 68, speed: 38, xp: 400,
+            attackCooldown: 0.9,
+            itemChance: 1.0, items: ['goldensword', 'goldenarmor', 'firepotion'],
+            aggroRadius: 260, leashRadius: 520, patrolSpeed: 16
         }
     };
 
@@ -432,14 +530,50 @@
         relic:       { name: 'Ancient Relic', type: 'relic',  color: '#ffd76b', subColor: '#9b7200' }
     };
 
-    var XP_TABLE = [0, 50, 120, 220, 350, 520, 730, 990, 1310, 1700];
+    var XP_TABLE = [0, 80, 220, 450, 800, 1300, 2050, 3100, 4600, 6800, 9800];
 
-    var HP_SCALING_FACTOR    = 0.35;
+    var HP_SCALING_FACTOR    = 0.65;   // enemy HP multiplier per difficulty tier
     var DMG_VARIANCE_MIN     = 0.85;
     var DMG_VARIANCE_RANGE   = 0.30;
-    var ENEMY_DMG_PER_SEC    = 2.80;
     var ATTACK_COOLDOWN_SECS = 0.38;
-    var DEF_CAP_PCT          = 80;
+    var DEF_CAP_PCT          = 75;     // max 75% damage reduction from armor
+
+    // ====================================================================
+    // RESOURCE NODES — mineable objects per area index
+    // ====================================================================
+
+    var AREA_RESOURCES = [
+        /* 0 Sunlit Meadow  */ [{ type: 'ore',         x: 220, y: 380, r: 16, name: 'Iron Deposit',   durability: 4,  yieldType: 'flask',       yieldCount: 1, color: '#8a7060' }],
+        /* 1 Forest         */ [{ type: 'crystal',     x: 650, y: 250, r: 14, name: 'Forest Crystal', durability: 8,  yieldType: 'relic',       yieldCount: 2, color: '#50c0a0' }],
+        /* 2 Town           */ [],
+        /* 3 Dark Caves     */ [
+            { type: 'ore',     x: 500, y: 200, r: 16, name: 'Cave Ore',      durability: 5,  yieldType: 'flask',       yieldCount: 1, color: '#706060' },
+            { type: 'crystal', x: 760, y: 420, r: 14, name: 'Dark Crystal',  durability: 10, yieldType: 'relic',       yieldCount: 2, color: '#7040c0' }
+        ],
+        /* 4 Cursed Keep    */ [{ type: 'ore',         x: 600, y: 480, r: 16, name: 'Cursed Ore',     durability: 6,  yieldType: 'leatherarmor',yieldCount: 1, color: '#604040' }],
+        /* 5 Shadow Fortress*/ [{ type: 'crystal',     x: 400, y: 450, r: 14, name: 'Shadow Crystal', durability: 12, yieldType: 'relic',       yieldCount: 3, color: '#a01818' }],
+        /* 6 Dragon's Lair  */ [{ type: 'ancient_ore', x: 340, y: 380, r: 18, name: 'Dragon Ore',     durability: 18, yieldType: 'goldensword', yieldCount: 1, color: '#c06010' }],
+        /* 7 Elder's Hall   */ [],
+        /* 8 Smithy         */ [],
+        /* 9 Relic Cavern   */ [],
+        /* 10 Shadow Sanctum*/ [],
+        /* 11 Fungal Depths */ [
+            { type: 'ore',     x: 380, y: 400, r: 16, name: 'Fungal Ore',    durability: 6,  yieldType: 'relic',       yieldCount: 1, color: '#507040' },
+            { type: 'crystal', x: 680, y: 300, r: 14, name: 'Gloom Crystal', durability: 12, yieldType: 'relic',       yieldCount: 3, color: '#4060a0' }
+        ],
+        /* 12 Undead Vault  */ [{ type: 'crystal',     x: 550, y: 450, r: 14, name: 'Vault Crystal',  durability: 14, yieldType: 'mailarmor',   yieldCount: 1, color: '#607080' }],
+        /* 13 Ancient Vault */ [{ type: 'ancient_ore', x: 250, y: 320, r: 18, name: 'Ancient Ore',    durability: 20, yieldType: 'goldenarmor', yieldCount: 1, color: '#d0a000' }]
+    ];
+
+    var SEED_RUNES = ['\u16A0','\u16A2','\u16A6','\u16A8','\u16B1','\u16B2','\u16B7','\u16B9','\u16BA','\u16BE','\u16C1','\u16C3','\u16C7','\u16C8','\u16C9','\u16CA'];
+
+    function seededRng(seed) {
+        var s = (seed ^ 0x5DEECE66) >>> 0;
+        return function () {
+            s = ((s * 1664525 + 1013904223) & 0xFFFFFFFF) >>> 0;
+            return s / 0xFFFFFFFF;
+        };
+    }
 
     // ====================================================================
     // RUNTIME STATE
@@ -582,7 +716,7 @@
 
     function makeHero() {
         return { x: CANVAS_W / 2, y: CANVAS_H / 2, speed: 148, radius: 14,
-                 hp: 100, maxHp: 100, attack: 18, defense: 0, level: 1, xp: 0,
+                 hp: 80, maxHp: 80, attack: 10, defense: 0, level: 1, xp: 0,
                  weapon: null, armor: null, attackCooldown: 0, hitFlash: 0, kills: 0, facing: 0 };
     }
     function makeStoryState() {
@@ -594,7 +728,8 @@
                 relicTargetReached: false,
                 fortressAccess: false,
                 sanctumEntered: false,
-                shadowCleansed: false
+                shadowCleansed: false,
+                vaultCleansed: false
             },
             loreNotes: [],
             discoveredLocations: [0]
@@ -604,11 +739,13 @@
         return { id: 'shadow_relics', step: QUEST_IDX.MEET_ELDER, completed: false, objective: QUEST_STEPS[QUEST_IDX.MEET_ELDER] };
     }
     function makeBaseState() {
+        var seed = (Math.floor(Math.random() * 0xFFFFFF) + 1) >>> 0;
         return { areaIndex: 0, areasVisited: [0], hero: makeHero(), enemies: [], items: [],
                  score: 0, relics: 0, totalKills: 0, tick: 0, areaEnemyState: {},
                  storyState: makeStoryState(), questState: makeQuestState(),
                  vendorPurchases: {}, upgrades: { mapCharter: false, lantern: false },
-                 purchaseCount: 0, npcFlags: {} };
+                 purchaseCount: 0, npcFlags: {},
+                 worldSeed: seed, areaSeed: {}, areaResourceState: {} };
     }
 
     // ====================================================================
@@ -623,6 +760,8 @@
                  storyState: state.storyState, questState: state.questState,
                  vendorPurchases: state.vendorPurchases, upgrades: state.upgrades,
                  purchaseCount: state.purchaseCount, npcFlags: state.npcFlags,
+                 worldSeed: state.worldSeed || 1, areaSeed: state.areaSeed || {},
+                 areaResourceState: state.areaResourceState || {},
                  theme: document.body.getAttribute('data-theme') || 'dark' };
     }
     function persist() { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(serialize())); } catch (e) {} }
@@ -631,11 +770,23 @@
         var out = JSON.parse(JSON.stringify(data));
         if (!out.version || out.version !== SAVE_VERSION) {
             out.storyState = out.storyState || makeStoryState();
+            if (!out.storyState.flags) out.storyState.flags = makeStoryState().flags;
+            if (out.storyState.flags.vaultCleansed === undefined) out.storyState.flags.vaultCleansed = false;
             out.questState = out.questState || makeQuestState();
             out.vendorPurchases = out.vendorPurchases || {};
             out.upgrades = out.upgrades || { mapCharter: false, lantern: false };
             out.purchaseCount = (typeof out.purchaseCount === 'number') ? out.purchaseCount : 0;
             out.npcFlags = out.npcFlags || {};
+            out.worldSeed = out.worldSeed || ((Math.floor(Math.random() * 0xFFFFFF) + 1) >>> 0);
+            out.areaSeed = out.areaSeed || {};
+            out.areaResourceState = out.areaResourceState || {};
+            // Fix: if old save left player trapped in Shadow Fortress inner room
+            if (out.areaIndex === 5 && out.hero) {
+                var hx = out.hero.x || 0, hy = out.hero.y || 0;
+                if (hx > 305 && hx < 795 && hy > 103 && hy < 270) {
+                    out.hero.x = 550; out.hero.y = 340;
+                }
+            }
             out.version = SAVE_VERSION;
         }
         return out;
@@ -665,10 +816,21 @@
         if (!state.upgrades)                     state.upgrades = { mapCharter: false, lantern: false };
         if (typeof state.purchaseCount !== 'number') state.purchaseCount = 0;
         if (!state.npcFlags)                     state.npcFlags = {};
+        if (!state.worldSeed)                    state.worldSeed = ((Math.floor(Math.random() * 0xFFFFFF) + 1) >>> 0);
+        if (!state.areaSeed)                     state.areaSeed = {};
+        if (!state.areaResourceState)            state.areaResourceState = {};
         if (!Array.isArray(state.storyState.discoveredLocations)) state.storyState.discoveredLocations = [0];
         if (!state.storyState.flags)             state.storyState.flags = makeStoryState().flags;
+        if (state.storyState.flags.vaultCleansed === undefined) state.storyState.flags.vaultCleansed = false;
         var base = makeHero();
         Object.keys(base).forEach(function (k) { if (state.hero[k] === undefined) state.hero[k] = base[k]; });
+        // Safety: push player out of Shadow Fortress inner room if trapped
+        if (state.areaIndex === 5 && state.hero) {
+            var hx = state.hero.x || 0, hy = state.hero.y || 0;
+            if (hx > 305 && hx < 795 && hy > 103 && hy < 270) {
+                state.hero.x = 550; state.hero.y = 340;
+            }
+        }
         ensureHeroSafePosition();
     }
     function loadSave() {
@@ -701,22 +863,35 @@
     // AREA MANAGEMENT
     // ====================================================================
 
+    function getOrCreateAreaSeed(areaId) {
+        if (!state.areaSeed[areaId]) {
+            state.areaSeed[areaId] = (((state.worldSeed * 31 + areaId * 1337) & 0xFFFFFF) + 1) >>> 0;
+        }
+        return state.areaSeed[areaId];
+    }
+
     function spawnEnemiesForArea() {
         var area = AREAS[state.areaIndex];
         if (!area || !area.enemyTypes || area.enemyTypes.length === 0 || area.enemyCount <= 0) return [];
         var aes  = state.areaEnemyState[state.areaIndex] || {};
-        // Respect respawn cooldown
         var pending = aes.respawnTick && state.tick < aes.respawnTick;
         var count   = pending ? 0 : (area.enemyCount + Math.floor(state.hero.level * 0.4));
         var enemies = [];
+        // Use seeded RNG for randomizable areas so positions are stable per save
+        var srng = area.randomizable ? seededRng(getOrCreateAreaSeed(state.areaIndex)) : null;
+        var posR = srng || function(min, max) { return Math.random() * (max - min) + min; };
+        var posRI = srng
+            ? function(a, b) { return Math.floor(srng() * (b - a + 1)) + a; }
+            : rndInt;
         for (var i = 0; i < count; i++) {
-            var typeName = area.enemyTypes[rndInt(0, area.enemyTypes.length - 1)];
+            var typeName = area.enemyTypes[posRI(0, area.enemyTypes.length - 1)];
             var def      = ENEMY_DEFS[typeName];
+            if (!def) continue;
             var scaledHp = Math.round(def.maxHp * (1 + (area.difficulty - 1) * HP_SCALING_FACTOR));
             var ex, ey, att = 0;
             do {
-                ex = rnd(80, CANVAS_W - 80);
-                ey = rnd(80, CANVAS_H - 80);
+                ex = 80 + posR(0, 1) * (CANVAS_W - 160);
+                ey = 80 + posR(0, 1) * (CANVAS_H - 160);
                 att++;
             } while ((dist2({ x: ex, y: ey }, state.hero) < 200 || isBlocked(ex, ey, def.size + 4)) && att < 30);
             enemies.push({
@@ -751,6 +926,17 @@
             items.push({ type: key, x: jx, y: jy, radius: 10 });
         }
         return items;
+    }
+
+    function getResourceNodesForArea() {
+        var templates = AREA_RESOURCES[state.areaIndex] || [];
+        var rstate = state.areaResourceState[state.areaIndex] || {};
+        return templates.map(function (t, idx) {
+            var remaining = (rstate[idx] !== undefined) ? rstate[idx] : t.durability;
+            return { idx: idx, type: t.type, x: t.x, y: t.y, r: t.r, name: t.name,
+                     durability: remaining, maxDurability: t.durability,
+                     yieldType: t.yieldType, yieldCount: t.yieldCount, color: t.color };
+        }).filter(function (n) { return n.durability > 0; });
     }
 
     function populateArea() {
@@ -951,12 +1137,13 @@
         var xpNeeded = XP_TABLE[Math.min(hero.level, XP_TABLE.length - 1)];
         if (hero.xp >= xpNeeded && hero.level < XP_TABLE.length) {
             hero.level++;
-            hero.maxHp += 20;
-            hero.hp     = Math.min(hero.maxHp, hero.hp + 30);
-            hero.attack += 4;
-            hero.speed   = Math.min(220, hero.speed + 4);
+            hero.maxHp += 15;
+            hero.hp     = Math.min(hero.maxHp, hero.hp + 20);
+            hero.attack += 3;
+            hero.speed   = Math.min(220, hero.speed + 3);
             addFloat(hero.x, hero.y - 32, 'LEVEL UP! ' + hero.level, '#ffd700', 18);
-            showNotif('Level ' + hero.level + '! ATK +4, Max HP +20');
+            var nextXP = hero.level < XP_TABLE.length ? XP_TABLE[Math.min(hero.level, XP_TABLE.length - 1)] : '---';
+            showNotif('Level ' + hero.level + '! ATK +3, Max HP +15. Next level: ' + nextXP + ' XP');
             persist();
         }
     }
@@ -1098,10 +1285,43 @@
         persist();
     }
 
+    var dialogueOpen = false;
+    var dialoguePendingVendorId = null;
+
+    function showDialogue(npc, text) {
+        var el = document.getElementById('dialogueOverlay');
+        if (!el) { showNotif(npc.name + ': ' + text); return; }
+        var iconEl = document.getElementById('dlgNpcIcon');
+        var nameEl = document.getElementById('dlgNpcName');
+        var roleEl = document.getElementById('dlgNpcRole');
+        var textEl = document.getElementById('dlgText');
+        if (iconEl) iconEl.textContent = npc.icon || '\u{1F464}';
+        if (nameEl) nameEl.textContent = npc.name;
+        if (roleEl) roleEl.textContent = npc.role;
+        if (textEl) textEl.textContent = text;
+        el.setAttribute('aria-hidden', 'false');
+        el.classList.add('dlg-visible');
+        var btn = document.getElementById('dlgCloseBtn');
+        if (btn) setTimeout(function () { btn.focus(); }, 30);
+        dialogueOpen = true;
+        dialoguePendingVendorId = npc.vendorId || null;
+    }
+
+    function closeDialogue() {
+        if (!dialogueOpen) return;
+        var el = document.getElementById('dialogueOverlay');
+        if (el) { el.setAttribute('aria-hidden', 'true'); el.classList.remove('dlg-visible'); }
+        dialogueOpen = false;
+        interactionCooldown = 0.5;
+        var vid = dialoguePendingVendorId;
+        dialoguePendingVendorId = null;
+        if (vid) setTimeout(function () { interactVendor(vid); }, 80);
+    }
+
     function talkToNpc(npc) {
         state.npcFlags[npc.id] = (state.npcFlags[npc.id] || 0) + 1;
-        var msg = npc.name + ' (' + npc.role + '): ' + getNpcDialogue(npc);
-        showNotif(msg);
+        var msg = getNpcDialogue(npc);
+        showDialogue(npc, msg);
         if (npc.id === 'elder_mira') {
             state.storyState.flags.metElder = true;
             setQuestStep(QUEST_IDX.GATHER_GUIDANCE, 'Seek guidance from Bran and Lyra.');
@@ -1112,7 +1332,6 @@
                 setQuestStep(QUEST_IDX.RECOVER_RELICS, 'Recover relic fragments from forest/caves.');
             }
         }
-        if (npc.vendorId) interactVendor(npc.vendorId);
         persist();
     }
 
@@ -1251,20 +1470,22 @@
             enemy.x = clamp(enemy.x, def.size, CANVAS_W - def.size);
             enemy.y = clamp(enemy.y, def.size, CANVAS_H - def.size);
 
-            // Contact damage only while chasing
+            // Contact damage — fixed per-hit amount scaled by area difficulty (not dt-based)
             if (enemy.aiState === 'chase' && dHero < hero.radius + def.size + 2 && enemy.attackCooldown <= 0) {
-                var rawDmg   = def.attack * area.difficulty;
+                var diffMod  = 1.0 + (area.difficulty - 1.0) * 0.35;
+                var rawDmg   = def.attack * diffMod;
                 var reduction = getHeroDefense() / 100;
-                var dmg      = Math.max(1, rawDmg * (1 - reduction) * dt * ENEMY_DMG_PER_SEC);
+                var dmg = Math.max(1, Math.round(rawDmg * (1 - reduction) * (DMG_VARIANCE_MIN + Math.random() * DMG_VARIANCE_RANGE)));
                 hero.hp     -= dmg;
                 hero.hitFlash = 0.22;
-                enemy.attackCooldown = 0.7;
+                addFloat(hero.x, hero.y - hero.radius - 8, '-' + dmg, '#ff8888', 12);
+                enemy.attackCooldown = (def.attackCooldown || 1.0) + Math.random() * 0.3;
                 if (hero.hp <= 0) {
                     hero.hp = 0; paused = true;
                     if (elPauseBtn) elPauseBtn.textContent = 'Resume';
                     setStatus('paused', 'Defeated!');
                     if (elHint) elHint.textContent = 'You were defeated! Press New Game or N to try again.';
-                    showNotif('Defeated by ' + def.name + '!');
+                    showNotif('Defeated by ' + def.name + ' for ' + dmg + ' damage!');
                 }
             }
         });
@@ -1446,6 +1667,52 @@
                     else drawRock(o.x, o.y, o.r, biome);
                     break;
             }
+        });
+    }
+
+    function drawResourceNodes() {
+        var nodes = getResourceNodesForArea();
+        var t = Date.now() * 0.002;
+        nodes.forEach(function (n) {
+            ctx.save();
+            ctx.translate(n.x, n.y);
+            var ratio = n.durability / n.maxDurability;
+            // Glow
+            ctx.shadowColor = n.color;
+            ctx.shadowBlur  = 10 + ratio * 10;
+            ctx.fillStyle   = n.color;
+            ctx.beginPath();
+            if (n.type === 'crystal' || n.type === 'ancient_ore') {
+                ctx.moveTo(0, -n.r * 1.3); ctx.lineTo(n.r * 0.75, 0);
+                ctx.lineTo(0, n.r * 0.7);  ctx.lineTo(-n.r * 0.75, 0);
+                ctx.closePath();
+            } else {
+                ctx.ellipse(0, 0, n.r, n.r * 0.72, 0.3, 0, Math.PI * 2);
+            }
+            ctx.fill();
+            ctx.shadowBlur = 0;
+            // Highlight
+            ctx.fillStyle = 'rgba(255,255,255,0.20)';
+            ctx.beginPath(); ctx.arc(-n.r * 0.28, -n.r * 0.32, n.r * 0.28, 0, Math.PI * 2); ctx.fill();
+            // Sparkles for rare nodes
+            if (n.type !== 'ore') {
+                ctx.fillStyle = 'rgba(255,255,220,0.75)';
+                for (var si = 0; si < 3; si++) {
+                    var sa = (si / 3) * Math.PI * 2 + t;
+                    ctx.beginPath(); ctx.arc(Math.cos(sa) * n.r * 1.1, Math.sin(sa) * n.r * 1.1, 2.5, 0, Math.PI * 2); ctx.fill();
+                }
+            }
+            // Durability bar
+            var bw = n.r * 2.8, bh = 4, bx2 = -bw / 2, by2 = n.r + 6;
+            ctx.fillStyle = 'rgba(0,0,0,0.55)'; ctx.fillRect(bx2 - 1, by2 - 1, bw + 2, bh + 2);
+            ctx.fillStyle = '#333'; ctx.fillRect(bx2, by2, bw, bh);
+            ctx.fillStyle = ratio > 0.6 ? '#80cc60' : ratio > 0.3 ? '#f0a020' : '#e03030';
+            ctx.fillRect(bx2, by2, bw * ratio, bh);
+            // Name label
+            ctx.fillStyle = '#e8d8a0'; ctx.font = '9px Arial';
+            ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+            ctx.fillText(n.name, 0, n.r + 12);
+            ctx.restore();
         });
     }
 
@@ -1654,6 +1921,29 @@
                 ctx.fillStyle = '#000'; ctx.beginPath(); ctx.arc(-s*0.38,-s*0.22,s*0.1,0,Math.PI*2); ctx.fill(); ctx.beginPath(); ctx.arc(s*0.38,-s*0.22,s*0.1,0,Math.PI*2); ctx.fill();
                 ctx.fillStyle = '#c0a040'; ctx.beginPath(); ctx.moveTo(-s*0.15,-s); ctx.lineTo(0,-s*1.55); ctx.lineTo(s*0.15,-s); ctx.closePath(); ctx.fill();
                 break;
+            case 'shadow_lord':
+                ctx.fillStyle = 'rgba(60,0,80,0.55)';
+                ctx.beginPath(); ctx.arc(0, 0, s * 1.6, 0, Math.PI * 2); ctx.fill();
+                ctx.fillStyle = def.color;
+                ctx.beginPath(); ctx.arc(0, 0, s, 0, Math.PI * 2); ctx.fill();
+                ctx.strokeStyle = '#8800cc'; ctx.lineWidth = 2;
+                for (var sl = 0; sl < 8; sl++) {
+                    var sla = (sl / 8) * Math.PI * 2 + enemy.wobble * 0.5;
+                    ctx.beginPath();
+                    ctx.moveTo(Math.cos(sla)*s, Math.sin(sla)*s);
+                    ctx.lineTo(Math.cos(sla)*(s*2.2), Math.sin(sla)*(s*2.2)); ctx.stroke();
+                }
+                ctx.fillStyle = '#cc44ff';
+                ctx.beginPath(); ctx.arc(-s*0.32,-s*0.25,s*0.22,0,Math.PI*2); ctx.fill();
+                ctx.beginPath(); ctx.arc(s*0.32,-s*0.25,s*0.22,0,Math.PI*2); ctx.fill();
+                ctx.fillStyle = '#000';
+                ctx.beginPath(); ctx.arc(-s*0.32,-s*0.25,s*0.1,0,Math.PI*2); ctx.fill();
+                ctx.beginPath(); ctx.arc(s*0.32,-s*0.25,s*0.1,0,Math.PI*2); ctx.fill();
+                ctx.fillStyle = '#6600aa';
+                ctx.beginPath(); ctx.moveTo(-s*0.15,-s*1.1); ctx.lineTo(0,-s*1.7); ctx.lineTo(s*0.15,-s*1.1); ctx.closePath(); ctx.fill();
+                ctx.beginPath(); ctx.moveTo(-s*0.15,-s*1.1); ctx.lineTo(-s*0.5,-s*1.5); ctx.lineTo(0,-s*1.1); ctx.closePath(); ctx.fill();
+                ctx.beginPath(); ctx.moveTo(s*0.15,-s*1.1); ctx.lineTo(s*0.5,-s*1.5); ctx.lineTo(0,-s*1.1); ctx.closePath(); ctx.fill();
+                break;
             default:
                 ctx.fillStyle = def.color; ctx.beginPath(); ctx.arc(0,0,s,0,Math.PI*2); ctx.fill();
         }
@@ -1806,17 +2096,20 @@
 
     // Layout positions for each area on the map panel (relative to panel origin)
     var MAP_LAYOUT = [
-        { id: 7, col: 0, row: 0 },   // Elder's Hall
-        { id: 8, col: 1, row: 0 },   // Smithy
-        { id: 9, col: 2, row: 0 },   // Relic Cavern
+        { id: 7,  col: 0, row: 0 },  // Elder's Hall
+        { id: 8,  col: 1, row: 0 },  // Smithy
+        { id: 9,  col: 2, row: 0 },  // Relic Cavern
         { id: 10, col: 3, row: 0 },  // Shadow Sanctum
-        { id: 0, col: 0, row: 1 },   // Sunlit Meadow
-        { id: 1, col: 1, row: 1 },   // Forest Clearing
-        { id: 2, col: 2, row: 1 },   // Ancient Town
-        { id: 3, col: 0, row: 2 },   // Dark Caves
-        { id: 4, col: 1, row: 2 },   // Cursed Keep
-        { id: 5, col: 2, row: 2 },   // Shadow Fortress
-        { id: 6, col: 3, row: 2 }    // Dragon's Lair
+        { id: 0,  col: 0, row: 1 },  // Sunlit Meadow
+        { id: 1,  col: 1, row: 1 },  // Forest Clearing
+        { id: 2,  col: 2, row: 1 },  // Ancient Town
+        { id: 11, col: 3, row: 1 },  // Fungal Depths
+        { id: 3,  col: 0, row: 2 },  // Dark Caves
+        { id: 4,  col: 1, row: 2 },  // Cursed Keep
+        { id: 5,  col: 2, row: 2 },  // Shadow Fortress
+        { id: 6,  col: 3, row: 2 },  // Dragon's Lair
+        { id: 13, col: 4, row: 2 },  // Ancient Vault
+        { id: 12, col: 0, row: 3 }   // Undead Vault
     ];
 
     var BIOME_MAP_COLOR = {
@@ -1826,8 +2119,8 @@
 
     function drawWorldMap() {
         if (!mapOpen) return;
-        var pw = 680, ph = 390, px = (CANVAS_W - pw) / 2, py = (CANVAS_H - ph) / 2;
-        var cellW = 136, cellH = 82, colOff = 52, rowOff = 62;
+        var pw = 780, ph = 490, px = (CANVAS_W - pw) / 2, py = (CANVAS_H - ph) / 2;
+        var cellW = 118, cellH = 70, colOff = 28, rowOff = 46;
 
         ctx.save();
         // Panel background
@@ -1912,6 +2205,13 @@
                 var stars = '';
                 for (var k = 0; k < Math.round(area.difficulty); k++) stars += '\u2605';
                 ctx.fillText(stars || (area.isInterior ? 'Interior' : ''), b.x + cellW / 2, b.y + cellH / 2 + 10);
+                // Seed rune for randomizable (shifting wilds) areas
+                if (area.randomizable) {
+                    var rs = state.areaSeed && state.areaSeed[area.id];
+                    var rune = rs ? SEED_RUNES[rs % SEED_RUNES.length] : '~';
+                    ctx.fillStyle = '#88aaff'; ctx.font = 'bold 11px serif';
+                    ctx.fillText(rune + ' Shifting', b.x + cellW / 2, b.y + cellH - 8);
+                }
             } else {
                 ctx.fillStyle = '#555566'; ctx.font = '10px Arial'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
                 ctx.fillText('???', b.x + cellW / 2, b.y + cellH / 2);
@@ -1932,7 +2232,7 @@
 
         // Legend
         ctx.fillStyle = '#aaaacc'; ctx.font = '11px Arial'; ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
-        ctx.fillText('\u2605 current  \u2605\u2605\u2605 difficulty  dashed line = portal  LOCKED = needs sigil', px + 12, py + ph - 12);
+        ctx.fillText('\u2605 current  \u2605\u2605 difficulty  dashed=portal  rune = Shifting Wilds (randomized area)  LOCKED = needs sigil', px + 12, py + ph - 12);
 
         ctx.restore();
     }
@@ -1945,6 +2245,7 @@
         ctx.clearRect(0, 0, CANVAS_W, CANVAS_H);
         drawBackground();
         drawTerrainObstacles();
+        drawResourceNodes();
         drawTransitionPreview();
         drawPortals();
         drawItems();
@@ -2072,7 +2373,10 @@
 
     function newGame() {
         if (animFrame !== null) { cancelAnimationFrame(animFrame); animFrame = null; }
+        if (dialogueOpen) closeDialogue();
         state              = makeBaseState();
+        // Pre-generate seeds for all randomizable areas
+        AREAS.forEach(function (a) { if (a.randomizable) getOrCreateAreaSeed(a.id); });
         paused             = false;
         mouseTarget        = null;
         trans              = { active: false, phase: 'none', timer: 0, dir: null, fromAreaId: 0, toAreaId: 0, targetX: 0, targetY: 0, msg: '' };
@@ -2087,7 +2391,7 @@
         populateArea();
         persist();
         setStatus('playing', 'New Adventure!');
-        if (elHint)    elHint.textContent    = 'Explore! M = map, Space/Enter = attack, E = interact.';
+        if (elHint)    elHint.textContent    = 'Explore! M = map, Space/Enter = attack, E = interact/mine, Esc = close.';
         if (elPauseBtn)elPauseBtn.textContent = 'Pause';
         if (elNotif)   elNotif.textContent   = '';
         updateHUD();
@@ -2142,7 +2446,10 @@
                 mapOpen = !mapOpen;
             } else if (evt.key === 'e' || evt.key === 'E') {
                 evt.preventDefault();
-                interact();
+                if (dialogueOpen) { closeDialogue(); } else { interact(); }
+            } else if (evt.key === 'Escape') {
+                if (dialogueOpen) { closeDialogue(); }
+                else if (mapOpen) { mapOpen = false; }
             }
         });
         window.addEventListener('keyup', function (evt) { keys[evt.key] = false; });
@@ -2218,6 +2525,15 @@
             if (!window.confirm('Reset all progress and start a brand new game?')) return;
             try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
             newGame();
+        });
+
+        // NPC Dialogue modal close button
+        var dlgClose = document.getElementById('dlgCloseBtn');
+        if (dlgClose) dlgClose.addEventListener('click', closeDialogue);
+        // Click backdrop to close
+        var dlgOverlay = document.getElementById('dialogueOverlay');
+        if (dlgOverlay) dlgOverlay.addEventListener('click', function (e) {
+            if (e.target === dlgOverlay) closeDialogue();
         });
 
         if (themeToggle) themeToggle.addEventListener('click', function () {
