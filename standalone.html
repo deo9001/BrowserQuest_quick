@@ -3,707 +3,207 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>BrowserQuest Standalone Mode (No-Install Lite Adventure)</title>
-    <style>
-        :root {
-            color-scheme: dark;
-            --bg: #131019;
-            --panel: #221b2f;
-            --text: #f8f1e1;
-            --muted: #d7c7a1;
-            --accent: #d9a441;
-            --ok: #7ad985;
-            --warn: #ffcd70;
-            --bad: #ff8b8b;
-            --focus: #8ab4ff;
-            --canvas: #0e0c14;
-        }
-        body[data-theme="light"] {
-            color-scheme: light;
-            --bg: #f8f3e7;
-            --panel: #ffffff;
-            --text: #1f1b26;
-            --muted: #4e425a;
-            --accent: #9f6900;
-            --ok: #1f7d2f;
-            --warn: #8b5e00;
-            --bad: #b71c1c;
-            --focus: #2b66d2;
-            --canvas: #e7ecf7;
-        }
-        * { box-sizing: border-box; }
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-        }
-        a, button, input, textarea, select {
-            font: inherit;
-        }
-        .skip-link {
-            position: absolute;
-            left: -9999px;
-            top: 0;
-            background: var(--panel);
-            color: var(--text);
-            padding: 8px;
-            z-index: 1000;
-        }
-        .skip-link:focus {
-            left: 8px;
-            top: 8px;
-        }
-        :focus-visible {
-            outline: 3px solid var(--focus);
-            outline-offset: 2px;
-        }
-        main {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 16px;
-            display: grid;
-            gap: 14px;
-        }
-        .card {
-            background: var(--panel);
-            border: 1px solid rgba(255,255,255,0.12);
-            border-radius: 12px;
-            padding: 14px;
-        }
-        .title-row {
-            display: flex;
-            gap: 12px;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-        h1, h2, h3 { margin: 0 0 10px; }
-        .subtitle { color: var(--muted); margin: 0; }
-        .status {
-            display: inline-block;
-            padding: 8px 12px;
-            border-radius: 999px;
-            border: 1px solid rgba(255,255,255,0.2);
-            font-weight: 700;
-        }
-        .status-ready, .status-playing { color: var(--ok); }
-        .status-loading, .status-paused, .status-reset { color: var(--warn); }
-        .status-error, .status-asset-failed { color: var(--bad); }
-        .warning {
-            border-left: 4px solid var(--accent);
-            padding-left: 10px;
-            color: var(--muted);
-            margin: 10px 0 0;
-        }
-        .layout {
-            display: grid;
-            gap: 14px;
-            grid-template-columns: 2fr 1fr;
-        }
-        #game-wrap { min-width: 0; }
-        #gameCanvas {
-            width: 100%;
-            height: auto;
-            background: var(--canvas);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 8px;
-            display: block;
-        }
-        .hud {
-            display: grid;
-            grid-template-columns: repeat(3, minmax(120px, 1fr));
-            gap: 8px;
-            margin: 10px 0;
-        }
-        .hud p {
-            margin: 0;
-            padding: 8px;
-            border-radius: 8px;
-            background: rgba(0,0,0,0.2);
-        }
-        .controls {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-        button {
-            background: #3a2b4d;
-            color: var(--text);
-            border: 1px solid var(--accent);
-            border-radius: 8px;
-            padding: 8px 10px;
-            cursor: pointer;
-        }
-        button:hover { filter: brightness(1.08); }
-        body[data-theme="light"] button { background: #f0e5cd; }
-        .small { font-size: 0.92rem; color: var(--muted); }
-        details { margin-top: 10px; }
-        summary { cursor: pointer; font-weight: 700; }
-        label { display: block; margin: 8px 0 4px; }
-        textarea {
-            width: 100%;
-            min-height: 90px;
-            border-radius: 8px;
-            border: 1px solid rgba(255,255,255,0.2);
-            background: rgba(0,0,0,0.2);
-            color: var(--text);
-            padding: 8px;
-        }
-        #errorDetails {
-            white-space: pre-wrap;
-            color: var(--bad);
-            margin-top: 8px;
-        }
-        .sr-only {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            border: 0;
-        }
-        @media (max-width: 900px) {
-            .layout { grid-template-columns: 1fr; }
-        }
-    </style>
+    <title>BrowserQuest Standalone Adventure</title>
+    <link rel="stylesheet" href="standalone.css">
 </head>
 <body>
-<a class="skip-link" href="#game-wrap">Skip to game area</a>
+<a class="skip-link" href="#game-wrap">Skip to game</a>
 <main>
-    <section class="card" aria-labelledby="title">
+
+    <!-- ===== HEADER ===== -->
+    <section class="card" aria-labelledby="pageTitle">
         <div class="title-row">
             <div>
-                <h1 id="title">BrowserQuest Standalone Mode (No-Install Lite Adventure)</h1>
-                <p class="subtitle">Playable local mode for restricted PCs. This is not the full multiplayer server app.</p>
+                <h1 id="pageTitle"><span aria-hidden="true">⚔ </span>BrowserQuest — Standalone Adventure</h1>
+                <p class="subtitle">Local single-player mode. No server required. Explore 4 areas, collect relics, discover equipment, and survive!</p>
             </div>
             <button type="button" id="themeToggle" aria-pressed="false">Switch to Light Theme</button>
         </div>
-        <p id="statusText" class="status status-ready" role="status" aria-live="polite">Status: Ready</p>
-        <p class="warning"><strong>Limitations:</strong> Multiplayer world sync, global chat, shared economy, and live Socket.IO server features are unavailable in this standalone mode.</p>
+        <p id="statusText" class="status status-playing" role="status" aria-live="polite">Status: Loading…</p>
     </section>
 
-    <div class="layout">
-        <section class="card" id="game-wrap" aria-labelledby="game-title">
-            <h2 id="game-title">Standalone Adventure Arena</h2>
-            <p class="small">Move with Arrow Keys/WASD or click/tap destination. Attack nearby enemies with Space/Enter. Collect relics and survive.</p>
-            <canvas id="gameCanvas" width="900" height="520" aria-label="Standalone game map" tabindex="0"></canvas>
-            <div class="hud" aria-live="polite">
-                <p><strong>Health:</strong> <span id="healthValue">100</span></p>
-                <p><strong>Score:</strong> <span id="scoreValue">0</span></p>
-                <p><strong>Relics:</strong> <span id="relicValue">0</span> / 8</p>
-            </div>
-            <div class="controls" aria-label="Game controls">
-                <button type="button" id="newGameBtn">New Game</button>
-                <button type="button" id="pauseBtn">Pause</button>
-                <button type="button" id="saveBtn">Save Now</button>
-                <button type="button" id="exportBtn">Export Save</button>
-                <button type="button" id="importBtn">Import Save</button>
-                <button type="button" id="resetBtn">Reset Save</button>
-            </div>
-            <label for="saveData">Save data (for export/import)</label>
-            <textarea id="saveData" spellcheck="false" aria-describedby="saveHint"></textarea>
-            <p id="saveHint" class="small">Export fills this box with JSON data. Import reads from this box. Save is also auto-stored in localStorage.</p>
-            <p class="small" id="gameHint">Goal: reach 8 relics. If health hits 0, start a new run.</p>
-            <pre id="errorDetails" hidden></pre>
-        </section>
+    <!-- ===== GAME ARENA — FULL WIDTH ===== -->
+    <section class="card" id="game-wrap" aria-labelledby="gameTitle">
+        <h2 id="gameTitle">Standalone Adventure Arena</h2>
+        <p class="small">
+            Move: <kbd>Arrow Keys</kbd> / <kbd>WASD</kbd> or click/tap destination.&nbsp;
+            Attack: <kbd>Space</kbd> / <kbd>Enter</kbd> or the Attack button.&nbsp;
+            Reach a map edge to travel to the next area.
+        </p>
 
-        <aside class="card" aria-labelledby="help-title">
-            <h2 id="help-title">About / Help / Dependencies</h2>
+        <!-- Main canvas — 1100×620 logical resolution, scales to full CSS width -->
+        <canvas id="gameCanvas" width="1100" height="620"
+                aria-label="Game map canvas" tabindex="0"></canvas>
+
+        <!-- HUD — all stats in a responsive grid -->
+        <div class="hud" aria-live="polite" aria-label="Player stats">
+            <div class="hud-cell hud-hp">
+                <span class="label">❤ Health</span>
+                <span class="value" id="healthValue">100 / 100</span>
+            </div>
+            <div class="hud-cell hud-lvl">
+                <span class="label">★ Level</span>
+                <span class="value" id="levelValue">1</span>
+            </div>
+            <div class="hud-cell">
+                <span class="label">XP</span>
+                <span class="value" id="xpValue">0 / 50</span>
+            </div>
+            <div class="hud-cell hud-area">
+                <span class="label">📍 Area</span>
+                <span class="value" id="areaValue">Forest Clearing</span>
+            </div>
+            <div class="hud-cell hud-atk">
+                <span class="label">⚔ Attack</span>
+                <span class="value" id="attackValue">18</span>
+            </div>
+            <div class="hud-cell hud-def">
+                <span class="label">🛡 Defense</span>
+                <span class="value" id="defenseValue">0%</span>
+            </div>
+            <div class="hud-cell">
+                <span class="label">🗡 Weapon</span>
+                <span class="value" id="weaponValue">None</span>
+            </div>
+            <div class="hud-cell">
+                <span class="label">🧥 Armor</span>
+                <span class="value" id="armorValue">None</span>
+            </div>
+            <div class="hud-cell">
+                <span class="label">💀 Kills</span>
+                <span class="value" id="killsValue">0</span>
+            </div>
+            <div class="hud-cell">
+                <span class="label">🏺 Relics</span>
+                <span class="value" id="relicValue">0</span>
+            </div>
+            <div class="hud-cell">
+                <span class="label">🏆 Score</span>
+                <span class="value" id="scoreValue">0</span>
+            </div>
+        </div>
+
+        <!-- Notification bar -->
+        <div class="notif-bar" role="status" aria-live="polite">
+            <span id="notifText"></span>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls" aria-label="Game controls">
+            <button type="button" id="newGameBtn" aria-label="New Game (Press N)"><span aria-hidden="true">🆕 </span>New Game <kbd>N</kbd></button>
+            <button type="button" id="pauseBtn" aria-label="Pause or Resume (Press P)"><span aria-hidden="true">⏸ </span>Pause <kbd>P</kbd></button>
+            <button type="button" id="attackBtn" aria-label="Attack nearby enemies (Press Space)"><span aria-hidden="true">⚔ </span>Attack <kbd>Space</kbd></button>
+            <button type="button" id="saveBtn" aria-label="Save game now"><span aria-hidden="true">💾 </span>Save Now</button>
+            <button type="button" id="exportBtn" aria-label="Export save data to text box"><span aria-hidden="true">📤 </span>Export Save</button>
+            <button type="button" id="importBtn" aria-label="Import save data from text box"><span aria-hidden="true">📥 </span>Import Save</button>
+            <button type="button" id="resetBtn" aria-label="Reset all progress and start over"><span aria-hidden="true">🗑 </span>Reset Save</button>
+        </div>
+
+        <p id="gameHint" class="small">Explore the map! Reach the edges to travel to new areas.</p>
+
+        <!-- Export / Import textarea -->
+        <label class="save-label" for="saveData">Save data (JSON for export/import)</label>
+        <textarea id="saveData" spellcheck="false"
+                  aria-describedby="saveHint" rows="3"></textarea>
+        <p id="saveHint" class="small">Export fills this box. Paste a JSON string here then click Import to restore.</p>
+    </section>
+
+    <!-- ===== ABOUT / HELP — BELOW THE GAME ===== -->
+    <section class="card" id="help-section" aria-labelledby="helpTitle">
+        <h2 id="helpTitle">About / Help / Dependencies</h2>
+
+        <div class="help-grid">
+
             <details open>
                 <summary>What this standalone mode is</summary>
-                <p>A no-install BrowserQuest-inspired local mode that runs by opening this HTML file from an extracted ZIP.</p>
+                <p>A no-install BrowserQuest-inspired adventure that runs entirely in a web browser from a local file. No Node.js, no server, no CDN — just open <code>standalone.html</code> from the extracted repository folder.</p>
             </details>
+
             <details>
-                <summary>What it can do</summary>
+                <summary>How to play</summary>
                 <ul>
-                    <li>Playable movement, combat, enemies, collectibles, score, and health.</li>
-                    <li>Pause/new game, autosave, export/import save data.</li>
-                    <li>Keyboard and mouse/touch-friendly controls with responsive layout.</li>
+                    <li><strong>Move:</strong> Arrow Keys / WASD, or click/tap a destination on the canvas.</li>
+                    <li><strong>Attack:</strong> Space / Enter / Attack button — hits all enemies within range.</li>
+                    <li><strong>Travel:</strong> Walk to any edge of the map to enter the next area.</li>
+                    <li><strong>Collect:</strong> Walk over items and relics to pick them up automatically.</li>
+                    <li><strong>Pause:</strong> P key or Pause button.</li>
+                    <li><strong>New Game:</strong> N key or New Game button.</li>
                 </ul>
             </details>
+
             <details>
-                <summary>What it cannot do</summary>
+                <summary>Game systems</summary>
                 <ul>
-                    <li>No live multiplayer server worlds or player-to-player chat.</li>
-                    <li>No Socket.IO synchronization, server persistence, or shared world events.</li>
+                    <li><strong>4 Areas:</strong> Forest Clearing → Dark Caves → Cursed Keep → Dragon's Lair (loops).</li>
+                    <li><strong>8 Enemy types:</strong> Rat, Goblin, Bat, Skeleton, Armored Skeleton, Ogre, Evil Eye, Dragon — each with unique stats and shapes.</li>
+                    <li><strong>Weapons:</strong> Iron Sword, Blue Sword, Golden Sword — boost attack power and range.</li>
+                    <li><strong>Armor:</strong> Cloth, Leather, Mail, Golden — each reduces incoming damage %.</li>
+                    <li><strong>Consumables:</strong> Health Flask (+28 HP), Fire Potion (+65 HP).</li>
+                    <li><strong>Relics:</strong> Ancient Relics grant score and are tracked globally.</li>
+                    <li><strong>XP &amp; Levels:</strong> Defeat enemies for XP. 10 levels — each grants +4 ATK, +20 Max HP, +4 speed.</li>
+                    <li><strong>Item drops:</strong> Enemies drop items on death based on their type.</li>
                 </ul>
             </details>
+
             <details>
-                <summary>Dependencies and internet use</summary>
+                <summary>Equipment effects</summary>
                 <ul>
-                    <li><strong>Main runtime:</strong> Browser APIs (Canvas, localStorage). Local only, no CDN.</li>
-                    <li><strong>Optional local assets:</strong> <code>client/img/1/coder.png</code>, <code>client/img/1/rat.png</code>. If unavailable, the game draws shape fallbacks.</li>
-                    <li><strong>Internet:</strong> Not required for this standalone mode.</li>
-                    <li><strong>License:</strong> BrowserQuest repo is MPL 2.0 code and CC-BY-SA 3.0 content. Third-party package licenses vary.</li>
+                    <li><strong>Iron Sword:</strong> +15 ATK, +10 range.</li>
+                    <li><strong>Blue Sword:</strong> +30 ATK, +15 range.</li>
+                    <li><strong>Golden Sword:</strong> +50 ATK, +20 range.</li>
+                    <li><strong>Cloth Armor:</strong> 12% damage reduction.</li>
+                    <li><strong>Leather Armor:</strong> 22% damage reduction.</li>
+                    <li><strong>Mail Armor:</strong> 35% damage reduction.</li>
+                    <li><strong>Golden Armor:</strong> 50% damage reduction (capped at 80%).</li>
+                    <li>Better items automatically replace weaker ones when picked up.</li>
                 </ul>
             </details>
+
             <details>
-                <summary>If something is blocked</summary>
+                <summary>Progression &amp; saving</summary>
                 <ul>
-                    <li>Re-extract the ZIP and keep folder structure unchanged.</li>
-                    <li>If local images fail, gameplay continues with fallback rendering.</li>
-                    <li>If localStorage is blocked, the game still runs but persistence is reduced.</li>
+                    <li>Your progress (hero stats, equipment, area, kills, relics, score) is auto-saved every 5 seconds and on page close.</li>
+                    <li>Use Export / Import to back up or transfer save data as JSON.</li>
+                    <li>Reset clears all progress after confirmation.</li>
+                    <li>Save version: <code>bq_standalone_v2</code></li>
                 </ul>
             </details>
+
+            <details>
+                <summary>Dependencies &amp; license</summary>
+                <ul>
+                    <li><strong>Runtime:</strong> Browser Canvas 2D API and localStorage. No CDN, no network.</li>
+                    <li><strong>Assets:</strong> All rendering is shape-based (Canvas 2D). No external images required.</li>
+                    <li><strong>License:</strong> BrowserQuest source is MPL 2.0; game assets are CC-BY-SA 3.0.</li>
+                </ul>
+            </details>
+
             <details>
                 <summary>Keyboard shortcuts</summary>
                 <ul>
-                    <li>Move: Arrow Keys or WASD</li>
-                    <li>Attack: Space or Enter</li>
-                    <li>Pause/Resume: P</li>
-                    <li>New Game: N</li>
+                    <li><kbd>Arrow Keys</kbd> / <kbd>WASD</kbd> — Move</li>
+                    <li><kbd>Space</kbd> / <kbd>Enter</kbd> — Attack</li>
+                    <li><kbd>P</kbd> — Pause / Resume</li>
+                    <li><kbd>N</kbd> — New Game</li>
                 </ul>
             </details>
-            <p class="small">For the full server app on a developer PC, see <a href="README.md">README.md</a> and <a href="standalone_info.md">standalone_info.md</a>.</p>
-        </aside>
-    </div>
+
+            <details>
+                <summary>Troubleshooting</summary>
+                <ul>
+                    <li><strong>Duplicate player / invisible enemies:</strong> Hard-refresh (Ctrl+F5). The old single-file version used sprite sheets incorrectly; v2 uses shape rendering that always works.</li>
+                    <li><strong>Area transition stuck:</strong> A 0.9s fade plays on every edge crossing — wait briefly, do not rapidly cross edges.</li>
+                    <li><strong>Save not loading:</strong> If localStorage is blocked by browser policy, the game still runs but won't persist between sessions.</li>
+                    <li><strong>Duplicate loops on restart:</strong> New Game / Import both cancel the old animation frame before starting a fresh loop.</li>
+                    <li><strong>Equipment not applying:</strong> Only better items are auto-equipped. Check HUD — current weapon / armor are displayed.</li>
+                    <li><strong>Full-app setup:</strong> See <a href="README.md">README.md</a> and <a href="standalone_info.md">standalone_info.md</a> for Node.js server instructions.</li>
+                </ul>
+            </details>
+
+        </div><!-- /.help-grid -->
+    </section>
+
 </main>
-
-<script>
-(function () {
-    var STORAGE_KEY = "browserquest_standalone_save_v1";
-    var statusText = document.getElementById("statusText");
-    var errorDetails = document.getElementById("errorDetails");
-    var canvas = document.getElementById("gameCanvas");
-    var ctx = canvas.getContext("2d");
-    var healthValue = document.getElementById("healthValue");
-    var scoreValue = document.getElementById("scoreValue");
-    var relicValue = document.getElementById("relicValue");
-    var saveData = document.getElementById("saveData");
-    var hint = document.getElementById("gameHint");
-    var themeToggle = document.getElementById("themeToggle");
-    var maxRelics = 8;
-    var state;
-    var lastTick = 0;
-    var target = null;
-    var keys = {};
-    var paused = false;
-    var assetStatus = "loading";
-
-    var heroImage = new Image();
-    var enemyImage = new Image();
-    var pendingAssets = 2;
-
-    function setStatus(mode, message) {
-        statusText.className = "status status-" + mode;
-        statusText.textContent = "Status: " + message;
-    }
-
-    function showError(message, details) {
-        setStatus("error", message);
-        errorDetails.hidden = false;
-        errorDetails.textContent = details || message;
-    }
-
-    function randomIn(min, max) {
-        return Math.random() * (max - min) + min;
-    }
-
-    function spawnEnemy() {
-        return {
-            x: randomIn(40, canvas.width - 40),
-            y: randomIn(40, canvas.height - 40),
-            hp: 2,
-            speed: randomIn(40, 70),
-            wobble: randomIn(0, Math.PI * 2)
-        };
-    }
-
-    function spawnRelic() {
-        return {
-            x: randomIn(30, canvas.width - 30),
-            y: randomIn(30, canvas.height - 30),
-            radius: 8
-        };
-    }
-
-    function baseState() {
-        return {
-            hero: { x: canvas.width / 2, y: canvas.height / 2, speed: 150, radius: 14, hp: 100 },
-            enemies: [spawnEnemy(), spawnEnemy(), spawnEnemy()],
-            relics: [spawnRelic(), spawnRelic(), spawnRelic()],
-            score: 0,
-            collected: 0,
-            tick: 0
-        };
-    }
-
-    function persist() {
-        var payload = {
-            hero: state.hero,
-            enemies: state.enemies,
-            relics: state.relics,
-            score: state.score,
-            collected: state.collected,
-            theme: document.body.getAttribute("data-theme") || "dark"
-        };
-        try {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
-            setStatus(paused ? "paused" : "playing", paused ? "Paused" : "Playing");
-        } catch (err) {
-            setStatus("error", "Save unavailable (localStorage blocked)");
-        }
-    }
-
-    function applySave(payload) {
-        if (!payload || !payload.hero || !Array.isArray(payload.enemies) || !Array.isArray(payload.relics)) {
-            throw new Error("Invalid save format.");
-        }
-        state = payload;
-        if (typeof state.hero.hp !== "number") { state.hero.hp = 100; }
-        if (typeof state.score !== "number") { state.score = 0; }
-        if (typeof state.collected !== "number") { state.collected = 0; }
-        if (!Array.isArray(state.enemies) || state.enemies.length === 0) {
-            state.enemies = [spawnEnemy(), spawnEnemy(), spawnEnemy()];
-        }
-        if (!Array.isArray(state.relics)) {
-            state.relics = [spawnRelic(), spawnRelic(), spawnRelic()];
-        }
-    }
-
-    function loadSave() {
-        try {
-            var raw = localStorage.getItem(STORAGE_KEY);
-            if (!raw) {
-                state = baseState();
-                return;
-            }
-            var parsed = JSON.parse(raw);
-            applySave(parsed);
-            if (parsed.theme === "light") {
-                document.body.setAttribute("data-theme", "light");
-                themeToggle.setAttribute("aria-pressed", "true");
-                themeToggle.textContent = "Switch to Dark Theme";
-            }
-            setStatus("ready", "Ready (restored previous save)");
-        } catch (err) {
-            state = baseState();
-            setStatus("error", "Save could not be loaded, using fresh game");
-        }
-    }
-
-    function clampHero() {
-        state.hero.x = Math.max(state.hero.radius, Math.min(canvas.width - state.hero.radius, state.hero.x));
-        state.hero.y = Math.max(state.hero.radius, Math.min(canvas.height - state.hero.radius, state.hero.y));
-    }
-
-    function updateHUD() {
-        healthValue.textContent = Math.max(0, Math.round(state.hero.hp));
-        scoreValue.textContent = state.score;
-        relicValue.textContent = state.collected;
-    }
-
-    function distance(a, b) {
-        var dx = a.x - b.x;
-        var dy = a.y - b.y;
-        return Math.sqrt(dx * dx + dy * dy);
-    }
-
-    function tryAttack() {
-        var removed = 0;
-        state.enemies = state.enemies.filter(function (enemy) {
-            var inRange = distance(state.hero, enemy) < 50;
-            if (!inRange) {
-                return true;
-            }
-            enemy.hp -= 1;
-            if (enemy.hp <= 0) {
-                removed += 1;
-                return false;
-            }
-            return true;
-        });
-        if (removed > 0) {
-            state.score += removed * 15;
-            while (state.enemies.length < 3) {
-                state.enemies.push(spawnEnemy());
-            }
-            setStatus("playing", "Playing (enemy defeated)");
-            persist();
-        }
-    }
-
-    function collectRelics() {
-        var gained = 0;
-        state.relics = state.relics.filter(function (relic) {
-            var found = distance(state.hero, relic) < state.hero.radius + relic.radius + 4;
-            if (found) {
-                gained += 1;
-                return false;
-            }
-            return true;
-        });
-        if (gained > 0) {
-            state.collected += gained;
-            state.score += gained * 10;
-            while (state.relics.length < 3 && state.collected < maxRelics) {
-                state.relics.push(spawnRelic());
-            }
-            setStatus("playing", "Playing (relic collected)");
-            persist();
-        }
-        if (state.collected >= maxRelics) {
-            hint.textContent = "Victory! You secured all relics. Start a New Game to replay.";
-            paused = true;
-            setStatus("paused", "Paused (victory reached)");
-        }
-    }
-
-    function moveEnemies(dt) {
-        state.enemies.forEach(function (enemy) {
-            enemy.wobble += dt;
-            var angle = Math.atan2(state.hero.y - enemy.y, state.hero.x - enemy.x) + Math.sin(enemy.wobble) * 0.3;
-            enemy.x += Math.cos(angle) * enemy.speed * dt;
-            enemy.y += Math.sin(angle) * enemy.speed * dt;
-            if (distance(state.hero, enemy) < state.hero.radius + 11) {
-                state.hero.hp -= 18 * dt;
-                if (state.hero.hp <= 0) {
-                    state.hero.hp = 0;
-                    paused = true;
-                    setStatus("paused", "Paused (you were defeated)");
-                    hint.textContent = "Defeat! Press New Game to try again.";
-                }
-            }
-        });
-    }
-
-    function moveHero(dt) {
-        var vx = 0;
-        var vy = 0;
-        if (keys.ArrowLeft || keys.a || keys.A) { vx -= 1; }
-        if (keys.ArrowRight || keys.d || keys.D) { vx += 1; }
-        if (keys.ArrowUp || keys.w || keys.W) { vy -= 1; }
-        if (keys.ArrowDown || keys.s || keys.S) { vy += 1; }
-
-        if (vx !== 0 || vy !== 0) {
-            target = null;
-            var len = Math.sqrt(vx * vx + vy * vy) || 1;
-            state.hero.x += (vx / len) * state.hero.speed * dt;
-            state.hero.y += (vy / len) * state.hero.speed * dt;
-            clampHero();
-            return;
-        }
-
-        if (target) {
-            var dx = target.x - state.hero.x;
-            var dy = target.y - state.hero.y;
-            var dist = Math.sqrt(dx * dx + dy * dy);
-            if (dist < 2) {
-                target = null;
-                return;
-            }
-            state.hero.x += (dx / dist) * state.hero.speed * dt;
-            state.hero.y += (dy / dist) * state.hero.speed * dt;
-            clampHero();
-        }
-    }
-
-    function drawScene() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        ctx.fillStyle = "rgba(74, 122, 85, 0.25)";
-        for (var gx = 0; gx < canvas.width; gx += 48) {
-            for (var gy = 0; gy < canvas.height; gy += 48) {
-                ctx.fillRect(gx + ((gx + gy) % 14), gy + ((gx + gy) % 11), 3, 3);
-            }
-        }
-
-        state.relics.forEach(function (relic) {
-            ctx.fillStyle = "#ffd76b";
-            ctx.beginPath();
-            ctx.arc(relic.x, relic.y, relic.radius, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.strokeStyle = "#8b6500";
-            ctx.stroke();
-        });
-
-        state.enemies.forEach(function (enemy) {
-            if (assetStatus === "ready") {
-                ctx.drawImage(enemyImage, enemy.x - 12, enemy.y - 12, 24, 24);
-            } else {
-                ctx.fillStyle = "#d65858";
-                ctx.beginPath();
-                ctx.arc(enemy.x, enemy.y, 10, 0, Math.PI * 2);
-                ctx.fill();
-            }
-            if (enemy.hp === 1) {
-                ctx.fillStyle = "#fff";
-                ctx.fillRect(enemy.x - 6, enemy.y - 16, 12, 2);
-            }
-        });
-
-        if (assetStatus === "ready") {
-            ctx.drawImage(heroImage, state.hero.x - 12, state.hero.y - 12, 24, 24);
-        } else {
-            ctx.fillStyle = "#67a6ff";
-            ctx.beginPath();
-            ctx.arc(state.hero.x, state.hero.y, state.hero.radius, 0, Math.PI * 2);
-            ctx.fill();
-        }
-    }
-
-    function gameTick(ts) {
-        try {
-            if (!lastTick) {
-                lastTick = ts;
-            }
-            var dt = Math.min(0.05, (ts - lastTick) / 1000);
-            lastTick = ts;
-
-            if (!paused) {
-                moveHero(dt);
-                moveEnemies(dt);
-                collectRelics();
-                if (state.tick % 180 === 0) {
-                    persist();
-                }
-                state.tick += 1;
-            }
-
-            drawScene();
-            updateHUD();
-            requestAnimationFrame(gameTick);
-        } catch (err) {
-            showError("Error", err && err.stack ? err.stack : String(err));
-        }
-    }
-
-    function newGame() {
-        state = baseState();
-        paused = false;
-        target = null;
-        hint.textContent = "Goal: reach 8 relics. If health hits 0, start a new run.";
-        setStatus("reset", "Reset");
-        persist();
-    }
-
-    function togglePause() {
-        paused = !paused;
-        setStatus(paused ? "paused" : "playing", paused ? "Paused" : "Playing");
-    }
-
-    function maybeFinishAssetLoad(success) {
-        pendingAssets -= 1;
-        if (!success) {
-            assetStatus = "fallback";
-        }
-        if (pendingAssets > 0) {
-            return;
-        }
-        if (assetStatus === "fallback") {
-            setStatus("asset-failed", "Asset failed (fallback rendering active)");
-        } else {
-            assetStatus = "ready";
-            setStatus("ready", "Ready");
-        }
-    }
-
-    heroImage.onload = function () { maybeFinishAssetLoad(true); };
-    enemyImage.onload = function () { maybeFinishAssetLoad(true); };
-    heroImage.onerror = function () { maybeFinishAssetLoad(false); };
-    enemyImage.onerror = function () { maybeFinishAssetLoad(false); };
-
-    setStatus("loading", "Loading assets");
-    heroImage.src = "client/img/1/coder.png";
-    enemyImage.src = "client/img/1/rat.png";
-
-    loadSave();
-    updateHUD();
-
-    canvas.addEventListener("click", function (evt) {
-        var rect = canvas.getBoundingClientRect();
-        target = {
-            x: (evt.clientX - rect.left) * (canvas.width / rect.width),
-            y: (evt.clientY - rect.top) * (canvas.height / rect.height)
-        };
-    });
-
-    canvas.addEventListener("touchstart", function (evt) {
-        if (!evt.touches || evt.touches.length === 0) {
-            return;
-        }
-        var rect = canvas.getBoundingClientRect();
-        var touch = evt.touches[0];
-        target = {
-            x: (touch.clientX - rect.left) * (canvas.width / rect.width),
-            y: (touch.clientY - rect.top) * (canvas.height / rect.height)
-        };
-    }, { passive: true });
-
-    window.addEventListener("keydown", function (evt) {
-        keys[evt.key] = true;
-        if (evt.key === " " || evt.key === "Enter") {
-            evt.preventDefault();
-            if (!paused) {
-                tryAttack();
-            }
-        } else if (evt.key === "p" || evt.key === "P") {
-            togglePause();
-        } else if (evt.key === "n" || evt.key === "N") {
-            newGame();
-        }
-    });
-
-    window.addEventListener("keyup", function (evt) {
-        keys[evt.key] = false;
-    });
-
-    document.getElementById("newGameBtn").addEventListener("click", newGame);
-    document.getElementById("pauseBtn").addEventListener("click", togglePause);
-    document.getElementById("saveBtn").addEventListener("click", function () {
-        persist();
-        setStatus(paused ? "paused" : "playing", "Playing (manual save complete)");
-    });
-
-    document.getElementById("exportBtn").addEventListener("click", function () {
-        persist();
-        saveData.value = localStorage.getItem(STORAGE_KEY) || "";
-        setStatus(paused ? "paused" : "playing", "Playing (save exported)");
-        saveData.focus();
-        saveData.select();
-    });
-
-    document.getElementById("importBtn").addEventListener("click", function () {
-        try {
-            var parsed = JSON.parse(saveData.value);
-            applySave(parsed);
-            persist();
-            paused = false;
-            setStatus("playing", "Playing (save imported)");
-            hint.textContent = "Imported save loaded.";
-        } catch (err) {
-            setStatus("error", "Error (import failed)");
-            showError("Error (import failed)", err.message);
-        }
-    });
-
-    document.getElementById("resetBtn").addEventListener("click", function () {
-        var confirmed = window.confirm("Reset standalone save and start a new game?");
-        if (!confirmed) {
-            return;
-        }
-        try {
-            localStorage.removeItem(STORAGE_KEY);
-        } catch (err) {
-            setStatus("error", "Error (reset failed)");
-        }
-        newGame();
-    });
-
-    themeToggle.addEventListener("click", function () {
-        var nextTheme = document.body.getAttribute("data-theme") === "light" ? "dark" : "light";
-        document.body.setAttribute("data-theme", nextTheme);
-        themeToggle.setAttribute("aria-pressed", String(nextTheme === "light"));
-        themeToggle.textContent = nextTheme === "light" ? "Switch to Dark Theme" : "Switch to Light Theme";
-        persist();
-    });
-
-    window.addEventListener("beforeunload", persist);
-    requestAnimationFrame(gameTick);
-})();
-</script>
+<script src="standalone.js"></script>
 </body>
 </html>
