@@ -1,0 +1,354 @@
+/* BrowserQuest Standalone Game v2 — standalone.css
+ * Full-width game layout, About/Help section below game canvas
+ */
+
+/* ======================================================
+   THEME VARIABLES
+   ====================================================== */
+:root {
+    color-scheme: dark;
+    --bg:       #131019;
+    --panel:    #1e1728;
+    --panel2:   #271e38;
+    --text:     #f8f1e1;
+    --muted:    #c9b98c;
+    --accent:   #d9a441;
+    --ok:       #7ad985;
+    --warn:     #ffcd70;
+    --bad:      #ff8b8b;
+    --focus:    #8ab4ff;
+    --canvas:   #0b0a12;
+    --border:   rgba(255, 255, 255, 0.1);
+    --hud-bg:   rgba(0, 0, 0, 0.35);
+}
+
+body[data-theme="light"] {
+    color-scheme: light;
+    --bg:       #f5eedd;
+    --panel:    #ffffff;
+    --panel2:   #f0e8d0;
+    --text:     #1f1b26;
+    --muted:    #5a4e30;
+    --accent:   #9f6900;
+    --ok:       #1a6e28;
+    --warn:     #7a5200;
+    --bad:      #b71c1c;
+    --focus:    #2b66d2;
+    --canvas:   #dde4f0;
+    --border:   rgba(0, 0, 0, 0.12);
+    --hud-bg:   rgba(0, 0, 0, 0.08);
+}
+
+/* ======================================================
+   RESET / BASE
+   ====================================================== */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    font-size: 15px;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+}
+
+a, button, input, textarea, select { font: inherit; }
+
+a { color: var(--accent); }
+
+h1, h2, h3 { margin: 0 0 8px; line-height: 1.2; }
+
+p { margin: 0 0 8px; }
+
+ul { margin: 4px 0; padding-left: 20px; }
+
+li { margin-bottom: 3px; }
+
+/* Accessibility skip link */
+.skip-link {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    background: var(--panel);
+    color: var(--text);
+    padding: 8px 14px;
+    z-index: 1000;
+    border-radius: 0 0 8px 0;
+}
+.skip-link:focus { left: 0; }
+
+:focus-visible {
+    outline: 3px solid var(--focus);
+    outline-offset: 2px;
+}
+
+/* ======================================================
+   LAYOUT
+   ====================================================== */
+main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 14px 16px;
+    display: grid;
+    gap: 12px;
+}
+
+.card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+}
+
+/* ======================================================
+   HEADER / TITLE BAR
+   ====================================================== */
+.title-row {
+    display: flex;
+    gap: 12px;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+
+.title-row h1 { font-size: 1.25rem; }
+
+.subtitle { color: var(--muted); margin: 0; font-size: 0.9rem; }
+
+/* ======================================================
+   STATUS & HINT
+   ====================================================== */
+.status {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+.status-ready, .status-playing  { color: var(--ok); }
+.status-loading, .status-paused { color: var(--warn); }
+.status-reset                   { color: var(--warn); }
+.status-error                   { color: var(--bad); }
+
+/* ======================================================
+   GAME SECTION — FULL WIDTH
+   ====================================================== */
+#game-wrap {
+    /* Full width — no side column */
+    width: 100%;
+}
+
+#gameCanvas {
+    display: block;
+    width: 100%;
+    height: auto;
+    background: var(--canvas);
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    cursor: crosshair;
+    touch-action: none;
+}
+
+/* ======================================================
+   HUD — stat grid below canvas
+   ====================================================== */
+.hud {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 6px;
+    margin: 10px 0 6px;
+}
+
+.hud-cell {
+    background: var(--hud-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-size: 0.87rem;
+}
+
+.hud-cell .label {
+    color: var(--muted);
+    font-size: 0.78rem;
+    display: block;
+    margin-bottom: 1px;
+}
+
+.hud-cell .value {
+    font-weight: 700;
+    color: var(--text);
+}
+
+/* Highlight specific stat cells */
+.hud-hp   .value { color: #6ee08a; }
+.hud-atk  .value { color: #ffaa44; }
+.hud-def  .value { color: #66aaff; }
+.hud-area .value { color: var(--accent); }
+.hud-lvl  .value { color: #cc88ff; }
+
+/* ======================================================
+   NOTIFICATION BAR
+   ====================================================== */
+.notif-bar {
+    min-height: 28px;
+    padding: 4px 12px;
+    border-radius: 6px;
+    background: rgba(0, 0, 0, 0.28);
+    border: 1px solid var(--border);
+    font-size: 0.88rem;
+    color: var(--warn);
+    font-style: italic;
+    margin-bottom: 6px;
+}
+
+/* ======================================================
+   CONTROLS
+   ====================================================== */
+.controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-bottom: 6px;
+}
+
+button {
+    background: #3a2b4d;
+    color: var(--text);
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    padding: 7px 12px;
+    cursor: pointer;
+    font-size: 0.88rem;
+    transition: filter 0.12s;
+}
+button:hover { filter: brightness(1.12); }
+button:active { filter: brightness(0.9); }
+
+body[data-theme="light"] button {
+    background: #ede0c8;
+    border-color: var(--accent);
+}
+
+/* Attack button highlight */
+#attackBtn {
+    background: #5a2020;
+    border-color: #e05050;
+    color: #ff9999;
+    font-weight: 700;
+}
+#attackBtn:hover { background: #6e2828; }
+
+/* ======================================================
+   SAVE DATA TEXTAREA
+   ====================================================== */
+label.save-label {
+    display: block;
+    margin: 8px 0 3px;
+    font-size: 0.85rem;
+    color: var(--muted);
+}
+
+textarea#saveData {
+    width: 100%;
+    min-height: 72px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: rgba(0, 0, 0, 0.22);
+    color: var(--text);
+    padding: 8px;
+    font-size: 0.82rem;
+    resize: vertical;
+}
+
+.small { font-size: 0.88rem; color: var(--muted); }
+
+#gameHint {
+    font-size: 0.88rem;
+    color: var(--muted);
+    min-height: 1.2em;
+    margin: 4px 0;
+}
+
+/* ======================================================
+   ABOUT / HELP SECTION — BELOW GAME
+   ====================================================== */
+#help-section {
+    /* sits below game-wrap in the grid — full width */
+}
+
+#help-section .help-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 12px;
+    margin-top: 10px;
+}
+
+#help-section details {
+    background: var(--panel2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 12px;
+}
+
+#help-section summary {
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 0.93rem;
+    list-style: none;
+    padding: 2px 0;
+}
+
+#help-section summary::before {
+    content: '▶ ';
+    color: var(--accent);
+    font-size: 0.75em;
+}
+
+#help-section details[open] > summary::before {
+    content: '▼ ';
+}
+
+#help-section details > *:not(summary) {
+    margin-top: 6px;
+}
+
+#help-section li { font-size: 0.88rem; }
+
+#help-section code {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 1px 4px;
+    border-radius: 3px;
+    font-size: 0.85em;
+}
+
+/* ======================================================
+   THEME TOGGLE
+   ====================================================== */
+#themeToggle {
+    background: transparent;
+    border: 1px solid var(--muted);
+    color: var(--muted);
+    padding: 5px 10px;
+    font-size: 0.82rem;
+    border-radius: 6px;
+    white-space: nowrap;
+}
+#themeToggle:hover { border-color: var(--accent); color: var(--text); }
+
+/* ======================================================
+   RESPONSIVE BREAKPOINTS
+   ====================================================== */
+@media (max-width: 760px) {
+    main { padding: 8px; }
+    .hud { grid-template-columns: repeat(3, 1fr); }
+    #help-section .help-grid { grid-template-columns: 1fr; }
+    .controls { gap: 5px; }
+    button { padding: 6px 9px; font-size: 0.82rem; }
+}
+
+@media (max-width: 480px) {
+    .title-row h1 { font-size: 1.05rem; }
+    .hud { grid-template-columns: repeat(2, 1fr); }
+}
