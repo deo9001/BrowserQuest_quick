@@ -8,9 +8,9 @@ function main(config) {
     var noop = function() {},
         logLevel = config.debug_level || "info",
         configuredLoggers = {
-            error: { error: Log.error, info: noop, debug: noop },
-            info: { error: Log.error, info: Log.info, debug: noop },
-            debug: { error: Log.error, info: Log.info, debug: Log.debug }
+            error: { error: Log.error.bind(Log), info: noop, debug: noop },
+            info: { error: Log.error.bind(Log), info: Log.info.bind(Log), debug: noop },
+            debug: { error: Log.error.bind(Log), info: Log.info.bind(Log), debug: Log.debug.bind(Log) }
         },
         activeLoggers = configuredLoggers[logLevel] || configuredLoggers.info,
         ws = require("./ws"),
