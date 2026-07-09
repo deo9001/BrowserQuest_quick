@@ -28,6 +28,7 @@
         <p class="small">
             Move: <kbd>Arrow Keys</kbd> / <kbd>WASD</kbd> or click/tap destination.&nbsp;
             Attack: <kbd>Space</kbd> / <kbd>Enter</kbd> or the Attack button.&nbsp;
+            Interact: <kbd>E</kbd> or Interact button.&nbsp;
             Map: <kbd>M</kbd> or the Map button.&nbsp;
             Approach an edge arrow to travel to the next area.
         </p>
@@ -82,6 +83,10 @@
                 <span class="label">🏆 Score</span>
                 <span class="value" id="scoreValue">0</span>
             </div>
+            <div class="hud-cell hud-objective">
+                <span class="label">📜 Objective</span>
+                <span class="value" id="objectiveValue">Speak to Elder Mira in the village hall.</span>
+            </div>
         </div>
 
         <!-- Notification bar -->
@@ -94,6 +99,7 @@
             <button type="button" id="newGameBtn" aria-label="New Game (Press N)"><span aria-hidden="true">🆕 </span>New Game <kbd>N</kbd></button>
             <button type="button" id="pauseBtn" aria-label="Pause or Resume (Press P)"><span aria-hidden="true">⏸ </span>Pause <kbd>P</kbd></button>
             <button type="button" id="attackBtn" aria-label="Attack nearby enemies (Press Space)"><span aria-hidden="true">⚔ </span>Attack <kbd>Space</kbd></button>
+            <button type="button" id="interactBtn" aria-label="Interact with nearby npc or door (Press E)"><span aria-hidden="true">💬 </span>Interact <kbd>E</kbd></button>
             <button type="button" id="mapBtn" aria-label="Toggle world map (Press M)"><span aria-hidden="true">🗺 </span>Map <kbd>M</kbd></button>
             <button type="button" id="saveBtn" aria-label="Save game now"><span aria-hidden="true">💾 </span>Save Now</button>
             <button type="button" id="exportBtn" aria-label="Export save data to text box"><span aria-hidden="true">📤 </span>Export Save</button>
@@ -126,8 +132,9 @@
                 <ul>
                     <li><strong>Move:</strong> Arrow Keys / WASD, or click/tap a destination on the canvas.</li>
                     <li><strong>Attack:</strong> Space / Enter / Attack button — sword swings in the direction of the nearest enemy.</li>
+                    <li><strong>Interact:</strong> Press E (or Interact button) near NPCs and doors to talk, shop, or enter interiors.</li>
                     <li><strong>Travel:</strong> Walk toward any edge arrow — transition begins automatically when you're close.</li>
-                    <li><strong>World Map:</strong> M key or Map button — shows all 7 areas, connections, and your current location.</li>
+                    <li><strong>World Map:</strong> M key or Map button — shows connected regions, interiors, locks, and your current location.</li>
                     <li><strong>Collect:</strong> Walk over items and relics to pick them up automatically.</li>
                     <li><strong>Pause:</strong> P key or Pause button.</li>
                     <li><strong>New Game:</strong> N key or New Game button.</li>
@@ -137,7 +144,7 @@
             <details>
                 <summary>Game systems</summary>
                 <ul>
-                    <li><strong>7 Areas:</strong> Sunlit Meadow → Forest Clearing → Ancient Town (upper row); Dark Caves → Cursed Keep → Shadow Fortress → Dragon's Lair (lower row). Each area has unique biome lighting and terrain.</li>
+                    <li><strong>Connected regions + interiors:</strong> Open world routes connect meadows, forests, keeps and lairs, plus enterable locations (Elder's Hall, Smithy, Relic Cavern, Shadow Sanctum).</li>
                     <li><strong>8 Enemy types:</strong> Rat, Goblin, Bat, Skeleton, Armored Skeleton, Ogre, Evil Eye, Dragon — each with unique stats, shapes, patrol/aggro behaviour.</li>
                     <li><strong>Enemy AI:</strong> Enemies patrol their spawn area. They only chase when you enter their aggro radius. Defeated enemies do not instantly respawn — they return after you revisit the area.</li>
                     <li><strong>Terrain &amp; Collision:</strong> Each area has solid obstacles (trees, rocks, water, walls, buildings). The player and enemies cannot pass through them.</li>
@@ -145,6 +152,8 @@
                     <li><strong>Armor:</strong> Cloth, Leather, Mail, Golden — each reduces incoming damage %.</li>
                     <li><strong>Consumables:</strong> Health Flask (+28 HP), Fire Potion (+65 HP).</li>
                     <li><strong>Relics:</strong> Ancient Relics grant score and are tracked globally.</li>
+                    <li><strong>Story &amp; quests:</strong> A narrative objective chain tracks progression from village investigation to Shadow Sanctum cleansing.</li>
+                    <li><strong>Vendors:</strong> Spend relics for healing, upgrades, map support, lantern gear, and fortress access.</li>
                     <li><strong>XP &amp; Levels:</strong> Defeat enemies for XP. 10 levels — each grants +4 ATK, +20 Max HP, +4 speed.</li>
                     <li><strong>Sword swing:</strong> Attack triggers a visible arc animation. Damage is applied at the midpoint of the swing and only hits enemies within the arc cone.</li>
                 </ul>
@@ -167,10 +176,10 @@
             <details>
                 <summary>Progression &amp; saving</summary>
                 <ul>
-                    <li>Your progress (hero stats, equipment, area, kills, relics, score) is auto-saved every 5 seconds and on page close.</li>
+                    <li>Your progress (story, quests, NPC flags, vendor purchases, area, hero stats, relics, score) is auto-saved every 5 seconds and on page close.</li>
                     <li>Use Export / Import to back up or transfer save data as JSON.</li>
                     <li>Reset clears all progress after confirmation.</li>
-                    <li>Save version: <code>bq_standalone_v3</code></li>
+                    <li>Save version: <code>bq_standalone_v4</code> (auto-migrates v3 saves)</li>
                 </ul>
             </details>
 
@@ -188,6 +197,7 @@
                 <ul>
                     <li><kbd>Arrow Keys</kbd> / <kbd>WASD</kbd> — Move</li>
                     <li><kbd>Space</kbd> / <kbd>Enter</kbd> — Attack (sword swing)</li>
+                    <li><kbd>E</kbd> — Interact with NPCs, doors, and vendors</li>
                     <li><kbd>M</kbd> — Toggle World Map</li>
                     <li><kbd>P</kbd> — Pause / Resume</li>
                     <li><kbd>N</kbd> — New Game</li>
@@ -197,7 +207,7 @@
             <details>
                 <summary>Troubleshooting</summary>
                 <ul>
-                    <li><strong>Area transition:</strong> Walk toward an edge arrow — transition starts automatically when within 80px of the border (no more 5-second wait). A smooth 500ms fade animation plays.</li>
+                    <li><strong>Area transition:</strong> Walk toward an edge arrow — transition starts automatically when within 80px of the border (no more 5-second wait). Blocked destination segments are marked before transition.</li>
                     <li><strong>Enemy respawn:</strong> Enemies do not respawn in the same session in a visited area. They return only when you re-enter after a cooldown (approx. 10 s of ticks).</li>
                     <li><strong>Save not loading:</strong> If localStorage is blocked by browser policy, the game still runs but won't persist between sessions. A new v3 save key is used — old v2 saves will start fresh.</li>
                     <li><strong>Duplicate loops on restart:</strong> New Game / Import both cancel the old animation frame before starting a fresh loop.</li>

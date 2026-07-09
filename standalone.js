@@ -9,7 +9,9 @@
     // CONSTANTS
     // ====================================================================
 
-    var STORAGE_KEY = 'bq_standalone_v3';
+    var STORAGE_KEY = 'bq_standalone_v4';
+    var LEGACY_STORAGE_KEYS = ['bq_standalone_v3'];
+    var SAVE_VERSION = 4;
     var CANVAS_W = 1100;
     var CANVAS_H = 620;
     var TRANSITION_THRESHOLD = 80;    // px from edge to trigger area transition
@@ -34,7 +36,8 @@
             neighbors: { right: 1, left: null, up: null, down: 3 },
             enemyTypes: ['rat', 'goblin'],
             enemyCount: 3, difficulty: 1.0,
-            description: 'A sun-drenched meadow with wildflowers and rustling grass.'
+            description: 'A sun-drenched meadow with wildflowers and rustling grass.',
+            storyTag: 'village_outskirts'
         },
         {
             id: 1, name: 'Forest Clearing',
@@ -45,7 +48,8 @@
             neighbors: { right: 2, left: 0, up: null, down: 4 },
             enemyTypes: ['rat', 'goblin'],
             enemyCount: 4, difficulty: 1.2,
-            description: 'Tall oaks and pines. Sunlight filters through the canopy.'
+            description: 'Tall oaks and pines. Sunlight filters through the canopy.',
+            storyTag: 'forest'
         },
         {
             id: 2, name: 'Ancient Town',
@@ -56,7 +60,8 @@
             neighbors: { right: null, left: 1, up: null, down: 5 },
             enemyTypes: ['goblin', 'skeleton'],
             enemyCount: 3, difficulty: 1.4,
-            description: 'Crumbling stone buildings. Goblins have ransacked the market.'
+            description: 'Crumbling stone buildings. Goblins have ransacked the market.',
+            storyTag: 'village'
         },
         {
             id: 3, name: 'Dark Caves',
@@ -67,7 +72,8 @@
             neighbors: { right: null, left: null, up: 0, down: 6 },
             enemyTypes: ['bat', 'skeleton'],
             enemyCount: 4, difficulty: 1.5,
-            description: 'Eerie tunnels echoing with bat wings and rattling bones.'
+            description: 'Eerie tunnels echoing with bat wings and rattling bones.',
+            storyTag: 'caves'
         },
         {
             id: 4, name: 'Cursed Keep',
@@ -78,7 +84,8 @@
             neighbors: { right: 5, left: null, up: 1, down: null },
             enemyTypes: ['skeleton', 'skeleton2', 'ogre'],
             enemyCount: 4, difficulty: 2.0,
-            description: 'A crumbling fortress haunted by the cursed dead.'
+            description: 'A crumbling fortress haunted by the cursed dead.',
+            storyTag: 'keep'
         },
         {
             id: 5, name: 'Shadow Fortress',
@@ -89,7 +96,8 @@
             neighbors: { right: 6, left: 4, up: 2, down: null },
             enemyTypes: ['skeleton2', 'ogre', 'eye'],
             enemyCount: 5, difficulty: 2.5,
-            description: 'A dark iron fortress. Evil saturates the air.'
+            description: 'A dark iron fortress. Evil saturates the air.',
+            storyTag: 'fortress'
         },
         {
             id: 6, name: "Dragon's Lair",
@@ -100,7 +108,60 @@
             neighbors: { right: null, left: 5, up: 3, down: null },
             enemyTypes: ['eye', 'boss'],
             enemyCount: 3, difficulty: 3.0,
-            description: 'A scorched lair. The air reeks of sulfur and ancient power.'
+            description: 'A scorched lair. The air reeks of sulfur and ancient power.',
+            storyTag: 'lair'
+        },
+        {
+            id: 7, name: "Elder's Hall",
+            biome: 'town',
+            bgColor: '#8f7d5a', gridColor: 'rgba(160,140,100,0.22)',
+            borderColor: 'rgba(210,190,130,0.35)',
+            ambientLight: 0.92,
+            neighbors: { right: null, left: null, up: null, down: null },
+            enemyTypes: [],
+            enemyCount: 0, difficulty: 0.0,
+            description: 'The elder gathers relic lore and plans the cleansing ritual.',
+            isInterior: true,
+            storyTag: 'elder_hall'
+        },
+        {
+            id: 8, name: 'Ironbound Smithy',
+            biome: 'town',
+            bgColor: '#7a6248', gridColor: 'rgba(140,110,80,0.20)',
+            borderColor: 'rgba(200,160,110,0.35)',
+            ambientLight: 0.88,
+            neighbors: { right: null, left: null, up: null, down: null },
+            enemyTypes: [],
+            enemyCount: 0, difficulty: 0.0,
+            description: 'A workshop where relics are traded for gear and supplies.',
+            isInterior: true,
+            storyTag: 'smithy'
+        },
+        {
+            id: 9, name: 'Relic Cavern',
+            biome: 'cave',
+            bgColor: '#15142a', gridColor: 'rgba(50,50,110,0.35)',
+            borderColor: 'rgba(90,90,180,0.30)',
+            ambientLight: 0.25,
+            neighbors: { right: null, left: null, up: null, down: null },
+            enemyTypes: ['bat', 'skeleton'],
+            enemyCount: 3, difficulty: 1.6,
+            description: 'Fragments of a broken relic hum through this hidden cavern.',
+            isInterior: true,
+            storyTag: 'relic_cavern'
+        },
+        {
+            id: 10, name: 'Shadow Sanctum',
+            biome: 'keep',
+            bgColor: '#130606', gridColor: 'rgba(110,20,20,0.44)',
+            borderColor: 'rgba(185,45,45,0.32)',
+            ambientLight: 0.14,
+            neighbors: { right: null, left: null, up: null, down: null },
+            enemyTypes: ['eye', 'boss'],
+            enemyCount: 2, difficulty: 3.2,
+            description: 'The core chamber where the final shadow relic feeds corruption.',
+            isInterior: true,
+            storyTag: 'shadow_sanctum'
         }
     ];
 
@@ -192,7 +253,97 @@
             { type: 'rect',   x: 180,  y: 240,  w: 210, h: 22  },
             { type: 'rect',   x: 710,  y: 240,  w: 210, h: 22  },
             { type: 'circle', x: 550,  y: 170,  r: 30          }
+        ],
+        // 7: Elder's Hall (interior)
+        [
+            { type: 'rect', x: 0,   y: 0,   w: 1100, h: 28 },
+            { type: 'rect', x: 0,   y: 592, w: 1100, h: 28 },
+            { type: 'rect', x: 0,   y: 0,   w: 28,   h: 620 },
+            { type: 'rect', x: 1072,y: 0,   w: 28,   h: 620 },
+            { type: 'rect', x: 330, y: 130, w: 440,  h: 20  },
+            { type: 'circle', x: 220, y: 210, r: 18 },
+            { type: 'circle', x: 880, y: 210, r: 18 }
+        ],
+        // 8: Ironbound Smithy (interior)
+        [
+            { type: 'rect', x: 0,   y: 0,   w: 1100, h: 28 },
+            { type: 'rect', x: 0,   y: 592, w: 1100, h: 28 },
+            { type: 'rect', x: 0,   y: 0,   w: 28,   h: 620 },
+            { type: 'rect', x: 1072,y: 0,   w: 28,   h: 620 },
+            { type: 'rect', x: 430, y: 110, w: 240,  h: 70  },
+            { type: 'rect', x: 180, y: 280, w: 180,  h: 24  },
+            { type: 'rect', x: 740, y: 280, w: 180,  h: 24  }
+        ],
+        // 9: Relic Cavern (interior)
+        [
+            { type: 'rect', x: 0,   y: 0,   w: 145, h: 210 },
+            { type: 'rect', x: 955, y: 0,   w: 145, h: 210 },
+            { type: 'rect', x: 0,   y: 410, w: 160, h: 210 },
+            { type: 'rect', x: 940, y: 410, w: 160, h: 210 },
+            { type: 'circle', x: 300, y: 240, r: 26 },
+            { type: 'circle', x: 800, y: 260, r: 26 },
+            { type: 'rect', x: 460, y: 320, w: 180, h: 24 }
+        ],
+        // 10: Shadow Sanctum (interior)
+        [
+            { type: 'rect', x: 0,   y: 0,   w: 40,  h: 620 },
+            { type: 'rect', x: 1060,y: 0,   w: 40,  h: 620 },
+            { type: 'rect', x: 260, y: 70,  w: 580, h: 30  },
+            { type: 'rect', x: 260, y: 290, w: 580, h: 30  },
+            { type: 'circle', x: 550, y: 500, r: 34 }
         ]
+    ];
+
+    var STORY_CHAPTERS = [
+        'The elder senses shadow relic corruption spreading from the fortress.',
+        'Gather clues from villagers, rangers, and scholars in nearby regions.',
+        'Recover relic fragments from wild zones and the Relic Cavern.',
+        'Prepare for the fortress by trading relics for tools and upgrades.',
+        'Enter the Shadow Sanctum and cleanse the final relic.'
+    ];
+
+    var QUEST_STEPS = [
+        'Speak to Elder Mira in the village hall.',
+        'Gather guidance in the forest and cave routes.',
+        'Recover 3 relic fragments from dangerous areas.',
+        'Acquire Fortress Sigil access and enter the fortress.',
+        'Prepare for the assault by purchasing at least 2 vendor upgrades.',
+        'Confront the Shadow Sanctum and end the corruption.'
+    ];
+
+    var NPC_DEFS = [
+        { id: 'elder_mira', name: 'Elder Mira', role: 'village elder', areaId: 7, x: 550, y: 220, vendorId: null },
+        { id: 'tovin_smith', name: 'Tovin', role: 'blacksmith', areaId: 8, x: 450, y: 260, vendorId: 'smith_vendor' },
+        { id: 'lyra_scholar', name: 'Lyra', role: 'relic scholar', areaId: 2, x: 500, y: 320, vendorId: null },
+        { id: 'bran_ranger', name: 'Bran', role: 'ranger', areaId: 1, x: 180, y: 280, vendorId: null },
+        { id: 'fort_guard', name: 'Captain Varr', role: 'guard', areaId: 5, x: 150, y: 335, vendorId: 'guard_vendor' },
+        { id: 'mira_merchant', name: 'Sela', role: 'merchant', areaId: 2, x: 770, y: 260, vendorId: 'merchant_vendor' }
+    ];
+
+    var VENDOR_STOCK = {
+        merchant_vendor: [
+            { id: 'healing_draught', name: 'Healing Draught', cost: 2, desc: '+40 HP now', repeatable: true, effect: 'heal', value: 40 },
+            { id: 'map_charter', name: 'Map Charter', cost: 4, desc: 'Reveal all known regions on map', effect: 'upgrade', key: 'mapCharter' }
+        ],
+        smith_vendor: [
+            { id: 'tempered_blade', name: 'Tempered Blade', cost: 5, desc: 'Upgrade to Blue Sword', effect: 'weapon', weapon: 'bluesword' },
+            { id: 'reinforced_mail', name: 'Reinforced Mail', cost: 5, desc: 'Upgrade to Mail Armor', effect: 'armor', armor: 'mailarmor' },
+            { id: 'lantern_kit', name: 'Lantern Kit', cost: 3, desc: 'Brightens dark areas', effect: 'upgrade', key: 'lantern' }
+        ],
+        guard_vendor: [
+            { id: 'fortress_sigil', name: 'Fortress Sigil', cost: 6, desc: 'Unlock Shadow Sanctum gate', effect: 'flag', key: 'fortressAccess' }
+        ]
+    };
+
+    var PORTALS = [
+        { id: 'town_to_elder', name: "Elder's Hall Door", areaId: 2, x: 145, y: 194, r: 24, targetAreaId: 7, targetX: 550, targetY: 520, label: 'Enter Elder Hall' },
+        { id: 'elder_to_town', name: 'Hall Exit', areaId: 7, x: 550, y: 556, r: 28, targetAreaId: 2, targetX: 145, targetY: 230, label: 'Exit to Ancient Town' },
+        { id: 'town_to_smith', name: 'Smithy Door', areaId: 2, x: 355, y: 166, r: 24, targetAreaId: 8, targetX: 560, targetY: 520, label: 'Enter Smithy' },
+        { id: 'smith_to_town', name: 'Smithy Exit', areaId: 8, x: 560, y: 556, r: 28, targetAreaId: 2, targetX: 355, targetY: 205, label: 'Exit to Ancient Town' },
+        { id: 'forest_to_cavern', name: 'Cave Mouth', areaId: 1, x: 920, y: 300, r: 28, targetAreaId: 9, targetX: 550, targetY: 520, label: 'Enter Relic Cavern' },
+        { id: 'cavern_to_forest', name: 'Cavern Exit', areaId: 9, x: 550, y: 556, r: 28, targetAreaId: 1, targetX: 920, targetY: 340, label: 'Exit to Forest Clearing' },
+        { id: 'fortress_to_sanctum', name: 'Sanctum Gate', areaId: 5, x: 550, y: 334, r: 28, targetAreaId: 10, targetX: 550, targetY: 520, requiresFlag: 'fortressAccess', lockedMsg: 'The gate is sealed. Captain Varr can provide a Fortress Sigil.', label: 'Enter Shadow Sanctum' },
+        { id: 'sanctum_to_fortress', name: 'Sanctum Exit', areaId: 10, x: 550, y: 556, r: 28, targetAreaId: 5, targetX: 550, targetY: 375, label: 'Exit to Shadow Fortress' }
     ];
 
     // ====================================================================
@@ -288,9 +439,12 @@
     var notifTimer       = 0;
     var mapOpen          = false;
     var transitionCooldown = 0; // seconds guard after a transition completes
+    var interactionContext = null;
+    var interactionCooldown = 0;
+    var transitionBlockCooldown = 0;
 
     // Transition state (phase: 'none' | 'fadeout' | 'fadein')
-    var trans = { active: false, phase: 'none', timer: 0, dir: null, fromAreaId: 0, toAreaId: 0, msg: '' };
+    var trans = { active: false, phase: 'none', timer: 0, dir: null, fromAreaId: 0, toAreaId: 0, targetX: 0, targetY: 0, msg: '' };
 
     // Sword-swing animation
     var swordSwing = { active: false, progress: 0, duration: 0.22, dir: 0, hitDealt: false };
@@ -298,7 +452,7 @@
     // DOM refs
     var canvas, ctx;
     var elStatus, elHealth, elScore, elRelics, elLevel, elXp, elArea;
-    var elWeapon, elArmor, elKills, elAtk, elDef, elNotif;
+    var elWeapon, elArmor, elKills, elAtk, elDef, elNotif, elObjective;
     var elPauseBtn, elHint;
 
     // ====================================================================
@@ -333,11 +487,14 @@
     // COLLISION
     // ====================================================================
 
-    function getObstacles() { return AREA_OBSTACLES[state.areaIndex] || []; }
+    function getObstacles(areaIndex) {
+        var idx = (typeof areaIndex === 'number') ? areaIndex : state.areaIndex;
+        return AREA_OBSTACLES[idx] || [];
+    }
 
-    function isBlocked(px, py, radius) {
+    function isBlockedInArea(areaIndex, px, py, radius) {
         var r   = radius || 14;
-        var obs = getObstacles();
+        var obs = getObstacles(areaIndex);
         for (var i = 0; i < obs.length; i++) {
             var o = obs[i];
             if (o.type === 'rect' || o.type === 'water') {
@@ -351,6 +508,34 @@
             }
         }
         return false;
+    }
+
+    function isBlocked(px, py, radius) {
+        return isBlockedInArea(state.areaIndex, px, py, radius);
+    }
+
+    function isSpawnClear(areaIndex, x, y, radius) {
+        var r = radius || 14;
+        if (x < r || x > CANVAS_W - r || y < r || y > CANVAS_H - r) return false;
+        return !isBlockedInArea(areaIndex, x, y, r);
+    }
+
+    function findSafeSpawn(areaIndex, desiredX, desiredY, radius, maxRange) {
+        var r = radius || 14;
+        var max = maxRange || 140;
+        var x = clamp(desiredX, r + 2, CANVAS_W - r - 2);
+        var y = clamp(desiredY, r + 2, CANVAS_H - r - 2);
+        if (isSpawnClear(areaIndex, x, y, r)) return { x: x, y: y, adjusted: false };
+
+        var step = 16;
+        for (var rad = step; rad <= max; rad += step) {
+            for (var a = 0; a < Math.PI * 2; a += Math.PI / 10) {
+                var tx = clamp(x + Math.cos(a) * rad, r + 2, CANVAS_W - r - 2);
+                var ty = clamp(y + Math.sin(a) * rad, r + 2, CANVAS_H - r - 2);
+                if (isSpawnClear(areaIndex, tx, ty, r)) return { x: tx, y: ty, adjusted: true };
+            }
+        }
+        return null;
     }
 
     // ====================================================================
@@ -382,9 +567,30 @@
                  hp: 100, maxHp: 100, attack: 18, defense: 0, level: 1, xp: 0,
                  weapon: null, armor: null, attackCooldown: 0, hitFlash: 0, kills: 0, facing: 0 };
     }
+    function makeStoryState() {
+        return {
+            chapter: 0,
+            flags: {
+                metElder: false,
+                gatheredGuidance: false,
+                relicTargetReached: false,
+                fortressAccess: false,
+                sanctumEntered: false,
+                shadowCleansed: false
+            },
+            loreNotes: [],
+            discoveredLocations: [0]
+        };
+    }
+    function makeQuestState() {
+        return { id: 'shadow_relics', step: 0, completed: false, objective: QUEST_STEPS[0] };
+    }
     function makeBaseState() {
         return { areaIndex: 0, areasVisited: [0], hero: makeHero(), enemies: [], items: [],
-                 score: 0, relics: 0, totalKills: 0, tick: 0, areaEnemyState: {} };
+                 score: 0, relics: 0, totalKills: 0, tick: 0, areaEnemyState: {},
+                 storyState: makeStoryState(), questState: makeQuestState(),
+                 vendorPurchases: {}, upgrades: { mapCharter: false, lantern: false },
+                 purchaseCount: 0, npcFlags: {} };
     }
 
     // ====================================================================
@@ -392,40 +598,81 @@
     // ====================================================================
 
     function serialize() {
-        return { version: 3, areaIndex: state.areaIndex, areasVisited: state.areasVisited,
+        return { version: SAVE_VERSION, areaIndex: state.areaIndex, areasVisited: state.areasVisited,
                  hero: state.hero, enemies: state.enemies, items: state.items,
                  score: state.score, relics: state.relics, totalKills: state.totalKills,
                  tick: state.tick, areaEnemyState: state.areaEnemyState || {},
+                 storyState: state.storyState, questState: state.questState,
+                 vendorPurchases: state.vendorPurchases, upgrades: state.upgrades,
+                 purchaseCount: state.purchaseCount, npcFlags: state.npcFlags,
                  theme: document.body.getAttribute('data-theme') || 'dark' };
     }
     function persist() { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(serialize())); } catch (e) {} }
+    function migrateSaveData(data) {
+        if (!data || !data.hero) return null;
+        var out = JSON.parse(JSON.stringify(data));
+        if (out.version !== SAVE_VERSION) {
+            out.storyState = out.storyState || makeStoryState();
+            out.questState = out.questState || makeQuestState();
+            out.vendorPurchases = out.vendorPurchases || {};
+            out.upgrades = out.upgrades || { mapCharter: false, lantern: false };
+            out.purchaseCount = (typeof out.purchaseCount === 'number') ? out.purchaseCount : 0;
+            out.npcFlags = out.npcFlags || {};
+            out.version = SAVE_VERSION;
+        }
+        return out;
+    }
+    function ensureHeroSafePosition() {
+        var safe = findSafeSpawn(state.areaIndex, state.hero.x, state.hero.y, state.hero.radius, 180);
+        if (safe && (safe.adjusted || safe.x !== state.hero.x || safe.y !== state.hero.y)) {
+            state.hero.x = safe.x;
+            state.hero.y = safe.y;
+            showNotif('Relocated to a safe spawn point.');
+        }
+        if (!safe) {
+            state.hero.x = CANVAS_W / 2;
+            state.hero.y = CANVAS_H / 2;
+        }
+    }
+    function syncStateDefaults() {
+        if (!Array.isArray(state.enemies))       state.enemies = [];
+        if (!Array.isArray(state.items))         state.items = [];
+        if (typeof state.areaIndex !== 'number') state.areaIndex = 0;
+        if (!Array.isArray(state.areasVisited))  state.areasVisited = [0];
+        if (typeof state.totalKills !== 'number')state.totalKills = 0;
+        if (!state.areaEnemyState)               state.areaEnemyState = {};
+        if (!state.storyState)                   state.storyState = makeStoryState();
+        if (!state.questState)                   state.questState = makeQuestState();
+        if (!state.vendorPurchases)              state.vendorPurchases = {};
+        if (!state.upgrades)                     state.upgrades = { mapCharter: false, lantern: false };
+        if (typeof state.purchaseCount !== 'number') state.purchaseCount = 0;
+        if (!state.npcFlags)                     state.npcFlags = {};
+        if (!Array.isArray(state.storyState.discoveredLocations)) state.storyState.discoveredLocations = [0];
+        if (!state.storyState.flags)             state.storyState.flags = makeStoryState().flags;
+        var base = makeHero();
+        Object.keys(base).forEach(function (k) { if (state.hero[k] === undefined) state.hero[k] = base[k]; });
+        ensureHeroSafePosition();
+    }
     function loadSave() {
         var fresh = false;
         try {
             var raw = localStorage.getItem(STORAGE_KEY);
+            if (!raw) {
+                for (var i = 0; i < LEGACY_STORAGE_KEYS.length; i++) {
+                   raw = localStorage.getItem(LEGACY_STORAGE_KEYS[i]);
+                   if (raw) break;
+                }
+            }
             if (!raw) { fresh = true; }
             else {
                 var d = JSON.parse(raw);
-                if (!d || d.version !== 3 || !d.hero) {
-                    // Older save detected — notify and start fresh
-                    if (d && d.version && d.version !== 3) {
-                        console.info('BrowserQuest: save version ' + d.version + ' found; expected 3. Starting fresh.');
-                        notifQueue.push('Old save (v' + d.version + ') is not compatible with v3 \u2014 starting a new adventure!');
-                    }
-                    fresh = true;
-                }
+                state = migrateSaveData(d);
+                if (!state) { fresh = true; }
                 else {
-                    state = d;
-                    if (!Array.isArray(state.enemies))       state.enemies = [];
-                    if (!Array.isArray(state.items))         state.items = [];
-                    if (typeof state.areaIndex !== 'number') state.areaIndex = 0;
-                    if (!Array.isArray(state.areasVisited))  state.areasVisited = [0];
-                    if (typeof state.totalKills !== 'number')state.totalKills = 0;
-                    if (!state.areaEnemyState)               state.areaEnemyState = {};
-                    var base = makeHero();
-                    Object.keys(base).forEach(function (k) { if (state.hero[k] === undefined) state.hero[k] = base[k]; });
-                    if (d.theme === 'light') document.body.setAttribute('data-theme', 'light');
-                    setStatus('ready', 'Ready (save restored)');
+                   syncStateDefaults();
+                   if (d.version && d.version !== SAVE_VERSION) showNotif('Save migrated from v' + d.version + ' to v' + SAVE_VERSION + '.');
+                   if (d.theme === 'light') document.body.setAttribute('data-theme', 'light');
+                   setStatus('ready', 'Ready (save restored)');
                 }
             }
         } catch (e) { fresh = true; }
@@ -438,6 +685,7 @@
 
     function spawnEnemiesForArea() {
         var area = AREAS[state.areaIndex];
+        if (!area || !area.enemyTypes || area.enemyTypes.length === 0 || area.enemyCount <= 0) return [];
         var aes  = state.areaEnemyState[state.areaIndex] || {};
         // Respect respawn cooldown
         var pending = aes.respawnTick && state.tick < aes.respawnTick;
@@ -465,8 +713,9 @@
     }
 
     function spawnItemsForArea() {
+        if (state.areaIndex === 7 || state.areaIndex === 8) return [];
         var items = [];
-        var relicCount = rndInt(2, 3);
+        var relicCount = (state.areaIndex === 9 || state.areaIndex === 10) ? rndInt(2, 4) : rndInt(2, 3);
         for (var i = 0; i < relicCount; i++) {
             var ix, iy, att = 0;
             do { ix = rnd(60, CANVAS_W - 60); iy = rnd(60, CANVAS_H - 60); att++; }
@@ -491,35 +740,89 @@
     }
 
     // Entry position in new area based on travel direction
-    function entryPosition(dir) {
+    function entryPosition(dir, axisCoord) {
         var pad = TRANSITION_THRESHOLD + 22;
         switch (dir) {
-            case 'right': return { x: pad,            y: clamp(state.hero.y, 40, CANVAS_H - 40) };
-            case 'left':  return { x: CANVAS_W - pad, y: clamp(state.hero.y, 40, CANVAS_H - 40) };
-            case 'up':    return { x: clamp(state.hero.x, 40, CANVAS_W - 40), y: CANVAS_H - pad };
-            case 'down':  return { x: clamp(state.hero.x, 40, CANVAS_W - 40), y: pad            };
+            case 'right': return { x: pad,            y: clamp(axisCoord, 40, CANVAS_H - 40) };
+            case 'left':  return { x: CANVAS_W - pad, y: clamp(axisCoord, 40, CANVAS_H - 40) };
+            case 'up':    return { x: clamp(axisCoord, 40, CANVAS_W - 40), y: CANVAS_H - pad };
+            case 'down':  return { x: clamp(axisCoord, 40, CANVAS_W - 40), y: pad            };
             default:      return { x: CANVAS_W / 2, y: CANVAS_H / 2 };
         }
     }
 
-    function doAreaTransition(dir) {
-        if (trans.active || transitionCooldown > 0) { return; }
-        var area   = AREAS[state.areaIndex];
-        var nextId = area.neighbors[dir];
-        if (nextId === null || nextId === undefined) { return; }
-        trans.active    = true;
-        trans.phase     = 'fadeout';
-        trans.timer     = 0;
-        trans.dir       = dir;
+    function hasPortalAccess(portal) {
+        if (!portal.requiresFlag) return true;
+        return !!(state.storyState && state.storyState.flags && state.storyState.flags[portal.requiresFlag]);
+    }
+
+    function setQuestStep(step, notification) {
+        if (!state.questState || state.questState.completed || step <= state.questState.step) return;
+        state.questState.step = step;
+        state.questState.objective = QUEST_STEPS[Math.min(step, QUEST_STEPS.length - 1)];
+        state.storyState.chapter = Math.min(step, STORY_CHAPTERS.length - 1);
+        if (notification) showNotif(notification);
+        persist();
+    }
+
+    function markLocationDiscovered(areaId) {
+        if (state.storyState.discoveredLocations.indexOf(areaId) === -1) {
+            state.storyState.discoveredLocations.push(areaId);
+        }
+    }
+
+    function beginTransition(nextId, dir, desiredX, desiredY, msg, fallbackRange) {
+        if (trans.active || transitionCooldown > 0) return false;
+        var safe = findSafeSpawn(nextId, desiredX, desiredY, state.hero.radius, fallbackRange || 170);
+        if (!safe) {
+            if (transitionBlockCooldown <= 0) {
+                showNotif('Path is blocked from this side. Try a clearer opening.');
+                transitionBlockCooldown = 1.2;
+            }
+            return false;
+        }
+        trans.active     = true;
+        trans.phase      = 'fadeout';
+        trans.timer      = 0;
+        trans.dir        = dir || null;
         trans.fromAreaId = state.areaIndex;
-        trans.toAreaId  = nextId;
-        trans.msg       = 'Entering ' + AREAS[nextId].name + '\u2026';
+        trans.toAreaId   = nextId;
+        trans.targetX    = safe.x;
+        trans.targetY    = safe.y;
+        trans.msg        = msg || ('Entering ' + AREAS[nextId].name + '…');
         showNotif(trans.msg + ' ' + AREAS[nextId].description);
+        return true;
+    }
+
+    function canTraverseEdgeAt(dir, axisCoord) {
+        var area = AREAS[state.areaIndex];
+        var nextId = area.neighbors[dir];
+        if (nextId == null) return false;
+        var ep = entryPosition(dir, axisCoord);
+        return !!findSafeSpawn(nextId, ep.x, ep.y, state.hero.radius, 120);
+    }
+
+    function doAreaTransition(dir, axisCoord) {
+        var area = AREAS[state.areaIndex];
+        var nextId = area.neighbors[dir];
+        if (nextId === null || nextId === undefined) { return false; }
+        var desired = entryPosition(dir, axisCoord);
+        return beginTransition(nextId, dir, desired.x, desired.y, 'Entering ' + AREAS[nextId].name + '…', 140);
+    }
+
+    function doPortalTransition(portal) {
+        if (!portal) return false;
+        if (!hasPortalAccess(portal)) {
+            showNotif(portal.lockedMsg || 'This passage is locked.');
+            return false;
+        }
+        return beginTransition(portal.targetAreaId, null, portal.targetX, portal.targetY, portal.label || ('Entering ' + AREAS[portal.targetAreaId].name + '…'), 190);
     }
 
     function applyTransitionMidpoint() {
         var nextId   = trans.toAreaId;
         var nextArea = AREAS[nextId];
+        if (!nextArea) return;
         // Record respawn timer for old area if it was fully cleared
         if (state.enemies.length === 0) {
             state.areaEnemyState[trans.fromAreaId] = {
@@ -533,12 +836,28 @@
             state.score += 50;
             showNotif('New area discovered: ' + nextArea.name + ' (+50 score)');
         }
-        var ep = entryPosition(trans.dir);
-        state.hero.x = clamp(ep.x, state.hero.radius + 5, CANVAS_W - state.hero.radius - 5);
-        state.hero.y = clamp(ep.y, state.hero.radius + 5, CANVAS_H - state.hero.radius - 5);
+        markLocationDiscovered(nextId);
+        if (nextArea.storyTag && state.storyState.loreNotes.indexOf(nextArea.storyTag) === -1) {
+            state.storyState.loreNotes.push(nextArea.storyTag);
+            showNotif('Lore discovered: ' + nextArea.description);
+        }
+        state.hero.x = clamp(trans.targetX, state.hero.radius + 5, CANVAS_W - state.hero.radius - 5);
+        state.hero.y = clamp(trans.targetY, state.hero.radius + 5, CANVAS_H - state.hero.radius - 5);
         populateArea();
+        if (nextId === 10) {
+            state.storyState.flags.sanctumEntered = true;
+            setQuestStep(5, 'You entered the Shadow Sanctum. End the corruption!');
+        }
         persist();
         updateHUD();
+    }
+
+    function getPortalsInArea(areaId) {
+        return PORTALS.filter(function (p) { return p.areaId === areaId; });
+    }
+
+    function getNpcsInArea(areaId) {
+        return NPC_DEFS.filter(function (n) { return n.areaId === areaId; });
     }
 
     // ====================================================================
@@ -596,6 +915,14 @@
             }
             return true;
         });
+        if (state.areaIndex === 10 && state.enemies.length === 0 && !state.storyState.flags.shadowCleansed) {
+            state.storyState.flags.shadowCleansed = true;
+            state.questState.completed = true;
+            state.questState.objective = 'Shadow relic cleansed. Return as the realm’s champion.';
+            showNotif('The Shadow Relic is cleansed! The realm begins to heal.');
+            state.score += 400;
+            persist();
+        }
         if (hitCount > 0) setStatus('playing', 'Playing');
     }
 
@@ -627,6 +954,14 @@
                 state.relics++; state.score += 30;
                 addFloat(item.x, item.y, 'Relic! +30', '#ffd76b', 14);
                 showNotif('Ancient Relic collected! (' + state.relics + ' total)');
+                if ((state.areaIndex === 1 || state.areaIndex === 3 || state.areaIndex === 9) && state.questState.step >= 1) {
+                    state.storyState.flags.gatheredGuidance = true;
+                    setQuestStep(2, 'Relic traces found. Recover at least 3 relic fragments.');
+                }
+                if (state.relics >= 3) {
+                    state.storyState.flags.relicTargetReached = true;
+                    setQuestStep(3, 'Relic target reached. Secure fortress access.');
+                }
             } else if (def.type === 'weapon') {
                 var oldBonus = state.hero.weapon ? (ITEM_DEFS[state.hero.weapon].attackBonus || 0) : 0;
                 if ((def.attackBonus || 0) > oldBonus) {
@@ -658,6 +993,130 @@
             persist();
             return false;
         });
+    }
+
+    function getNpcDialogue(npc) {
+        var f = state.storyState.flags;
+        switch (npc.id) {
+            case 'elder_mira':
+                if (!f.metElder) return 'The shadow relics are poisoning every road. Speak with our scouts and return with relic fragments.';
+                if (f.shadowCleansed) return 'You ended the corruption. The villages will sing your name.';
+                return 'Carry this purpose: gather relics, prepare, then break the Sanctum.';
+            case 'tovin_smith':
+                return f.shadowCleansed ? 'My forge burns brighter now. You are always welcome here.' : 'Relics for steel. I can arm you for the fortress.';
+            case 'lyra_scholar':
+                return f.relicTargetReached ? 'Good. Three fragments resonate. The fortress gate should weaken soon.' : 'Shadow glyphs point toward caves and old stone roads.';
+            case 'bran_ranger':
+                return f.gatheredGuidance ? 'You know the routes now. Stay mobile near the borders.' : 'Forest pass is safer than the old keep road. Watch edge chokepoints.';
+            case 'fort_guard':
+                if (!f.fortressAccess) return 'The Sanctum gate only yields to a Fortress Sigil.';
+                return 'You hold the sigil. Enter, and end this.';
+            case 'mira_merchant':
+                return 'Supplies for relics. A good map and draught can save a campaign.';
+            default:
+                return 'Stay safe out there.';
+        }
+    }
+
+    function applyVendorEffect(item) {
+        if (item.effect === 'heal') {
+            var before = state.hero.hp;
+            state.hero.hp = Math.min(state.hero.maxHp, state.hero.hp + item.value);
+            showNotif(item.name + ' restored ' + Math.round(state.hero.hp - before) + ' HP.');
+            return true;
+        }
+        if (item.effect === 'weapon') {
+            state.hero.weapon = item.weapon;
+            showNotif('Equipped ' + ITEM_DEFS[item.weapon].name + '.');
+            return true;
+        }
+        if (item.effect === 'armor') {
+            state.hero.armor = item.armor;
+            showNotif('Equipped ' + ITEM_DEFS[item.armor].name + '.');
+            return true;
+        }
+        if (item.effect === 'upgrade') {
+            state.upgrades[item.key] = true;
+            showNotif(item.name + ' unlocked.');
+            return true;
+        }
+        if (item.effect === 'flag') {
+            state.storyState.flags[item.key] = true;
+            showNotif(item.name + ' obtained.');
+            if (item.key === 'fortressAccess') setQuestStep(4, 'Fortress access granted. Prepare before entering the Sanctum.');
+            return true;
+        }
+        return false;
+    }
+
+    function isPurchased(itemId) {
+        return !!state.vendorPurchases[itemId];
+    }
+
+    function interactVendor(vendorId) {
+        var stock = VENDOR_STOCK[vendorId] || [];
+        if (!stock.length) return;
+        var lines = stock.map(function (it, idx) {
+            var owned = (!it.repeatable && isPurchased(it.id)) ? ' (owned)' : '';
+            return (idx + 1) + '. ' + it.name + ' - ' + it.cost + ' relics' + owned + ' [' + it.desc + ']';
+        }).join('\n');
+        var choiceRaw = window.prompt('Vendor stock (Relics: ' + state.relics + ')\n' + lines + '\nEnter item number to buy, or cancel.');
+        if (choiceRaw === null) return;
+        var choice = parseInt(choiceRaw, 10) - 1;
+        if (choice < 0 || choice >= stock.length) { showNotif('Invalid choice.'); return; }
+        var item = stock[choice];
+        if (!item.repeatable && isPurchased(item.id)) { showNotif('Already purchased.'); return; }
+        if (state.relics < item.cost) { showNotif('Not enough relics for ' + item.name + '.'); return; }
+        state.relics -= item.cost;
+        state.score = Math.max(0, state.score - item.cost * 5);
+        if (!item.repeatable) state.vendorPurchases[item.id] = true;
+        state.purchaseCount++;
+        applyVendorEffect(item);
+        if (state.purchaseCount >= 2 && state.questState.step >= 4) {
+            setQuestStep(5, 'Preparations complete. Enter the Shadow Sanctum.');
+        }
+        persist();
+    }
+
+    function talkToNpc(npc) {
+        state.npcFlags[npc.id] = (state.npcFlags[npc.id] || 0) + 1;
+        var msg = npc.name + ' (' + npc.role + '): ' + getNpcDialogue(npc);
+        showNotif(msg);
+        if (npc.id === 'elder_mira') {
+            state.storyState.flags.metElder = true;
+            setQuestStep(1, 'Seek guidance from Bran and Lyra.');
+        }
+        if (npc.id === 'bran_ranger' || npc.id === 'lyra_scholar') {
+            if (state.storyState.flags.metElder) {
+                state.storyState.flags.gatheredGuidance = true;
+                setQuestStep(2, 'Recover relic fragments from forest/caves.');
+            }
+        }
+        if (npc.vendorId) interactVendor(npc.vendorId);
+        persist();
+    }
+
+    function getInteractionContext() {
+        var hero = state.hero;
+        var best = null;
+        getNpcsInArea(state.areaIndex).forEach(function (npc) {
+            var d = dist2(hero, npc);
+            if (d < 58 && (!best || d < best.dist)) best = { type: 'npc', npc: npc, dist: d };
+        });
+        getPortalsInArea(state.areaIndex).forEach(function (portal) {
+            var d = dist2(hero, { x: portal.x, y: portal.y });
+            if (d < (portal.r + 20) && (!best || d < best.dist)) best = { type: 'portal', portal: portal, dist: d };
+        });
+        return best;
+    }
+
+    function interact() {
+        if (interactionCooldown > 0 || paused || trans.active) return;
+        var ctxInt = getInteractionContext();
+        if (!ctxInt) return;
+        if (ctxInt.type === 'npc') talkToNpc(ctxInt.npc);
+        if (ctxInt.type === 'portal') doPortalTransition(ctxInt.portal);
+        interactionCooldown = 0.25;
     }
 
     // ====================================================================
@@ -696,13 +1155,16 @@
         // Edge transition — trigger early (TRANSITION_THRESHOLD from edge)
         var thr  = TRANSITION_THRESHOLD;
         var area = AREAS[state.areaIndex];
-        if      (state.hero.x < thr && area.neighbors.left  != null) doAreaTransition('left');
-        else if (state.hero.x > CANVAS_W - thr && area.neighbors.right != null) doAreaTransition('right');
-        else if (state.hero.y < thr && area.neighbors.up    != null) doAreaTransition('up');
-        else if (state.hero.y > CANVAS_H - thr && area.neighbors.down != null) doAreaTransition('down');
+        if (area && !area.isInterior) {
+            if (state.hero.x < thr && area.neighbors.left != null && canTraverseEdgeAt('left', state.hero.y)) doAreaTransition('left', state.hero.y);
+            else if (state.hero.x > CANVAS_W - thr && area.neighbors.right != null && canTraverseEdgeAt('right', state.hero.y)) doAreaTransition('right', state.hero.y);
+            else if (state.hero.y < thr && area.neighbors.up != null && canTraverseEdgeAt('up', state.hero.x)) doAreaTransition('up', state.hero.x);
+            else if (state.hero.y > CANVAS_H - thr && area.neighbors.down != null && canTraverseEdgeAt('down', state.hero.x)) doAreaTransition('down', state.hero.x);
+        }
 
         state.hero.x = clamp(state.hero.x, state.hero.radius, CANVAS_W - state.hero.radius);
         state.hero.y = clamp(state.hero.y, state.hero.radius, CANVAS_H - state.hero.radius);
+        interactionContext = getInteractionContext();
     }
 
     function moveEnemies(dt) {
@@ -861,7 +1323,9 @@
 
         // Darkness overlay for low-ambientLight biomes
         if (area.ambientLight < 1.0) {
-            ctx.fillStyle = 'rgba(0,0,0,' + ((1.0 - area.ambientLight) * 0.70) + ')';
+            var boost = (state.upgrades && state.upgrades.lantern && (area.biome === 'cave' || area.biome === 'keep' || area.biome === 'lair')) ? 0.18 : 0;
+            var light = clamp(area.ambientLight + boost, 0, 1);
+            ctx.fillStyle = 'rgba(0,0,0,' + ((1.0 - light) * 0.70) + ')';
             ctx.fillRect(0, 0, CANVAS_W, CANVAS_H);
         }
     }
@@ -961,10 +1425,51 @@
         });
     }
 
+    function drawPortals() {
+        var portals = getPortalsInArea(state.areaIndex);
+        portals.forEach(function (p) {
+            var unlocked = hasPortalAccess(p);
+            ctx.save();
+            ctx.strokeStyle = unlocked ? 'rgba(255,220,120,0.88)' : 'rgba(180,80,80,0.85)';
+            ctx.fillStyle = unlocked ? 'rgba(255,220,120,0.18)' : 'rgba(180,80,80,0.16)';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.r * 0.65, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+            ctx.fillStyle = unlocked ? '#ffe6a0' : '#ff9a9a';
+            ctx.font = '11px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText(unlocked ? 'Door' : 'Locked', p.x, p.y - p.r - 8);
+            ctx.restore();
+        });
+    }
+
+    function drawNpcs() {
+        getNpcsInArea(state.areaIndex).forEach(function (npc) {
+            ctx.save();
+            ctx.translate(npc.x, npc.y);
+            ctx.fillStyle = '#f0c090';
+            ctx.beginPath(); ctx.arc(0, -10, 7, 0, Math.PI * 2); ctx.fill();
+            ctx.fillStyle = npc.vendorId ? '#5a8ae0' : '#5a9a5a';
+            ctx.fillRect(-8, -3, 16, 18);
+            ctx.fillStyle = '#d0d6ff';
+            ctx.font = '10px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText(npc.name, 0, -22);
+            if (interactionContext && interactionContext.type === 'npc' && interactionContext.npc.id === npc.id) {
+                ctx.fillStyle = '#ffd700';
+                ctx.fillText('[E]', 0, -34);
+            }
+            ctx.restore();
+        });
+    }
+
     // Transition preview: tinted strip of next area at active edges
     function drawTransitionPreview() {
         if (trans.active) return;
         var area = AREAS[state.areaIndex];
+        if (area.isInterior) return;
         var thr  = TRANSITION_THRESHOLD;
         var dirs = ['right', 'left', 'up', 'down'];
         dirs.forEach(function (dir) {
@@ -988,6 +1493,16 @@
                 case 'left':  ctx.fillRect(0, 0, sw, CANVAS_H); break;
                 case 'up':    ctx.fillRect(0, 0, CANVAS_W, sw); break;
                 case 'down':  ctx.fillRect(0, CANVAS_H - sw, CANVAS_W, sw); break;
+            }
+            ctx.globalAlpha = Math.min(0.95, alpha + 0.2);
+            ctx.fillStyle = 'rgba(180,40,40,0.85)';
+            var segment = 42;
+            for (var pos = 30; pos < (dir === 'left' || dir === 'right' ? CANVAS_H - 30 : CANVAS_W - 30); pos += segment) {
+                if (canTraverseEdgeAt(dir, pos)) continue;
+                if (dir === 'right') ctx.fillRect(CANVAS_W - 20, pos - 10, 18, 18);
+                if (dir === 'left')  ctx.fillRect(2, pos - 10, 18, 18);
+                if (dir === 'up')    ctx.fillRect(pos - 10, 2, 18, 18);
+                if (dir === 'down')  ctx.fillRect(pos - 10, CANVAS_H - 20, 18, 18);
             }
             ctx.globalAlpha = Math.min(1, alpha * 2);
             ctx.fillStyle = '#fff'; ctx.font = '13px Arial'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
@@ -1266,13 +1781,17 @@
 
     // Layout positions for each area on the map panel (relative to panel origin)
     var MAP_LAYOUT = [
-        { id: 0, col: 0, row: 1 },  // Sunlit Meadow
-        { id: 1, col: 1, row: 1 },  // Forest Clearing
-        { id: 2, col: 2, row: 1 },  // Ancient Town
-        { id: 3, col: 0, row: 2 },  // Dark Caves
-        { id: 4, col: 1, row: 2 },  // Cursed Keep
-        { id: 5, col: 2, row: 2 },  // Shadow Fortress
-        { id: 6, col: 3, row: 2 }   // Dragon's Lair
+        { id: 7, col: 0, row: 0 },   // Elder's Hall
+        { id: 8, col: 1, row: 0 },   // Smithy
+        { id: 9, col: 2, row: 0 },   // Relic Cavern
+        { id: 10, col: 3, row: 0 },  // Shadow Sanctum
+        { id: 0, col: 0, row: 1 },   // Sunlit Meadow
+        { id: 1, col: 1, row: 1 },   // Forest Clearing
+        { id: 2, col: 2, row: 1 },   // Ancient Town
+        { id: 3, col: 0, row: 2 },   // Dark Caves
+        { id: 4, col: 1, row: 2 },   // Cursed Keep
+        { id: 5, col: 2, row: 2 },   // Shadow Fortress
+        { id: 6, col: 3, row: 2 }    // Dragon's Lair
     ];
 
     var BIOME_MAP_COLOR = {
@@ -1282,8 +1801,8 @@
 
     function drawWorldMap() {
         if (!mapOpen) return;
-        var pw = 560, ph = 340, px = (CANVAS_W - pw) / 2, py = (CANVAS_H - ph) / 2;
-        var cellW = 120, cellH = 80, colOff = 40, rowOff = 60;
+        var pw = 680, ph = 390, px = (CANVAS_W - pw) / 2, py = (CANVAS_H - ph) / 2;
+        var cellW = 136, cellH = 82, colOff = 52, rowOff = 62;
 
         ctx.save();
         // Panel background
@@ -1295,7 +1814,7 @@
         // Title
         ctx.fillStyle   = '#ffd700'; ctx.font = 'bold 18px Arial';
         ctx.textAlign   = 'center'; ctx.textBaseline = 'top';
-        ctx.fillText('World Map  [M to close]', px + pw / 2, py + 10);
+        ctx.fillText('World Map & Story Routes [M to close]', px + pw / 2, py + 10);
 
         // Compute area box positions
         var boxes = {};
@@ -1322,14 +1841,30 @@
             });
         });
 
+        // Portal links (interior/exterior)
+        ctx.strokeStyle = 'rgba(255,205,90,0.42)';
+        ctx.setLineDash([5, 4]);
+        PORTALS.forEach(function (portal) {
+            if (portal.areaId > portal.targetAreaId) return;
+            if (!boxes[portal.areaId] || !boxes[portal.targetAreaId]) return;
+            var a = boxes[portal.areaId], b = boxes[portal.targetAreaId];
+            ctx.beginPath();
+            ctx.moveTo(a.x + cellW / 2, a.y + cellH / 2);
+            ctx.lineTo(b.x + cellW / 2, b.y + cellH / 2);
+            ctx.stroke();
+        });
+        ctx.setLineDash([]);
+
         // Draw area boxes
         AREAS.forEach(function (area) {
             var b = boxes[area.id];
             if (!b) return;
-            var visited = state.areasVisited.indexOf(area.id) !== -1;
+            var visited = state.areasVisited.indexOf(area.id) !== -1 || state.upgrades.mapCharter;
             var current = area.id === state.areaIndex;
+            var discovered = state.storyState.discoveredLocations.indexOf(area.id) !== -1 || visited;
+            var showName = visited || discovered;
 
-            ctx.fillStyle = visited ? BIOME_MAP_COLOR[area.biome] || '#333' : '#111122';
+            ctx.fillStyle = showName ? BIOME_MAP_COLOR[area.biome] || '#333' : '#111122';
             ctx.fillRect(b.x, b.y, cellW, cellH);
 
             // Current area highlight
@@ -1337,12 +1872,12 @@
                 ctx.strokeStyle = '#ffd700'; ctx.lineWidth = 3;
                 ctx.strokeRect(b.x - 2, b.y - 2, cellW + 4, cellH + 4);
             } else {
-                ctx.strokeStyle = visited ? '#6688aa' : '#333355'; ctx.lineWidth = 1.5;
+                ctx.strokeStyle = showName ? '#6688aa' : '#333355'; ctx.lineWidth = 1.5;
                 ctx.strokeRect(b.x, b.y, cellW, cellH);
             }
 
             // Name label
-            if (visited) {
+            if (showName) {
                 ctx.fillStyle   = current ? '#ffd700' : '#dde0ff';
                 ctx.font        = current ? 'bold 11px Arial' : '10px Arial';
                 ctx.textAlign   = 'center'; ctx.textBaseline = 'middle';
@@ -1351,10 +1886,16 @@
                 ctx.fillStyle = '#ffcc00'; ctx.font = '10px Arial';
                 var stars = '';
                 for (var k = 0; k < Math.round(area.difficulty); k++) stars += '\u2605';
-                ctx.fillText(stars, b.x + cellW / 2, b.y + cellH / 2 + 10);
+                ctx.fillText(stars || (area.isInterior ? 'Interior' : ''), b.x + cellW / 2, b.y + cellH / 2 + 10);
             } else {
                 ctx.fillStyle = '#555566'; ctx.font = '10px Arial'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
                 ctx.fillText('???', b.x + cellW / 2, b.y + cellH / 2);
+            }
+
+            if (area.id === 10 && !state.storyState.flags.fortressAccess) {
+                ctx.fillStyle = '#ff8888';
+                ctx.font = 'bold 10px Arial';
+                ctx.fillText('LOCKED', b.x + cellW / 2, b.y + cellH - 14);
             }
 
             // Player marker
@@ -1366,7 +1907,7 @@
 
         // Legend
         ctx.fillStyle = '#aaaacc'; ctx.font = '11px Arial'; ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
-        ctx.fillText('\u2605 = current location   \u2605\u2605\u2605 = difficulty   ??? = undiscovered', px + 12, py + ph - 12);
+        ctx.fillText('\u2605 current  \u2605\u2605\u2605 difficulty  dashed line = portal  LOCKED = needs sigil', px + 12, py + ph - 12);
 
         ctx.restore();
     }
@@ -1380,8 +1921,10 @@
         drawBackground();
         drawTerrainObstacles();
         drawTransitionPreview();
+        drawPortals();
         drawItems();
         drawHitFlashes(dt);
+        drawNpcs();
         drawEnemies();
         drawHero();
         drawFloatTexts(dt);
@@ -1409,6 +1952,28 @@
         if (elKills)  elKills.textContent  = state.totalKills;
         if (elAtk)    elAtk.textContent    = getHeroAttack();
         if (elDef)    elDef.textContent    = getHeroDefense() + '%';
+        if (elObjective) {
+            var chapter = STORY_CHAPTERS[Math.min(state.storyState.chapter || 0, STORY_CHAPTERS.length - 1)];
+            var objective = state.questState.completed ? 'Completed: ' + state.questState.objective : state.questState.objective;
+            elObjective.textContent = objective + ' — ' + chapter;
+        }
+    }
+
+    function updateHintText() {
+        if (!elHint) return;
+        if (interactionContext && interactionContext.type === 'npc') {
+            elHint.textContent = 'Press E to talk to ' + interactionContext.npc.name + '.';
+            return;
+        }
+        if (interactionContext && interactionContext.type === 'portal') {
+            var p = interactionContext.portal;
+            if (hasPortalAccess(p)) elHint.textContent = 'Press E to ' + (p.label || 'enter') + '.';
+            else elHint.textContent = p.lockedMsg || 'This entrance is locked.';
+            return;
+        }
+        var area = AREAS[state.areaIndex];
+        if (area && area.isInterior) elHint.textContent = 'Explore interior spaces and talk to NPCs. Press E near doors or NPCs.';
+        else elHint.textContent = 'Explore! Edge arrows transition where passages are clear. Press E for NPCs and doors.';
     }
 
     // ====================================================================
@@ -1442,6 +2007,8 @@
                 }
 
                 if (transitionCooldown > 0) transitionCooldown -= dt;
+                if (interactionCooldown > 0) interactionCooldown -= dt;
+                if (transitionBlockCooldown > 0) transitionBlockCooldown -= dt;
                 if (state.tick % 300 === 0) persist();
                 state.tick++;
             }
@@ -1466,6 +2033,7 @@
 
             drawScene(dt);
             updateHUD();
+            updateHintText();
             animFrame = requestAnimationFrame(gameTick);
         } catch (err) {
             console.error('gameTick error', err);
@@ -1482,7 +2050,7 @@
         state              = makeBaseState();
         paused             = false;
         mouseTarget        = null;
-        trans              = { active: false, phase: 'none', timer: 0, dir: null, fromAreaId: 0, toAreaId: 0, msg: '' };
+        trans              = { active: false, phase: 'none', timer: 0, dir: null, fromAreaId: 0, toAreaId: 0, targetX: 0, targetY: 0, msg: '' };
         swordSwing         = { active: false, progress: 0, duration: 0.22, dir: 0, hitDealt: false };
         transitionCooldown = 0;
         mapOpen            = false;
@@ -1494,7 +2062,7 @@
         populateArea();
         persist();
         setStatus('playing', 'New Adventure!');
-        if (elHint)    elHint.textContent    = 'Explore! Approach edges to travel. M = map. Space/Enter = attack.';
+        if (elHint)    elHint.textContent    = 'Explore! M = map, Space/Enter = attack, E = interact.';
         if (elPauseBtn)elPauseBtn.textContent = 'Pause';
         if (elNotif)   elNotif.textContent   = '';
         updateHUD();
@@ -1529,6 +2097,7 @@
         elAtk     = document.getElementById('attackValue');
         elDef     = document.getElementById('defenseValue');
         elNotif   = document.getElementById('notifText');
+        elObjective = document.getElementById('objectiveValue');
         elPauseBtn = document.getElementById('pauseBtn');
         elHint    = document.getElementById('gameHint');
 
@@ -1546,6 +2115,9 @@
                 newGame();
             } else if (evt.key === 'm' || evt.key === 'M') {
                 mapOpen = !mapOpen;
+            } else if (evt.key === 'e' || evt.key === 'E') {
+                evt.preventDefault();
+                interact();
             }
         });
         window.addEventListener('keyup', function (evt) { keys[evt.key] = false; });
@@ -1578,6 +2150,9 @@
         var attackBtn = document.getElementById('attackBtn');
         if (attackBtn) attackBtn.addEventListener('click', function () { if (!paused && !trans.active) tryAttack(); });
 
+        var interactBtn = document.getElementById('interactBtn');
+        if (interactBtn) interactBtn.addEventListener('click', interact);
+
         var mapBtn = document.getElementById('mapBtn');
         if (mapBtn) mapBtn.addEventListener('click', function () { mapOpen = !mapOpen; });
 
@@ -1597,15 +2172,13 @@
             if (!saveDataEl) return;
             try {
                 var parsed = JSON.parse(saveDataEl.value);
-                if (!parsed || parsed.version !== 3 || !parsed.hero) throw new Error('Invalid save data: expected version 3, got version ' + (parsed && parsed.version ? parsed.version : 'unknown') + '. Save may be from an older game version.');
+                if (!parsed || !parsed.hero) throw new Error('Invalid save data payload.');
                 if (animFrame !== null) { cancelAnimationFrame(animFrame); animFrame = null; }
-                state = parsed;
-                if (!Array.isArray(state.enemies))      state.enemies = [];
-                if (!Array.isArray(state.items))        state.items = [];
-                if (!Array.isArray(state.areasVisited)) state.areasVisited = [0];
-                if (!state.areaEnemyState)              state.areaEnemyState = {};
+                state = migrateSaveData(parsed);
+                if (!state) throw new Error('Save migration failed.');
+                syncStateDefaults();
                 paused = false; mouseTarget = null;
-                trans  = { active: false, phase: 'none', timer: 0, dir: null, fromAreaId: 0, toAreaId: 0, msg: '' };
+                trans  = { active: false, phase: 'none', timer: 0, dir: null, fromAreaId: 0, toAreaId: 0, targetX: 0, targetY: 0, msg: '' };
                 swordSwing = { active: false, progress: 0, duration: 0.22, dir: 0, hitDealt: false };
                 transitionCooldown = 0; floatTexts = []; hitFlashes = []; lastTick = 0;
                 persist(); setStatus('playing', 'Save imported!');

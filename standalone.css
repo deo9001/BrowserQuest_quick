@@ -186,6 +186,8 @@ main {
 .hud-def  .value { color: #66aaff; }
 .hud-area .value { color: var(--accent); }
 .hud-lvl  .value { color: #cc88ff; }
+.hud-objective { grid-column: 1 / -1; }
+.hud-objective .value { color: #f5d890; font-weight: 600; }
 
 /* ======================================================
    NOTIFICATION BAR
@@ -238,6 +240,13 @@ body[data-theme="light"] button {
     font-weight: 700;
 }
 #attackBtn:hover { background: #6e2828; }
+
+#interactBtn {
+    background: #243a5a;
+    border-color: #6aa2ff;
+    color: #cde1ff;
+    font-weight: 700;
+}
 
 /* ======================================================
    SAVE DATA TEXTAREA
