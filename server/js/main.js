@@ -5,11 +5,19 @@ var fs = require('fs'),
  
 
 function main(config) {
-    var ws = require("./ws"),
+    var noop = function() {},
+        logLevel = config.debug_level || "info",
+        configuredLoggers = {
+            error: { error: Log.error, info: noop, debug: noop },
+            info: { error: Log.error, info: Log.info, debug: noop },
+            debug: { error: Log.error, info: Log.info, debug: Log.debug }
+        },
+        activeLoggers = configuredLoggers[logLevel] || configuredLoggers.info,
+        ws = require("./ws"),
         WorldServer = require("./worldserver"),
         _ = require('underscore'),
         server = new ws.socketIOServer(config.host, config.port),
-        metrics = config.metrics_enabled ? new Metrics(config) : null;
+        metrics = config.metrics_enabled ? new Metrics(config) : null,
         worlds = [],
         lastTotalPlayers = 0,
         checkPopulationInterval = setInterval(function() {
@@ -25,8 +33,7 @@ function main(config) {
             }
         }, 1000);
     
-    log = Log;
-    log.level = config.debug_level || "info";
+    log = activeLoggers;
     
     log.info("Starting BrowserQuest game server...");
     

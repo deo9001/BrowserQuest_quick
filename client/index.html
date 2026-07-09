@@ -331,10 +331,9 @@ Mozilla presents an HTML5 mini-MMORPG by Little Workshop http://www.littleworksh
             
             var addStartupAlert = function(messageHtml) {
                 var alert = document.createElement("div");
+                    target = document.getElementById("intro");
                 alert.className = 'alert';
                 alert.innerHTML = messageHtml;
-
-                target = document.getElementById("intro");
                 document.body.insertBefore(alert, target);
             };
 
