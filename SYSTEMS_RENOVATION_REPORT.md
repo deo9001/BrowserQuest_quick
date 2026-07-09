@@ -67,16 +67,23 @@ Each area object has:
 ### Current world graph (v3)
 ```
 [0] Sunlit Meadow ──right──► [1] Forest Clearing ──right──► [2] Ancient Town
-        │                              │
-       down                           down
-        ▼                              ▼
-[3] Dark Caves ──down──► [6] Dragon's Lair    [4] Cursed Keep ──right──► [5] Shadow Fortress
-                                                                                    │
-                                                                                   right
-                                                                                    ▼
-                                                                             [6] Dragon's Lair
+        │                              │                              │
+       down                           down                           down
+        ▼                              ▼                              ▼
+[3] Dark Caves             [4] Cursed Keep ──right──► [5] Shadow Fortress ──right──► [6] Dragon's Lair
+        │                                                                                    ▲
+       down                                                                                  │
+        └───────────────────────────────────────────────────────────────────────────────────┘
+                                                                                          (up: 3)
 ```
-(See actual `neighbors` fields for the authoritative connections.)
+Connections summary:
+- 0 (Meadow): right→1, down→3
+- 1 (Forest): left→0, right→2, down→4
+- 2 (Town): left→1, down→5
+- 3 (Caves): up→0, down→6
+- 4 (Keep): up→1, right→5
+- 5 (Shadow Fortress): left→4, up→2, right→6
+- 6 (Dragon's Lair): up→3, left→5
 
 ---
 

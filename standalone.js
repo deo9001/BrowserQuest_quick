@@ -406,7 +406,14 @@
             if (!raw) { fresh = true; }
             else {
                 var d = JSON.parse(raw);
-                if (!d || d.version !== 3 || !d.hero) { fresh = true; }
+                if (!d || d.version !== 3 || !d.hero) {
+                    // Older save detected — notify and start fresh
+                    if (d && d.version && d.version !== 3) {
+                        console.info('BrowserQuest: save version ' + d.version + ' found; expected 3. Starting fresh.');
+                        notifQueue.push('Old save (v' + d.version + ') is not compatible with v3 \u2014 starting a new adventure!');
+                    }
+                    fresh = true;
+                }
                 else {
                     state = d;
                     if (!Array.isArray(state.enemies))       state.enemies = [];
@@ -566,7 +573,7 @@
             var ang  = Math.atan2(enemy.y - state.hero.y, enemy.x - state.hero.x);
             var diff = Math.abs(ang - swordSwing.dir);
             if (diff > Math.PI) diff = Math.PI * 2 - diff;
-            if (diff > 1.4) { return true; } // outside ~80 degree cone
+            if (diff > 1.4) { return true; } // outside ±80° cone (1.4 rad half-width, ~160° total arc)
             var def = ENEMY_DEFS[enemy.type];
             var dmg = Math.max(1, Math.round(atk * (DMG_VARIANCE_MIN + Math.random() * DMG_VARIANCE_RANGE)));
             enemy.hp      -= dmg;
@@ -1590,7 +1597,7 @@
             if (!saveDataEl) return;
             try {
                 var parsed = JSON.parse(saveDataEl.value);
-                if (!parsed || parsed.version !== 3 || !parsed.hero) throw new Error('Invalid save data (version mismatch or missing hero)');
+                if (!parsed || parsed.version !== 3 || !parsed.hero) throw new Error('Invalid save data: expected version 3, got version ' + (parsed && parsed.version ? parsed.version : 'unknown') + '. Save may be from an older game version.');
                 if (animFrame !== null) { cancelAnimationFrame(animFrame); animFrame = null; }
                 state = parsed;
                 if (!Array.isArray(state.enemies))      state.enemies = [];
